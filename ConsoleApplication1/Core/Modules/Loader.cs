@@ -17,7 +17,7 @@ namespace SRogue.Core.Modules
         protected const bool CreateNewFileIfLoadingFailed = true;
 
         public TType Load<TType>()
-            where TType : class, ICloneable
+            where TType : class, IEntity
         {
             string xml = string.Empty;
 

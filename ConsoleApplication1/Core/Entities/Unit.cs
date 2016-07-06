@@ -10,7 +10,7 @@ using System.Xml.Serialization;
 
 namespace SRogue.Core.Entities
 {
-    public abstract class Unit : IUnit, ICloneable, IMovable, IDamageble
+    public abstract class Unit : IUnit, IMovable, IDamageble
     {
         protected char textureCache;
 
@@ -39,12 +39,7 @@ namespace SRogue.Core.Entities
         public float Health { get; set; }
 
         public float HealthMax { get; set; }
-
-        public object Clone()
-        {
-            return MemberwiseClone();
-        }
-
+        
         public void Move(Direction direction)
         {
             int targetX = X;

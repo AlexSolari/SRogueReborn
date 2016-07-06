@@ -9,8 +9,13 @@ using System.Xml.Serialization;
 
 namespace SRogue.Core.Entities
 {
-    public abstract class Tile : ITile, ICloneable
+    public abstract class Tile : ITile
     {
+        public Tile()
+        {
+            Id = Guid.NewGuid();
+        }
+
         protected char textureCache;
 
         [XmlIgnore]
@@ -31,13 +36,7 @@ namespace SRogue.Core.Entities
                 return textureCache;
             }
         }
-
-        public object Clone()
-        {
-            return MemberwiseClone();
-        }
-
-
+        
         public virtual void OnStep(IUnit unit)
         {
             
