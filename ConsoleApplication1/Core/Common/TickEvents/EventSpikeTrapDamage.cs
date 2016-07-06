@@ -8,41 +8,11 @@ using System.Threading.Tasks;
 
 namespace SRogue.Core.Common.TickEvents
 {
-    public class EventSpikeTrapDamage : TickEventBase
+    public class EventSpikeTrapDamage : EventPeriodicDamage 
     {
-        private BuffInjured debuff = new BuffInjured();
-
-        public override Action Event
-        {
-            get
-            {
-                return () => {
-                    (Target as IUnit).Damage(5);
-                };
-            }
-        }
-
-        public override Action OnTimeout
-        {
-            get
-            {
-                return () => {
-                    if (Target == GameManager.Current.Player)
-                    {
-                        GameManager.Current.Player.Buffs.Remove(debuff);
-                    }
-                };
-            }
-        }
-
         public EventSpikeTrapDamage(IUnit unit)
+            : base(unit, 5, 5, new BuffInjured())
         {
-            Target = unit;
-            TicksRemaining = 5;
-            if (Target == GameManager.Current.Player)
-            {
-                GameManager.Current.Player.Buffs.Add(debuff);
-            }
         }
     }
 }
