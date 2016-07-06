@@ -12,7 +12,6 @@ namespace SRogue
     {
         static void Main(string[] args)
         {
-            Console.WindowHeight += 1;
             GameManager.Current.GenerateWorld();
             MusicManager.Current.Play();
             do
@@ -21,9 +20,9 @@ namespace SRogue
 
                 Console.Out.Write(DisplayManager.Current.Render());
 
+                Console.SetWindowSize(80, 26);
                 GameManager.Current.ProcessInput(Console.ReadKey().KeyChar);
                 GameManager.Current.GameTick();
-
             } while (true);
         }
     }
