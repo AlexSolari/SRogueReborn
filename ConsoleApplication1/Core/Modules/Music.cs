@@ -33,8 +33,8 @@ namespace SRogue.Core.Modules
             AddNote(880);
             AddNote(988); 
             
-            //var melody = new Thread(Melody);
-            //melody.Start();
+            var melody = new Thread(Melody);
+            melody.Start();
         }
 
         private static void Melody()
