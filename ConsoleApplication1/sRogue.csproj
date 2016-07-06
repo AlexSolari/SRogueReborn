@@ -48,6 +48,7 @@
     <Compile Include="Core\Common\Direction.cs" />
     <Compile Include="Core\Common\Point.cs" />
     <Compile Include="Core\Common\Singleton.cs" />
+    <Compile Include="Core\Common\TickEvents\EventPeriodicDamage.cs" />
     <Compile Include="Core\Common\TickEvents\EventTileRemove.cs" />
     <Compile Include="Core\Common\TickEvents\EventEntityRemove.cs" />
     <Compile Include="Core\Common\TickEvents\EventSpikeTrapDamage.cs" />
