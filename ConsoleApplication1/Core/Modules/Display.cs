@@ -143,6 +143,7 @@ namespace SRogue.Core.Modules
                     var valueToDisplay = (Overlay[y, x] != '\0') ? Overlay[y, x] : Screen[y, x];
                     result.Append((valueToDisplay == '\0') ? ' ' : valueToDisplay);
                 }
+                result.AppendLine();
             }
 
             return result.ToString();

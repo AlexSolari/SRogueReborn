@@ -93,7 +93,7 @@ namespace SRogue.Core.Modules
             int index = 4;
             foreach (var buff in firstfive)
             {
-                Put("       {0}".FormatWith(buff.BuffName), 1, index, ui);
+                Put("     {0}".FormatWith(buff.BuffName), 1, index, ui);
                 index++;
             }
         }
