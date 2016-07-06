@@ -11,7 +11,7 @@ namespace SRogue.Core.Modules
 {
     public class EntityLoader
     {
-        protected Dictionary<Type, ICloneable> Cache = new Dictionary<Type, ICloneable>();
+        protected Dictionary<Type, XmlDocument> Cache = new Dictionary<Type, XmlDocument>();
 
         protected const bool CreateNewInstanceIfLoadingFailed = true;
         protected const bool CreateNewFileIfLoadingFailed = true;
@@ -32,7 +32,7 @@ namespace SRogue.Core.Modules
                         var doc = new XmlDocument();
                         doc.LoadXml(xml);
 
-                        Cache.Add(typeof(TType), doc.DeserializeAs<TType>());
+                        Cache.Add(typeof(TType), doc);
                     }
                 }
                 catch (IOException ex)
@@ -61,7 +61,7 @@ namespace SRogue.Core.Modules
                 
             }
 
-            return Cache[typeof(TType)].Clone() as TType;
+            return Cache[typeof(TType)].DeserializeAs<TType>();
         }
     }
 }

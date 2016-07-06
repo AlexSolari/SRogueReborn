@@ -15,7 +15,7 @@ namespace SRogue.Core.Common
 
         }
 
-        public static T Instance 
+        public static T Current 
         {
             get
             {

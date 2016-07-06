@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace SRogue.Core.Entities.Interfaces
 {
-    public interface ITile : IPositionable, IDisplayable, IEntity
+    public interface IKillable
     {
-        bool Pathable { get; set; }
-
-        void OnStep(IUnit unit);
+        void Kill();
     }
 }

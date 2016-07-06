@@ -12,19 +12,19 @@ namespace SRogue
     {
         static void Main(string[] args)
         {
-            Console.WindowHeight += 1; 
-            GameManager.Instance.GenerateWorld();
+            Console.WindowHeight += 1;
+            GameManager.Current.GenerateWorld();
+            MusicManager.Current.Play();
             do
             {
                 Console.Clear();
-                
-                Console.Out.Write(DisplayManager.Instance.Render());
 
-                GameManager.Instance.ProcessInput(Console.ReadKey().KeyChar);
-                GameManager.Instance.GameTick();
+                Console.Out.Write(DisplayManager.Current.Render());
+
+                GameManager.Current.ProcessInput(Console.ReadKey().KeyChar);
+                GameManager.Current.GameTick();
 
             } while (true);
-            
         }
     }
 }

@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SRogue.Core.Entities.Interfaces
+namespace SRogue.Core.Modules
 {
-    public interface IEntity
+    public class State
     {
-        Guid Id { get; set; }
+        public int Depth { get; set; }
     }
 }

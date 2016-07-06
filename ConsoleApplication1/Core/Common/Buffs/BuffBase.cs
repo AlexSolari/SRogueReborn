@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SRogue.Core.Entities.Interfaces
+namespace SRogue.Core.Common.Buffs
 {
-    public interface IEntity
+    public abstract class BuffBase
     {
-        Guid Id { get; set; }
+        public abstract string BuffName { get; }
     }
 }

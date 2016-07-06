@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace SRogue.Core.Entities.Interfaces
 {
-    public interface ITile : IPositionable, IDisplayable, IEntity
+    public interface IDamageble : IKillable
     {
-        bool Pathable { get; set; }
-
-        void OnStep(IUnit unit);
+        float Health { get; set; }
+        float HealthMax { get; set; }
+        void Damage(float pure);
     }
 }

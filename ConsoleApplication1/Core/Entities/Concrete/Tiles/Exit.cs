@@ -1,4 +1,5 @@
 ﻿using SRogue.Core.Common;
+using SRogue.Core.Common.TickEvents;
 using SRogue.Core.Entities.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -9,9 +10,9 @@ namespace SRogue.Core.Entities.Concrete.Tiles
 {
     public class Exit : Tile
     {
-        public override void OnStepOver(IEntity unit)
+        public override void OnStep(IUnit unit)
         {
-            GameManager.Instance.OnTickEndEvents.Add(new TickEvents(() => GameManager.Instance.GenerateWorld()));
+            GameManager.Current.OnTickEndEvents.Add(new EventNextLevel());
         }
     }
 }

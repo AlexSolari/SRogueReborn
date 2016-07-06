@@ -12,9 +12,10 @@ namespace SRogue.Core.Common
         public const char Wall = '█';
         public const char Floor = '.';
         public const char Exit = 'H';
-        
+        public const char SpikeTrap = Floor;
+        public const char SpikeTrap_Active = '┴';
+
         /***Entities***/
         public const char Player = '@';
-        
     }
 }

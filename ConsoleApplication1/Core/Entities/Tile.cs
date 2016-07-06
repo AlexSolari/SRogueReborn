@@ -5,11 +5,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace SRogue.Core.Entities
 {
     public abstract class Tile : ITile, ICloneable
     {
+        protected char textureCache;
+
+        [XmlIgnore]
+        public Guid Id { get; set; }
+
         public virtual bool Pathable { get; set; }
 
         public virtual int X { get; set; }
@@ -20,7 +26,9 @@ namespace SRogue.Core.Entities
         {
             get
             {
-                return (char)typeof(Assets).GetField(this.GetType().Name).GetValue(null);
+                if (textureCache == '\0')
+                    textureCache = (char)typeof(Assets).GetField(this.GetType().Name).GetValue(null);
+                return textureCache;
             }
         }
 
@@ -30,7 +38,7 @@ namespace SRogue.Core.Entities
         }
 
 
-        public virtual void OnStepOver(IEntity unit)
+        public virtual void OnStep(IUnit unit)
         {
             
         }

@@ -1,9 +1,11 @@
 ﻿using SRogue.Core.Common;
+using SRogue.Core.Common.TickEvents;
 using SRogue.Core.Entities;
 using SRogue.Core.Entities.Concrete.Entities;
 using SRogue.Core.Entities.Concrete.Tiles;
 using SRogue.Core.Entities.Interfaces;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,30 +16,30 @@ namespace SRogue.Core.Modules
     public class Game
     {
         public Player Player { get; set; }
-        public IList<IEntity> Entities { get; private set; }
+        public IList<IUnit> Entities { get; private set; }
         public IList<ITile> Tiles { get; private set; }
-        public List<TickEvents> OnTickEndEvents { get; set; }
+        public List<TickEventBase> OnTickEndEvents { get; set; }
 
         public Game()   
         {
-            Entities = new List<IEntity>();
+            Entities = new List<IUnit>();
             Tiles = new List<ITile>();
-            OnTickEndEvents = new List<TickEvents>();
+            OnTickEndEvents = new List<TickEventBase>();
         }
 
         #region GameObjects
         
-        public IList<ITile> GetTilesAt(int x, int y)
+        public IEnumerable<ITile> GetTilesAt(int x, int y)
         {
-            return Tiles.Where(t => t.X == x && t.Y == y).ToList();
+            return Tiles.Where(t => t.X == x && t.Y == y);
         }
 
-        public IList<IEntity> GetEntitiesAt(int x, int y)
+        public IEnumerable<IUnit> GetEntitiesAt(int x, int y)
         {
-            return Entities.Where(t => t.X == x && t.Y == y).ToList();
+            return Entities.Where(t => t.X == x && t.Y == y);
         }
 
-        public void Add(IEntity entity)
+        public void Add(IUnit entity)
         {
             Entities.Add(entity);
         }
@@ -48,7 +50,7 @@ namespace SRogue.Core.Modules
 
             foreach (var t in tiles)
             {
-                Tiles.Remove(t);
+                OnTickEndEvents.Add(new EventTileRemove(t));
             }
 
             Tiles.Add(tile);
@@ -56,7 +58,7 @@ namespace SRogue.Core.Modules
 
         #endregion
 
-        #region GameState
+        #region GameStatus
 
         public void ProcessInput(char input)
         {
@@ -88,14 +90,19 @@ namespace SRogue.Core.Modules
 
                 foreach (var tile in tilesUnderEntity)
                 {
-                    tile.OnStepOver(entity);
+                    tile.OnStep(entity);
                 }
             }
 
-            foreach (var evnt in OnTickEndEvents)
+            var events = OnTickEndEvents.ToList();
+            foreach (var evnt in events)
             {
                 evnt.Event();
                 evnt.TicksRemaining--;
+                if (evnt.TicksRemaining == 0 && evnt.OnTimeout != null)
+                {
+                    evnt.OnTimeout();
+                }
             }
 
             OnTickEndEvents.RemoveAll(x => x.TicksRemaining <= 0);
@@ -109,6 +116,15 @@ namespace SRogue.Core.Modules
 
             return (ignoreEntities || !isThereEntities) && !isThereTiles;
         }
+
+        public ITile GetRandomTile(bool pathable = false)
+        {
+            var generator = new Random();
+            var tiles = Tiles.Where(x => !pathable || x.Pathable).ToList();
+
+            return tiles[generator.Next(tiles.Count())];
+        }
+
         #endregion
 
         #region WorldGenerator
@@ -119,7 +135,7 @@ namespace SRogue.Core.Modules
             Entities.Clear();
 
             var centers = new List<Point>();
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 10; i++)
             {
                 var seed = DateTime.Now.Ticks / (Tiles.Count + 1);
                 GenerateRoom(seed, centers);
@@ -127,28 +143,33 @@ namespace SRogue.Core.Modules
 
             GenerateCorridors(centers);
 
-            var exit = EntityLoadManager.Instance.Load<Exit>();
+            var exit = EntityLoadManager.Current.Load<Exit>();
             exit.X = centers.Last().X;
             exit.Y = centers.Last().Y;
             Add(exit);
 
-            Player = EntityLoadManager.Instance.Load<Player>();
+            Player = EntityLoadManager.Current.Load<Player>();
             Player.X = centers.First().X;
             Player.Y = centers.First().Y;
             Add(Player);
 
             Fill();
+
+            GenerateTraps();
+
+            GameState.Current.Depth++;
+            DisplayManager.Current.ResetOverlay();
         }
 
         protected void Fill()
         {
-            for (int x = 0; x < DisplayManager.Instance.Width; x++)
+            for (int x = 0; x < DisplayManager.Current.FieldWidth; x++)
             {
-                for (int y = 0; y < DisplayManager.Instance.Height; y++)
+                for (int y = 0; y < DisplayManager.Current.FieldHeight; y++)
                 {
                     if (PlaceFree(x, y, true))
                     {
-                        var tile = EntityLoadManager.Instance.Load<Wall>();
+                        var tile = EntityLoadManager.Current.Load<Wall>();
 
                         tile.X = x;
                         tile.Y = y;
@@ -170,7 +191,7 @@ namespace SRogue.Core.Modules
                 var y = current.Y;
                 while (x != target.X)
                 {
-                    var tile = EntityLoadManager.Instance.Load<Floor>();
+                    var tile = EntityLoadManager.Current.Load<Floor>();
 
                     tile.X = x;
                     tile.Y = y;
@@ -181,7 +202,7 @@ namespace SRogue.Core.Modules
                 }
                 while (y != target.Y)
                 {
-                    var tile = EntityLoadManager.Instance.Load<Floor>();
+                    var tile = EntityLoadManager.Current.Load<Floor>();
 
                     tile.X = x;
                     tile.Y = y;
@@ -196,10 +217,10 @@ namespace SRogue.Core.Modules
         protected void GenerateRoom(long seed, IList<Point> centers)
         {
             var generator = new Random((int)seed);
-            var roomSizeX = generator.Next(3, 6);
-            var roomSizeY = generator.Next(2, 4);
-            var roomX = generator.Next(roomSizeX + 1, DisplayManager.Instance.Width - 1 - roomSizeX);
-            var roomY = generator.Next(roomSizeY + 1, DisplayManager.Instance.Height - 1 - roomSizeY);
+            var roomSizeX = generator.Next(3, 5);
+            var roomSizeY = generator.Next(2, 3);
+            var roomX = generator.Next(roomSizeX + 1, DisplayManager.Current.FieldWidth - 1 - roomSizeX);
+            var roomY = generator.Next(roomSizeY + 1, DisplayManager.Current.FieldHeight - 1 - roomSizeY);
 
             centers.Add(new Point() { X = roomX, Y = roomY });
 
@@ -207,13 +228,27 @@ namespace SRogue.Core.Modules
             {
                 for (int y = roomY - roomSizeY; y <= roomY + roomSizeY; y++)
                 {
-                    var tile = EntityLoadManager.Instance.Load<Floor>();
+                    var tile = EntityLoadManager.Current.Load<Floor>();
                     
                     tile.X = x;
                     tile.Y = y;
 
                     Add(tile);
                 }
+            }
+        }
+
+        protected void GenerateTraps()
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                var oldTile = GetRandomTile(true);
+                var newTile = EntityLoadManager.Current.Load<SpikeTrap>();
+
+                newTile.X = oldTile.X;
+                newTile.Y = oldTile.Y;
+
+                Add(newTile);
             }
         }
 #endregion
