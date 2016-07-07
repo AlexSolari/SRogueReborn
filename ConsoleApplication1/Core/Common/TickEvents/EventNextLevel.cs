@@ -13,6 +13,7 @@ namespace SRogue.Core.Common.TickEvents
         {
             get
             {
+                UiManager.Current.Actions.Append("Explored new level. ");
                 return () => GameManager.Current.GenerateWorld();
             }
         }

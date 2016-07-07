@@ -21,9 +21,10 @@ namespace SRogue.Core.Entities.Concrete.Entities
 
         public void Interact(IInteractable target)
         {
-            if (target is IHostile)
+            if (target is IHostile && target is IDamageble)
             {
-#warning TODO: implement attacking hostile units
+                UiManager.Current.Actions.Append("Dealead {0} damage to Zombie. ".FormatWith(Attack));
+                (target as IDamageble).Damage(Attack, Common.DamageType.Physical);
             }
         }
     }

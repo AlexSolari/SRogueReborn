@@ -57,10 +57,12 @@
     <Compile Include="Core\Common\TickEvents\EventNextLevel.cs" />
     <Compile Include="Core\Common\TickEvents\TickEventBase.cs" />
     <Compile Include="Core\DisplayManager.cs" />
+    <Compile Include="Core\Entities\Concrete\Entities\Zombie.cs" />
     <Compile Include="Core\Entities\Concrete\Entities\Player.cs" />
     <Compile Include="Core\Entities\Concrete\Tiles\SpikeTrap.cs" />
     <Compile Include="Core\Entities\Concrete\Tiles\Floor.cs" />
     <Compile Include="Core\Entities\Concrete\Tiles\Exit.cs" />
+    <Compile Include="Core\Entities\Interfaces\IAiControllable.cs" />
     <Compile Include="Core\Entities\Interfaces\IControllable.cs" />
     <Compile Include="Core\Entities\Interfaces\IHostile.cs" />
     <Compile Include="Core\Entities\Interfaces\IInteractable.cs" />
@@ -110,6 +112,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="res\Wall.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="res\Zombie.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

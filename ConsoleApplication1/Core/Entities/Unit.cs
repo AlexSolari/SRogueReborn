@@ -44,6 +44,8 @@ namespace SRogue.Core.Entities
 
         public int MagicResist { get; set; }
 
+        public int Attack { get; set; }
+
         public void Move(Direction direction)
         {
             int targetX = X;
@@ -67,10 +69,18 @@ namespace SRogue.Core.Entities
                     break;
             }
 
+            var entities = GameManager.Current.GetEntitiesAt(targetX, targetY).Where(x => x is IInteractable);
             if (GameManager.Current.PlaceFree(targetX, targetY, false, false))
             {
                 X = targetX;
                 Y = targetY;
+            }
+            else if (entities.Count() > 0 && this is IControllable)
+            {
+                foreach (var entity in entities)
+                {
+                    (this as IControllable).Interact(entity as IInteractable);
+                }
             }
         }
 

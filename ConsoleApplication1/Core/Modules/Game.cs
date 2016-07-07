@@ -86,11 +86,21 @@ namespace SRogue.Core.Modules
         {
             foreach (var entity in Entities)
             {
+                if (entity is IAiControllable)
+                {
+                    (entity as IAiControllable).AiTick();
+                }
+
                 var tilesUnderEntity = GetTilesAt(entity.X, entity.Y);
 
                 foreach (var tile in tilesUnderEntity)
                 {
                     tile.OnStep(entity);
+                }
+
+                if (entity.Health < entity.HealthMax)
+                {
+                    entity.Health = Math.Min(entity.Health + 1, entity.HealthMax);
                 }
             }
 
@@ -156,6 +166,14 @@ namespace SRogue.Core.Modules
             Fill();
 
             GenerateTraps();
+
+            for (int index = 0; index < GameState.Current.Depth + 3; index++)
+            {
+                var zombie = EntityLoadManager.Current.Load<Zombie>();
+                zombie.X = GetRandomTile(true).X;
+                zombie.Y = GetRandomTile(true).Y;
+                Add(zombie);
+            }
 
             GameState.Current.Depth++;
             DisplayManager.Current.ResetOverlay();

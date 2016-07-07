@@ -13,16 +13,17 @@ namespace SRogue
         static void Main(string[] args)
         {
             GameManager.Current.GenerateWorld();
-            MusicManager.Current.Play();
+            //MusicManager.Current.Play();
             do
             {
                 Console.Clear();
 
                 Console.Out.Write(DisplayManager.Current.Render());
+                Console.Out.Write(UiManager.Current.MakeActionsLine());
 
-                Console.SetWindowSize(80, 26);
-                GameManager.Current.ProcessInput(Console.ReadKey().KeyChar);
                 GameManager.Current.GameTick();
+                Console.SetWindowSize(80, 27);
+                GameManager.Current.ProcessInput(Console.ReadKey().KeyChar);
             } while (true);
         }
     }

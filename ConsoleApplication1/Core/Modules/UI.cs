@@ -16,6 +16,13 @@ namespace SRogue.Core.Modules
 
         public const char UiBorder = '▓';
 
+        public StringBuilder Actions { get; }
+
+        public UI()
+        {
+            Actions = new StringBuilder();
+        }
+
         public char[,] Render()
         {
             var ui = new char[UiHeight, UiWidth];
@@ -83,12 +90,12 @@ namespace SRogue.Core.Modules
 
         protected void MakeHealthmeter(char[,] ui)
         {
-            Put("   HP: {0}/{1}".FormatWith(GameManager.Current.Player.Health, GameManager.Current.Player.HealthMax), 1, 2, ui);
+            Put("   HP: {0}/{1}".FormatWith((int)GameManager.Current.Player.Health, GameManager.Current.Player.HealthMax), 1, 2, ui);
         }
 
         protected void MakeBuffs(char[,] ui)
         {
-            Put("       BUFFS:".FormatWith(GameState.Current.Depth), 1, 3, ui);
+            Put("     BUFFS:".FormatWith(GameState.Current.Depth), 1, 3, ui);
             var firstfive = GameManager.Current.Player.Buffs.Take(5);
             int index = 4;
             foreach (var buff in firstfive)
@@ -96,6 +103,13 @@ namespace SRogue.Core.Modules
                 Put("     {0}".FormatWith(buff.BuffName), 1, index, ui);
                 index++;
             }
+        }
+
+        public string MakeActionsLine()
+        {
+            var result = string.Join("", Actions.ToString().Take(80));
+            Actions.Clear();
+            return result;
         }
     }
 }
