@@ -273,7 +273,7 @@ namespace SRogue.Core.Modules
 
         protected void GenerateTraps()
         {
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < Rnd.Current.Next(5,15); i++)
             {
                 var oldTile = GetRandomTile(true);
                 var newTile = EntityLoadManager.Current.Load<SpikeTrap>();
