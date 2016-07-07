@@ -36,6 +36,8 @@ namespace SRogue.Core.Modules
             MakeGold(ui);
             MakeBuffs(ui);
 
+            MakeHints(ui);
+
             return ui;
         }
 
@@ -56,7 +58,7 @@ namespace SRogue.Core.Modules
         protected void MakeInvenotyItems(char[,] ui)
         {
             var inv = GameState.Current.Inventory;
-            var index = 2;
+            var index = 3;
             if (inv.Weapon.Item != null)
             {
                 Put(Padding("Equiped: {0}".FormatWith(inv.Weapon.Item.Name), InventoryWidth), 1, index++, ui);
@@ -82,13 +84,15 @@ namespace SRogue.Core.Modules
 
             foreach (var item in backpack)
             {
-                Put(Padding("{0}".FormatWith(item.Name), InventoryWidth), 1, index++, ui);
+                var formatStr = (item == inv.Selected) ? ">> {0} <<" : "{0}";
+                Put(Padding(formatStr.FormatWith(item.Name), InventoryWidth), 1, index++, ui);
             }
         }
 
         protected void MakeInventoryHeader(char[,] ui)
         {
             Put(Padding("INVENTORY", InventoryWidth), 1, 1, ui);
+            Put(Padding("w,s - navigate, q - equip, e - sell", InventoryWidth), 1, 2, ui);
         }
 
         protected void FillInventory(char[,] ui)
@@ -130,6 +134,8 @@ namespace SRogue.Core.Modules
         }
 
         #endregion
+
+        #region Utility
 
         public void LoseGame()
         {
@@ -182,8 +188,10 @@ namespace SRogue.Core.Modules
             return result;
         }
 
+        #endregion
+
         #region UI
-        
+
         protected void MakeUiBorders(char[,] ui)
         {
             int x = 0;
@@ -238,6 +246,11 @@ namespace SRogue.Core.Modules
             }
         }
 
+        protected void MakeHints(char[,] ui)
+        {
+            Put("i - inventory".FormatWith(GameState.Current.Depth), 1, 21, ui, true);
+            Put("wasd - control".FormatWith(GameState.Current.Depth), 1, 22, ui, true);
+        }
         #endregion
     }
 }

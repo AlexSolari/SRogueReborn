@@ -43,5 +43,25 @@ namespace SRogue.Core.Entities.Concrete.Entities
                 targetUnit.GiveItem();
             }
         }
+
+        protected override float SummarizeArmor()
+        {
+            var inv = GameState.Current.Inventory;
+            return base.SummarizeArmor() 
+                + (inv.Head.Item as ArmorBase).Armor 
+                + (inv.Chest.Item as ArmorBase).Armor 
+                + (inv.Legs.Item as ArmorBase).Armor 
+                + (inv.Foot.Item as ArmorBase).Armor;
+        }
+
+        protected override float SummarizeResist()
+        {
+            var inv = GameState.Current.Inventory;
+            return base.SummarizeResist() 
+                + (inv.Head.Item as ArmorBase).MagicResist
+                + (inv.Chest.Item as ArmorBase).MagicResist
+                + (inv.Legs.Item as ArmorBase).MagicResist
+                + (inv.Foot.Item as ArmorBase).MagicResist;
+        }
     }
 }

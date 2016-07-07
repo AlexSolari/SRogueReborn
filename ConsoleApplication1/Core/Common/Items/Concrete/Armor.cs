@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace SRogue.Core.Common.Items.Concrete
 {
-    public class Sword : WeaponBase
+    public class Armor : ArmorBase
     {
-        public Sword(int damage = 1)
-            : base(damage)
+        public Armor(int armor = 2, int resist = 1)
+            : base(armor, resist, ItemType.Chest)
         {
 
         }

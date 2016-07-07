@@ -118,24 +118,27 @@ namespace SRogue.Core.Entities
 
         public float DecreaseDamage(float pureDamage, DamageType type)
         {
-            var decreaseType = float.NaN;
-
             switch (type)
             {
                 case DamageType.Pure:
-                    decreaseType = GameplayConstants.PureDamageDecreaseComponent;
-                    break;
+                    return pureDamage;
                 case DamageType.Physical:
-                    decreaseType = GameplayConstants.PhysicalDamageDecreaseComponent;
-                    break;
+                    return (float)Math.Pow((double)GameplayConstants.PhysicalDamageDecreaseComponent, SummarizeArmor()) * pureDamage;
                 case DamageType.Magical:
-                    decreaseType = GameplayConstants.MagicalDamageDecreaseComponent;
-                    break;
+                    return (float)Math.Pow((double)GameplayConstants.MagicalDamageDecreaseComponent, SummarizeResist()) * pureDamage;
                 default:
                     throw new ArgumentException("Unknown damage type");
             }
+        }
 
-            return (float)Math.Pow((double)decreaseType, Armor) * pureDamage;
+        protected virtual float SummarizeArmor()
+        {
+            return Armor;
+        }
+
+        protected virtual float SummarizeResist()
+        {
+            return MagicResist;
         }
     }
 }

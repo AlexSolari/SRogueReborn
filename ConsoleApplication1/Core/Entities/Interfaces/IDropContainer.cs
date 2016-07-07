@@ -9,6 +9,7 @@ namespace SRogue.Core.Entities.Interfaces
 {
     public interface IDropContainer : IInteractable
     {
+        bool Picked { get; set; }
         IList<ItemBase> Droplist { get; set; }
         void GiveItem();
     }

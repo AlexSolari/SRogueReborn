@@ -15,6 +15,8 @@ namespace SRogue.Core.Entities.Concrete.Entities.Bases
         [XmlIgnore]
         public IList<ItemBase> Droplist { get; set; }
 
+        public bool Picked { get; set; }
+
         public DropUnitBase()
         {
             Droplist = new List<ItemBase>();
@@ -22,10 +24,14 @@ namespace SRogue.Core.Entities.Concrete.Entities.Bases
 
         public void GiveItem()
         {
-            var item = Droplist[Rnd.Current.Next(Droplist.Count)];
-            Kill();
-            GameState.Current.Inventory.Backpack.Add(item);
-            UiManager.Current.Actions.Append("You picked up '{0}'. ".FormatWith(item.Name));
+            if (!Picked)
+            {
+                var item = Droplist[Rnd.Current.Next(Droplist.Count)];
+                Kill();
+                GameState.Current.Inventory.Backpack.Add(item);
+                UiManager.Current.Actions.Append("You picked up '{0}'. ".FormatWith(item.Name));
+                Picked = true;
+            }
         }
     }
 }

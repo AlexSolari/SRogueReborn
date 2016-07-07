@@ -94,6 +94,26 @@ namespace SRogue.Core.Modules
                         break;
                 }
             }
+            else
+            {
+                switch (input)
+                {
+                    case 'w':
+                        GameState.Current.Inventory.SelectNext();
+                        break;
+                    case 's':
+                        GameState.Current.Inventory.SelectPrev();
+                        break;
+                    case 'q':
+                        GameState.Current.Inventory.EquipSelected();
+                        break;
+                    case 'e':
+                        GameState.Current.Inventory.SellSelected();
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
 
         private void ToggleInventory()
@@ -101,10 +121,12 @@ namespace SRogue.Core.Modules
             if (InventoryOpened)
             {
                 DisplayManager.Current.LoadOverlay();
+                GameState.Current.Inventory.Deselect();
             }
             else
             {
                 DisplayManager.Current.SaveOverlay();
+                GameState.Current.Inventory.SelectNext();
             }
             InventoryOpened = !InventoryOpened;
             Console.Out.Write(DisplayManager.Current.Render());

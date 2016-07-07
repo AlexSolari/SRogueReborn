@@ -8,12 +8,35 @@ namespace SRogue.Core.Common.Items.Bases
 {
     public class WeaponBase : ItemBase
     {
-        public int Damage { get; set; }
+        protected int _Damage;
+
+        public int Damage
+        {
+            get
+            {
+                return _Damage + (int)Material + (int)Quality;
+            }
+            set
+            {
+                _Damage = value;
+            }
+        }
+
+        public override string Name
+        {
+            get
+            {
+                if (isEmpty)
+                    return base.Name;
+
+                return base.Name + " ({0} dmg)".FormatWith(Damage);   
+            }
+        }
 
         public WeaponBase(int damage)
             : base()
         {
-            Damage = damage + ((int)Quality / 2);
+            _Damage = damage;
             Slot = ItemType.Weapon;
         }
     }

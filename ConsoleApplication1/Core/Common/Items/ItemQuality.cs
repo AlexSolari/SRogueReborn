@@ -8,6 +8,7 @@ namespace SRogue.Core.Common.Items
 {
     public enum ItemQuality
     {
+        Cursed = -2,
         Broken,
         Common,
         Good,

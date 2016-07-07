@@ -13,6 +13,8 @@ namespace SRogue
     {
         static void Init()
         {
+            Console.Title = "SRogue";
+
             AiManager.Current.RegisterAllFrom<Ai.Container>();
         }
 

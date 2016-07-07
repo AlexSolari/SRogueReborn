@@ -8,6 +8,8 @@ namespace SRogue.Core.Common.Items.Bases
 {
     public abstract class ItemBase
     {
+        public bool isEmpty { get; set; }
+
         public ItemType Slot { get; set; }
 
         public ItemMaterial Material { get; set; }
@@ -18,7 +20,10 @@ namespace SRogue.Core.Common.Items.Bases
         { 
             get
             {
-                return "{1} {2} +{0}".FormatWith((int)Quality, Material, this.GetType().Name);
+                if (isEmpty)
+                    return "[ No {0} ]".FormatWith(this.GetType().Name);
+
+                return "{0} {1} {2}".FormatWith(Quality, Material, this.GetType().Name);
             }
         }
 
