@@ -129,10 +129,9 @@ namespace SRogue.Core.Modules
 
         public ITile GetRandomTile(bool pathable = false)
         {
-            var generator = new Random();
-            var tiles = Tiles.Where(x => !pathable || x.Pathable).ToList();
-
-            return tiles[generator.Next(tiles.Count())];
+            var tiles = Tiles.Where(x => (pathable) ? x.Pathable : !x.Pathable).ToList();
+            var tile = tiles[Rnd.Current.Next(tiles.Count())];
+            return tile;
         }
 
         #endregion
@@ -141,42 +140,60 @@ namespace SRogue.Core.Modules
        
         public void GenerateWorld()
         {
+            GameState.Current.Depth++;
+
             Tiles.Clear();
             Entities.Clear();
 
+            var roomsCount = Rnd.Current.Next(6, 14);
             var centers = new List<Point>();
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < roomsCount; i++)
             {
-                var seed = DateTime.Now.Ticks / (Tiles.Count + 1);
-                GenerateRoom(seed, centers);
+                GenerateRoom(centers);
             }
 
             GenerateCorridors(centers);
-
-            var exit = EntityLoadManager.Current.Load<Exit>();
-            exit.X = centers.Last().X;
-            exit.Y = centers.Last().Y;
-            Add(exit);
-
-            Player = EntityLoadManager.Current.Load<Player>();
-            Player.X = centers.First().X;
-            Player.Y = centers.First().Y;
-            Add(Player);
 
             Fill();
 
             GenerateTraps();
 
-            for (int index = 0; index < GameState.Current.Depth + 3; index++)
+            AddPlayer(centers);
+
+            GenerateEnemies();
+
+            GenerateExit(centers);
+#if !DEBUG
+            DisplayManager.Current.ResetOverlay();
+#endif
+        }
+
+        private void AddPlayer(IList<Point> centers)
+        {
+            Player = EntityLoadManager.Current.Load<Player>();
+            Player.X = centers.First().X;
+            Player.Y = centers.First().Y;
+            Add(Player);
+        }
+
+        protected void GenerateExit(IList<Point> centers)
+        {
+            var exit = EntityLoadManager.Current.Load<Exit>();
+            exit.X = centers.Last().X;
+            exit.Y = centers.Last().Y;
+            Add(exit);
+        }
+
+        protected void GenerateEnemies()
+        {
+            for (int index = 0; index < GameState.Current.Depth + 2; index++)
             {
                 var zombie = EntityLoadManager.Current.Load<Zombie>();
-                zombie.X = GetRandomTile(true).X;
-                zombie.Y = GetRandomTile(true).Y;
+                var tile = GetRandomTile(true);
+                zombie.X = tile.X;
+                zombie.Y = tile.Y;
                 Add(zombie);
             }
-
-            GameState.Current.Depth++;
-            DisplayManager.Current.ResetOverlay();
         }
 
         protected void Fill()
@@ -200,10 +217,9 @@ namespace SRogue.Core.Modules
 
         protected void GenerateCorridors(IList<Point> centers)
         {
-            var generator = new Random();
             foreach (var current in centers)
             {
-                var target = centers.Where(p => p != current).OrderBy(p => generator.Next()).FirstOrDefault();
+                var target = centers.Where(p => p != current).OrderBy(p => Rnd.Current.Next()).FirstOrDefault();
 
                 var x = current.X;
                 var y = current.Y;
@@ -232,13 +248,12 @@ namespace SRogue.Core.Modules
             }
         }
 
-        protected void GenerateRoom(long seed, IList<Point> centers)
+        protected void GenerateRoom(IList<Point> centers)
         {
-            var generator = new Random((int)seed);
-            var roomSizeX = generator.Next(3, 5);
-            var roomSizeY = generator.Next(2, 3);
-            var roomX = generator.Next(roomSizeX + 1, DisplayManager.Current.FieldWidth - 1 - roomSizeX);
-            var roomY = generator.Next(roomSizeY + 1, DisplayManager.Current.FieldHeight - 1 - roomSizeY);
+            var roomSizeX = Rnd.Current.Next(3, 5);
+            var roomSizeY = Rnd.Current.Next(2, 3);
+            var roomX = Rnd.Current.Next(roomSizeX + 1, DisplayManager.Current.FieldWidth - 1 - roomSizeX);
+            var roomY = Rnd.Current.Next(roomSizeY + 1, DisplayManager.Current.FieldHeight - 1 - roomSizeY);
 
             centers.Add(new Point() { X = roomX, Y = roomY });
 

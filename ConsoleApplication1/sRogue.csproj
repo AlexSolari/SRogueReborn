@@ -49,6 +49,7 @@
     <Compile Include="Core\Common\Direction.cs" />
     <Compile Include="Core\Common\GameplayConstants.cs" />
     <Compile Include="Core\Common\Point.cs" />
+    <Compile Include="Core\Common\Rnd.cs" />
     <Compile Include="Core\Common\Singleton.cs" />
     <Compile Include="Core\Common\TickEvents\EventPeriodicDamage.cs" />
     <Compile Include="Core\Common\TickEvents\EventTileRemove.cs" />

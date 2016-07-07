@@ -14,7 +14,6 @@ namespace SRogue.Core.Entities.Concrete.Entities
     {
         public void AiTick()
         {
-            var generator = new Random();
             var targetPlayer = GameManager.Current.Entities
                 .Where(e => e.X < X + 5 && e.X > X - 5 && e.Y < Y + 5 && e.Y > Y - 5)
                 .Where(e => e is Player)
@@ -22,7 +21,7 @@ namespace SRogue.Core.Entities.Concrete.Entities
 
             if (targetPlayer == null)
             {
-                Move((Direction)generator.Next(4));
+                Move((Direction)Rnd.Current.Next(4));
                 return;
             }
 
