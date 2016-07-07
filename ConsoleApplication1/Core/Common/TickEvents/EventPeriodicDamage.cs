@@ -14,12 +14,14 @@ namespace SRogue.Core.Common.TickEvents
 
         protected float Damage { get; set; }
 
+        protected DamageType DamageType { get; set; }
+
         public override Action Event
         {
             get
             {
                 return () => {
-                    (Target as IUnit).Damage(Damage);
+                    (Target as IUnit).Damage(Damage, DamageType);
                 };
             }
         }
@@ -37,12 +39,13 @@ namespace SRogue.Core.Common.TickEvents
             }
         }
 
-        public EventPeriodicDamage(IUnit unit, float damagePure, int ticks, BuffBase debuff)
+        public EventPeriodicDamage(IUnit unit, float damagePure, DamageType type, int ticks, BuffBase debuff)
         {
             Target = unit;
             TicksRemaining = ticks;
             Damage = damagePure;
             Debuff = debuff;
+            DamageType = type;
             if (Target == GameManager.Current.Player)
             {
                 GameManager.Current.Player.Buffs.Add(Debuff);

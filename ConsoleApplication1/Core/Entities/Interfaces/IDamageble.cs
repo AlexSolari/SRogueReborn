@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SRogue.Core.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,8 +9,6 @@ namespace SRogue.Core.Entities.Interfaces
 {
     public interface IDamageble : IKillable
     {
-        float Health { get; set; }
-        float HealthMax { get; set; }
-        void Damage(float pure);
+        void Damage(float pure, DamageType type);
     }
 }

@@ -11,7 +11,7 @@ namespace SRogue.Core.Common.TickEvents
     public class EventSpikeTrapDamage : EventPeriodicDamage 
     {
         public EventSpikeTrapDamage(IUnit unit)
-            : base(unit, 5, 5, new BuffInjured())
+            : base(unit, 5, DamageType.Physical, 5, new BuffInjured())
         {
         }
     }

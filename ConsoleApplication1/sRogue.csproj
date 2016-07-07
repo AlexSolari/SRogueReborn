@@ -45,7 +45,9 @@
     <Compile Include="Core\Common\Assets.cs" />
     <Compile Include="Core\Common\Buffs\BuffBase.cs" />
     <Compile Include="Core\Common\Buffs\BuffInjured.cs" />
+    <Compile Include="Core\Common\DamageType.cs" />
     <Compile Include="Core\Common\Direction.cs" />
+    <Compile Include="Core\Common\GameplayConstants.cs" />
     <Compile Include="Core\Common\Point.cs" />
     <Compile Include="Core\Common\Singleton.cs" />
     <Compile Include="Core\Common\TickEvents\EventPeriodicDamage.cs" />
@@ -59,6 +61,9 @@
     <Compile Include="Core\Entities\Concrete\Tiles\SpikeTrap.cs" />
     <Compile Include="Core\Entities\Concrete\Tiles\Floor.cs" />
     <Compile Include="Core\Entities\Concrete\Tiles\Exit.cs" />
+    <Compile Include="Core\Entities\Interfaces\IControllable.cs" />
+    <Compile Include="Core\Entities\Interfaces\IHostile.cs" />
+    <Compile Include="Core\Entities\Interfaces\IInteractable.cs" />
     <Compile Include="Core\Entities\Unit.cs" />
     <Compile Include="Core\Entities\Interfaces\IDamageble.cs" />
     <Compile Include="Core\Entities\Interfaces\IDisplayable.cs" />

@@ -39,7 +39,11 @@ namespace SRogue.Core.Entities
         public float Health { get; set; }
 
         public float HealthMax { get; set; }
-        
+
+        public int Armor { get; set; }
+
+        public int MagicResist { get; set; }
+
         public void Move(Direction direction)
         {
             int targetX = X;
@@ -87,9 +91,9 @@ namespace SRogue.Core.Entities
             }
         }
 
-        public virtual void Damage(float pure)
+        public virtual void Damage(float pure, DamageType type)
         {
-            Health -= pure;
+            Health -= DecreaseDamage(pure, type);
             if (Health <= 0)
             {
                 Kill();
@@ -100,6 +104,28 @@ namespace SRogue.Core.Entities
         {
             Health = 0;
             GameManager.Current.OnTickEndEvents.Add(new EventEntityRemove(this));
+        }
+
+        public float DecreaseDamage(float pureDamage, DamageType type)
+        {
+            var decreaseType = float.NaN;
+
+            switch (type)
+            {
+                case DamageType.Pure:
+                    decreaseType = GameplayConstants.PureDamageDecreaseComponent;
+                    break;
+                case DamageType.Physical:
+                    decreaseType = GameplayConstants.PhysicalDamageDecreaseComponent;
+                    break;
+                case DamageType.Magical:
+                    decreaseType = GameplayConstants.MagicalDamageDecreaseComponent;
+                    break;
+                default:
+                    throw new ArgumentException("Unknown damage type");
+            }
+
+            return (float)Math.Pow((double)decreaseType, Armor) * pureDamage;
         }
     }
 }
