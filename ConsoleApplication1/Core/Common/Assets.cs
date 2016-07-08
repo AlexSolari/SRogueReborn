@@ -21,6 +21,11 @@ namespace SRogue.Core.Common
 
         /***Entities***/
         public const char Player = '@';
-        public const char Zombie = 'Z';
+        public const char Zombie = 'z';
+        public const char ZombieBoss = 'Z';
+
+
+        public const char Item = 'u';
+        public const char RandomSwordDrop = Item;
     }
 }

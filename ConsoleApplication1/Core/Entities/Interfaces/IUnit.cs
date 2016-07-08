@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SRogue.Core.Entities.Interfaces
 {
-    public interface IUnit : IPositionable, IDisplayable, IDamageble, IEntity
+    public interface IUnit : IPositionable, IDisplayable, IDamageble, IEntity, IMovable
     {
         float Health { get; set; }
         float HealthMax { get; set; }

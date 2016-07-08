@@ -35,7 +35,7 @@ namespace SRogue.Core.Modules
                         Cache.Add(typeof(TType), doc);
                     }
                 }
-                catch (IOException ex)
+                catch (Exception ex)
                 {
                     using (var writer = new StreamWriter("log.txt"))
                     {

@@ -1,4 +1,4 @@
-﻿using SRogue.Core.Common.Items;
+﻿using SRogue.Core.Common.Items.Bases;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace SRogue.Core.Entities.Interfaces
 {
-    public interface IControllable
+    public interface IDropContainer : IInteractable
     {
-        void Interact(IInteractable target);
+        IList<ItemBase> Droplist { get; set; }
+        void GiveItem();
     }
 }

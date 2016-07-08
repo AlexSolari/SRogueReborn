@@ -110,7 +110,7 @@ namespace SRogue.Core.Entities
             }
         }
 
-        public void Kill()
+        public virtual void Kill()
         {
             Health = 0;
             GameManager.Current.OnTickEndEvents.Add(new EventEntityRemove(this));

@@ -20,8 +20,11 @@ namespace SRogue.Core.Modules
         public IList<ITile> Tiles { get; private set; }
         public List<TickEventBase> OnTickEndEvents { get; set; }
 
+        public bool InventoryOpened { get; set; }
+
         public Game()   
         {
+            InventoryOpened = false;
             Entities = new List<IUnit>();
             Tiles = new List<ITile>();
             OnTickEndEvents = new List<TickEventBase>();
@@ -63,23 +66,48 @@ namespace SRogue.Core.Modules
         public void ProcessInput(char input)
         {
             input = char.ToLower(input);
-            switch (input)
-            {
-                case 'w':
-                    Player.Move(Direction.Top);
-                    break;
-                case 's':
-                    Player.Move(Direction.Bottom);
-                    break;
-                case 'a':
-                    Player.Move(Direction.Left);
-                    break;
-                case 'd':
-                    Player.Move(Direction.Right);
-                    break;
-                default:
-                    break;
+
+            if (input == 'i')
+                ToggleInventory();
+
+            if (!InventoryOpened)
+            { 
+                switch (input)
+                {
+                    case 'w':
+                        Player.Move(Direction.Top);
+                        GameTick();
+                        break;
+                    case 's':
+                        Player.Move(Direction.Bottom);
+                        GameTick();
+                        break;
+                    case 'a':
+                        Player.Move(Direction.Left);
+                        GameTick();
+                        break;
+                    case 'd':
+                        Player.Move(Direction.Right);
+                        GameTick();
+                        break;
+                    default:
+                        break;
+                }
             }
+        }
+
+        private void ToggleInventory()
+        {
+            if (InventoryOpened)
+            {
+                DisplayManager.Current.LoadOverlay();
+            }
+            else
+            {
+                DisplayManager.Current.SaveOverlay();
+            }
+            InventoryOpened = !InventoryOpened;
+            Console.Out.Write(DisplayManager.Current.Render());
         }
 
         public void GameTick()
@@ -100,7 +128,8 @@ namespace SRogue.Core.Modules
 
                 if (entity.Health < entity.HealthMax)
                 {
-                    entity.Health = Math.Min(entity.Health + 1, entity.HealthMax);
+                    var regen = (entity is IHostile) ? 0.33f : 1;
+                    entity.Health = Math.Min(entity.Health + regen, entity.HealthMax);
                 }
             }
 
@@ -186,13 +215,27 @@ namespace SRogue.Core.Modules
 
         protected void GenerateEnemies()
         {
-            for (int index = 0; index < GameState.Current.Depth + 2; index++)
+            if (GameState.Current.Depth % 4 == 0)
             {
-                var zombie = EntityLoadManager.Current.Load<Zombie>();
-                var tile = GetRandomTile(true);
-                zombie.X = tile.X;
-                zombie.Y = tile.Y;
-                Add(zombie);
+                for (int index = 0; index < GameState.Current.Depth / 4; index++)
+                {
+                    var zombie = EntityLoadManager.Current.Load<ZombieBoss>();
+                    var tile = GetRandomTile(true);
+                    zombie.X = tile.X;
+                    zombie.Y = tile.Y;
+                    Add(zombie);
+                }
+            }
+            else
+            {
+                for (int index = 0; index < GameState.Current.Depth + 2; index++)
+                {
+                    var zombie = EntityLoadManager.Current.Load<Zombie>();
+                    var tile = GetRandomTile(true);
+                    zombie.X = tile.X;
+                    zombie.Y = tile.Y;
+                    Add(zombie);
+                }
             }
         }
 

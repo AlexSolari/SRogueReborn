@@ -8,11 +8,14 @@ namespace SRogue.Core.Modules
 {
     public class UI
     {
-        public readonly int UiWidth = 20;
-        public readonly int UiHeight = 25;
+        public const int UiWidth = 20;
+        public const int UiHeight = 25;
 
-        public readonly int MarginWidth = 59;
-        public readonly int MarginHeight = 0;
+        public const int InventoryWidth = 54;
+        public const int InventoryHeight = 22;
+
+        public const int MarginWidth = 59;
+        public const int MarginHeight = 0;
 
         public const char UiBorder = '▓';
 
@@ -35,6 +38,98 @@ namespace SRogue.Core.Modules
 
             return ui;
         }
+
+        public char[,] RenderInventory()
+        {
+            var ui = new char[InventoryHeight, InventoryWidth];
+
+            FillInventory(ui);
+            RenderInventoryBorders(ui);
+            MakeInventoryHeader(ui);
+            MakeInvenotyItems(ui);
+
+            return ui;
+        }
+
+        #region Inventory
+
+        protected void MakeInvenotyItems(char[,] ui)
+        {
+            var inv = GameState.Current.Inventory;
+            var index = 2;
+            if (inv.Weapon.Item != null)
+            {
+                Put(Padding("Equiped: {0}".FormatWith(inv.Weapon.Item.Name), InventoryWidth), 1, index++, ui);
+            }
+            if (inv.Head.Item != null)
+            {
+                Put(Padding("Equiped: {0}".FormatWith(inv.Head.Item.Name), InventoryWidth), 1, index++, ui);
+            }
+            if (inv.Chest.Item != null)
+            {
+                Put(Padding("Equiped: {0}".FormatWith(inv.Chest.Item.Name), InventoryWidth), 1, index++, ui);
+            }
+            if (inv.Legs.Item != null)
+            {
+                Put(Padding("Equiped: {0}".FormatWith(inv.Legs.Item.Name), InventoryWidth), 1, index++, ui);
+            }
+            if (inv.Foot.Item != null)
+            {
+                Put(Padding("Equiped: {0}".FormatWith(inv.Foot.Item.Name), InventoryWidth), 1, index++, ui);
+            }
+
+            var backpack = inv.Backpack.Take(InventoryHeight - 3 - index);
+
+            foreach (var item in backpack)
+            {
+                Put(Padding("{0}".FormatWith(item.Name), InventoryWidth), 1, index++, ui);
+            }
+        }
+
+        protected void MakeInventoryHeader(char[,] ui)
+        {
+            Put(Padding("INVENTORY", InventoryWidth), 1, 1, ui);
+        }
+
+        protected void FillInventory(char[,] ui)
+        {
+            for (int x = 0; x < InventoryWidth; x++)
+            {
+                for (int y = 0; y < InventoryHeight; y++)
+                {
+                    ui[y, x] = ' ';
+                }
+            }
+        }
+
+        protected void RenderInventoryBorders(char[,] ui)
+        {
+            var x = 0;
+            var y = 0;
+
+            while (x < InventoryWidth - 1)
+            {
+                Put(UiBorder, x, y, ui);
+                x++;
+            }
+            while (y < InventoryHeight - 1)
+            {
+                Put(UiBorder, x, y, ui);
+                y++;
+            }
+            while (x > 0)
+            {
+                Put(UiBorder, x, y, ui);
+                x--;
+            }
+            while (y > 0)
+            {
+                Put(UiBorder, x, y, ui);
+                y--;
+            }
+        }
+
+        #endregion
 
         public void LoseGame()
         {
@@ -62,6 +157,33 @@ namespace SRogue.Core.Modules
             }
         }
 
+        protected string Padding(string str, int width = UiWidth)
+        {
+            var result = new StringBuilder(str);
+
+            if (str.Length % 2 != 1)
+            {
+                result.Insert(0, " ");
+            }
+
+            while (result.Length < width - 3)
+            {
+                result.Insert(0, " ");
+                result.Append(" ");
+            }
+
+            return result.ToString();
+        }
+
+        public string MakeActionsLine()
+        {
+            var result = string.Join("", Actions.ToString().Take(80));
+            Actions.Clear();
+            return result;
+        }
+
+        #region UI
+        
         protected void MakeUiBorders(char[,] ui)
         {
             int x = 0;
@@ -116,29 +238,6 @@ namespace SRogue.Core.Modules
             }
         }
 
-        protected string Padding(string str)
-        {
-            var result = new StringBuilder(str);
-            
-            if (str.Length % 2 != 1)
-            {
-                result.Insert(0, " ");
-            }
-              
-            while (result.Length < UiWidth - 3)
-            {
-                result.Insert(0, " ");
-                result.Append(" ");
-            }
-
-            return result.ToString();
-        }
-
-        public string MakeActionsLine()
-        {
-            var result = string.Join("", Actions.ToString().Take(80));
-            Actions.Clear();
-            return result;
-        }
+        #endregion
     }
 }

@@ -1,5 +1,8 @@
 ﻿using SRogue.Core.Common;
 using SRogue.Core.Common.Buffs;
+using SRogue.Core.Common.Items;
+using SRogue.Core.Common.Items.Bases;
+using SRogue.Core.Entities.Concrete.Entities.Bases;
 using SRogue.Core.Entities.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -22,15 +25,22 @@ namespace SRogue.Core.Entities.Concrete.Entities
 
         public void Interact(IInteractable target)
         {
-            if (target is IHostile && target is IUnit)
+            if (target is HostileUnitBase)
             {
-                var targetUnit = target as IUnit;
-                UiManager.Current.Actions.Append("Dealead {0} damage to Zombie. ".FormatWith(Attack));
-                targetUnit.Damage(Attack, Common.DamageType.Physical);
+                var weapon = GameState.Current.Inventory.Weapon.Item as WeaponBase;
+                var targetUnit = target as HostileUnitBase;
+                var damage = Attack + weapon.Damage;
+                UiManager.Current.Actions.Append("Dealead {0} damage to Zombie. ".FormatWith(damage));
+                targetUnit.Damage(damage, Common.DamageType.Physical);
                 if (targetUnit.Health <= 0)
                 {
-                    GameState.Current.Gold += (int)((targetUnit as IHostile).Reward * (Rnd.Current.NextDouble() + 0.5f));
+                    GameState.Current.Gold += (int)(targetUnit.Reward * (Rnd.Current.NextDouble() + 0.5f));
                 }
+            }
+            if (target is DropUnitBase)
+            {
+                var targetUnit = target as DropUnitBase;
+                targetUnit.GiveItem();
             }
         }
     }

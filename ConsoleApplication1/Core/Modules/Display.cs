@@ -19,6 +19,7 @@ namespace SRogue.Core.Modules
         public readonly int Height = 25;
         public readonly int FieldWidth = 59;
         public readonly int FieldHeight = 25;
+        private char[,] OverlaySaver;
         private char[,] Overlay;
         private char[,] Screen;
         private readonly char Fog = '▒';
@@ -28,6 +29,17 @@ namespace SRogue.Core.Modules
             Overlay = new char[Height, Width];
             Screen = new char[Height, Width];
         }
+
+        public void SaveOverlay()
+        {
+            OverlaySaver = (char[,])Overlay.Clone();
+        }
+
+        public void LoadOverlay()
+        {
+            Overlay = (char[,])OverlaySaver.Clone();
+        }
+
 
         public void ResetOverlay()
         {
@@ -94,11 +106,11 @@ namespace SRogue.Core.Modules
         {
             var ui = UiManager.Current.Render();
 
-            for (int x = UiManager.Current.MarginWidth; x < Width; x++)
+            for (int x = UI.MarginWidth; x < Width; x++)
             {
-                for (int y = UiManager.Current.MarginHeight; y < Height; y++)
+                for (int y = UI.MarginHeight; y < Height; y++)
                 {
-                    Put(ui[y, x - UiManager.Current.MarginWidth], x, y, Destination.Overlay);
+                    Put(ui[y, x - UI.MarginWidth], x, y, Destination.Overlay);
                 }
             }
 
@@ -109,6 +121,19 @@ namespace SRogue.Core.Modules
                 y < Math.Min(GameManager.Current.Player.Y + 3, FieldHeight); y++)
                 {
                     Put('\0', x, y, Destination.Overlay);
+                }
+            }
+
+            if (GameManager.Current.InventoryOpened)
+            {
+                var inventory = UiManager.Current.RenderInventory();
+
+                for (int x = 2; x < UI.InventoryWidth + 2; x++)
+                {
+                    for (int y = 2; y < UI.InventoryHeight + 2; y++)
+                    {
+                        Put(inventory[y - 2, x - 2], x, y, Destination.Overlay);
+                    }
                 }
             }
         }

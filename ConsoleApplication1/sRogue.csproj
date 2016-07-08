@@ -42,15 +42,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\AiManager.cs" />
+    <Compile Include="Core\Common\AiForAttribute.cs" />
     <Compile Include="Core\Common\Assets.cs" />
     <Compile Include="Core\Common\Buffs\BuffBase.cs" />
     <Compile Include="Core\Common\Buffs\BuffInjured.cs" />
     <Compile Include="Core\Common\DamageType.cs" />
     <Compile Include="Core\Common\Direction.cs" />
     <Compile Include="Core\Common\GameplayConstants.cs" />
+    <Compile Include="Core\Common\Items\Bases\WeaponBase.cs" />
+    <Compile Include="Core\Common\Items\Concrete\Sword.cs" />
+    <Compile Include="Core\Common\Items\Inventory.cs" />
+    <Compile Include="Core\Common\Items\Bases\ItemBase.cs" />
+    <Compile Include="Core\Common\Items\ItemMaterial.cs" />
+    <Compile Include="Core\Common\Items\ItemQuality.cs" />
+    <Compile Include="Core\Common\Items\ItemSlot.cs" />
+    <Compile Include="Core\Common\Items\ItemType.cs" />
     <Compile Include="Core\Common\Point.cs" />
     <Compile Include="Core\Common\Rnd.cs" />
     <Compile Include="Core\Common\Singleton.cs" />
+    <Compile Include="Core\Common\TickEvents\EventItemDrop.cs" />
     <Compile Include="Core\Common\TickEvents\EventPeriodicDamage.cs" />
     <Compile Include="Core\Common\TickEvents\EventTileRemove.cs" />
     <Compile Include="Core\Common\TickEvents\EventEntityRemove.cs" />
@@ -58,6 +69,10 @@
     <Compile Include="Core\Common\TickEvents\EventNextLevel.cs" />
     <Compile Include="Core\Common\TickEvents\TickEventBase.cs" />
     <Compile Include="Core\DisplayManager.cs" />
+    <Compile Include="Core\Entities\Concrete\Entities\Bases\DropUnitBase.cs" />
+    <Compile Include="Core\Entities\Concrete\Entities\Bases\HostileUnitBase.cs" />
+    <Compile Include="Core\Entities\Concrete\Entities\RandomSwordDrop.cs" />
+    <Compile Include="Core\Entities\Concrete\Entities\ZombieBoss.cs" />
     <Compile Include="Core\Entities\Concrete\Entities\Zombie.cs" />
     <Compile Include="Core\Entities\Concrete\Entities\Player.cs" />
     <Compile Include="Core\Entities\Concrete\Tiles\SpikeTrap.cs" />
@@ -65,6 +80,7 @@
     <Compile Include="Core\Entities\Concrete\Tiles\Exit.cs" />
     <Compile Include="Core\Entities\Interfaces\IAiControllable.cs" />
     <Compile Include="Core\Entities\Interfaces\IControllable.cs" />
+    <Compile Include="Core\Entities\Interfaces\IDropContainer.cs" />
     <Compile Include="Core\Entities\Interfaces\IHostile.cs" />
     <Compile Include="Core\Entities\Interfaces\IInteractable.cs" />
     <Compile Include="Core\Entities\Unit.cs" />
@@ -80,6 +96,7 @@
     <Compile Include="Core\Extensions\ObjectExtensions.cs" />
     <Compile Include="Core\Extensions\StringExtensions.cs" />
     <Compile Include="Core\GameState.cs" />
+    <Compile Include="Core\Modules\Ai.cs" />
     <Compile Include="Core\Modules\Loader.cs" />
     <Compile Include="Core\Entities\Tile.cs" />
     <Compile Include="Core\Extensions\IntegerExtensions.cs" />
@@ -113,6 +130,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="res\Wall.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="res\ZombieBoss.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="res\Zombie.xml">
