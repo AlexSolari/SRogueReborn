@@ -30,6 +30,7 @@ namespace SRogue.Core.Modules
             MakeUiBorders(ui);
             MakeDepthmeter(ui);
             MakeHealthmeter(ui);
+            MakeGold(ui);
             MakeBuffs(ui);
 
             return ui;
@@ -48,8 +49,13 @@ namespace SRogue.Core.Modules
             ui[y, x] = c;
         }
 
-        private void Put(string s, int x, int y, char[,] ui)
+        private void Put(string s, int x, int y, char[,] ui, bool padding = false)
         {
+            if (padding)
+            {
+                s = Padding(s);
+            }
+
             for (int i = 0; i < s.Length; i++)
             {
                 ui[y, x + i] = s[i];
@@ -85,24 +91,47 @@ namespace SRogue.Core.Modules
 
         protected void MakeDepthmeter(char[,] ui)
         {
-            Put("     DEPTH: {0}".FormatWith(GameState.Current.Depth), 1, 1, ui);
+            Put("DEPTH: {0}".FormatWith(GameState.Current.Depth), 1, 1, ui, true);
         }
 
         protected void MakeHealthmeter(char[,] ui)
         {
-            Put("   HP: {0}/{1}".FormatWith((int)GameManager.Current.Player.Health, GameManager.Current.Player.HealthMax), 1, 2, ui);
+            Put("HP: {0}/{1}".FormatWith((int)GameManager.Current.Player.Health, GameManager.Current.Player.HealthMax), 1, 2, ui, true);
+        }
+
+        protected void MakeGold(char[,] ui)
+        {
+            Put("GOLD: {0}".FormatWith(GameState.Current.Gold), 1, 3, ui, true);
         }
 
         protected void MakeBuffs(char[,] ui)
         {
-            Put("     BUFFS:".FormatWith(GameState.Current.Depth), 1, 3, ui);
+            Put("BUFFS:".FormatWith(GameState.Current.Depth), 1, 4, ui, true);
             var firstfive = GameManager.Current.Player.Buffs.Take(5);
-            int index = 4;
+            int index = 5;
             foreach (var buff in firstfive)
             {
-                Put("     {0}".FormatWith(buff.BuffName), 1, index, ui);
+                Put("{0}".FormatWith(buff.BuffName), 1, index, ui, true);
                 index++;
             }
+        }
+
+        protected string Padding(string str)
+        {
+            var result = new StringBuilder(str);
+            
+            if (str.Length % 2 != 1)
+            {
+                result.Insert(0, " ");
+            }
+              
+            while (result.Length < UiWidth - 3)
+            {
+                result.Insert(0, " ");
+                result.Append(" ");
+            }
+
+            return result.ToString();
         }
 
         public string MakeActionsLine()
