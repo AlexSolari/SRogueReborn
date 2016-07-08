@@ -15,9 +15,9 @@ namespace SRogue.Core.Modules
             Screen
 	    }
 
-        public readonly int Width = 80;
+        public readonly int Width = 79;
         public readonly int Height = 25;
-        public readonly int FieldWidth = 60;
+        public readonly int FieldWidth = 59;
         public readonly int FieldHeight = 25;
         private char[,] Overlay;
         private char[,] Screen;

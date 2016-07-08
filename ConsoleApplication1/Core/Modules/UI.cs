@@ -11,12 +11,12 @@ namespace SRogue.Core.Modules
         public readonly int UiWidth = 20;
         public readonly int UiHeight = 25;
 
-        public readonly int MarginWidth = 60;
+        public readonly int MarginWidth = 59;
         public readonly int MarginHeight = 0;
 
         public const char UiBorder = '▓';
 
-        public StringBuilder Actions { get; }
+        public StringBuilder Actions { get; private set; }
 
         public UI()
         {
