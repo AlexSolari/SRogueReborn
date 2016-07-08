@@ -1,4 +1,5 @@
-﻿using SRogue.Core.Common.Buffs;
+﻿using SRogue.Core.Common;
+using SRogue.Core.Common.Buffs;
 using SRogue.Core.Entities.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -21,10 +22,15 @@ namespace SRogue.Core.Entities.Concrete.Entities
 
         public void Interact(IInteractable target)
         {
-            if (target is IHostile && target is IDamageble)
+            if (target is IHostile && target is IUnit)
             {
+                var targetUnit = target as IUnit;
                 UiManager.Current.Actions.Append("Dealead {0} damage to Zombie. ".FormatWith(Attack));
-                (target as IDamageble).Damage(Attack, Common.DamageType.Physical);
+                targetUnit.Damage(Attack, Common.DamageType.Physical);
+                if (targetUnit.Health <= 0)
+                {
+                    GameState.Current.Gold += (int)((targetUnit as IHostile).Reward * (Rnd.Current.NextDouble() + 0.5f));
+                }
             }
         }
     }

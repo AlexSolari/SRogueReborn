@@ -12,6 +12,8 @@ namespace SRogue.Core.Entities.Concrete.Entities
 {
     public class Zombie : Unit, IAiControllable, IHostile
     {
+        public int Reward { get; set; }
+
         public void AiTick()
         {
             var targetPlayer = GameManager.Current.Entities

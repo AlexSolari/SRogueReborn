@@ -8,5 +8,6 @@ namespace SRogue.Core.Entities.Interfaces
 {
     public interface IHostile : IInteractable
     {
+        int Reward { get; set; }
     }
 }

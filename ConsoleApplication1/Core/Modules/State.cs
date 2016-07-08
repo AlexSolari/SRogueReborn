@@ -9,5 +9,7 @@ namespace SRogue.Core.Modules
     public class State
     {
         public int Depth { get; set; }
+
+        public int Gold { get; set; }
     }
 }
