@@ -14,6 +14,7 @@ namespace SRogue
         static void Init()
         {
             Console.Title = "SRogue";
+            Console.SetWindowSize(80, 27);
 
             AiManager.Current.RegisterAllFrom<Ai.Container>();
         }
@@ -28,7 +29,6 @@ namespace SRogue
 #endif
             do
             {
-                Console.SetWindowSize(80, 27);
                 Console.Clear();
 
                 Console.Out.Write(DisplayManager.Current.Render());

@@ -128,11 +128,11 @@ namespace SRogue.Core.Modules
             {
                 var inventory = UiManager.Current.RenderInventory();
 
-                for (int x = 2; x < UI.InventoryWidth + 2; x++)
+                for (int x = 1; x < UI.InventoryWidth + 1; x++)
                 {
-                    for (int y = 2; y < UI.InventoryHeight + 2; y++)
+                    for (int y = 1; y < UI.InventoryHeight + 1; y++)
                     {
-                        Put(inventory[y - 2, x - 2], x, y, Destination.Overlay);
+                        Put(inventory[y - 1, x - 1], x, y, Destination.Overlay);
                     }
                 }
             }

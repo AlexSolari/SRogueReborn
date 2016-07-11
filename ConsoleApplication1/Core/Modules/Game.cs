@@ -129,7 +129,6 @@ namespace SRogue.Core.Modules
                 GameState.Current.Inventory.SelectNext();
             }
             InventoryOpened = !InventoryOpened;
-            Console.Out.Write(DisplayManager.Current.Render());
         }
 
         public void GameTick()
