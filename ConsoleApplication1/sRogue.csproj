@@ -43,7 +43,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\AiManager.cs" />
-    <Compile Include="Core\Common\AiForAttribute.cs" />
     <Compile Include="Core\Common\Assets.cs" />
     <Compile Include="Core\Common\Buffs\BuffBase.cs" />
     <Compile Include="Core\Common\Buffs\BuffInjured.cs" />
@@ -122,6 +121,9 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <None Include="res\ai\simpleHostileAI.ai">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Content Include="res\Exit.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

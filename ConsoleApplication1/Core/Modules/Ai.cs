@@ -3,6 +3,7 @@ using SRogue.Core.Entities.Concrete.Entities;
 using SRogue.Core.Entities.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,12 +17,15 @@ namespace SRogue.Core.Modules
         public void RegisterAiFor<TType>(Action<TType> tick)
             where TType : IAiControllable, IUnit
         {
-            AiTicks.Add(typeof(TType), tick as Action<IUnit>);
+            if (!AiTicks.Any(x => x.Key == typeof(TType)))
+            {
+                AiTicks.Add(typeof(TType), tick as Action<IUnit>);
+            }
         }
 
         public void RegisterAiFor(Type type, Action<IUnit> tick)
         {
-            if (typeof(IUnit).IsAssignableFrom(type) && typeof(IAiControllable).IsAssignableFrom(type))
+            if (typeof(IUnit).IsAssignableFrom(type) && typeof(IAiControllable).IsAssignableFrom(type) && !AiTicks.Any(x => x.Key == type))
             {
                 AiTicks.Add(type, tick as Action<IUnit>);
             }
@@ -41,28 +45,58 @@ namespace SRogue.Core.Modules
             }
         }
 
-        public void RegisterAllFrom<TType>()
+        public void InitializeDefaults()
         {
-            var methods = typeof(TType).GetMethods().Where(x => x.GetCustomAttributes(typeof(AiForAttribute), true).Count() > 0);
+            var types = typeof(Ai).Assembly.DefinedTypes;
+            var files = Directory.GetFiles("res/ai");
 
-            foreach (var method in methods)
+            foreach (var file in files)
             {
-                var attributes = method.GetCustomAttributes(typeof(AiForAttribute), true) as AiForAttribute[];
-                foreach (var attr in attributes)
+                var targets = new List<string>();
+                var vision = 0;
+                var radius = 0;
+                var damagetype = 0;
+
+                using (var reader = new StreamReader(file))
                 {
-                    RegisterAiFor(attr.Target, (x) => method.Invoke(null, new[] { x }) );
+                    var str = string.Empty;
+                    while(!reader.EndOfStream)
+                    {
+                        str = reader.ReadLine();
+
+                        if (str.StartsWith("#"))
+                        {
+                            targets.Add(str.Substring(1));
+                        }
+                        else if (str.StartsWith("vision:"))
+                        {
+                            int.TryParse(str.Substring(7), out vision);
+                        }
+                        else if (str.StartsWith("attackradius:"))
+                        {
+                            int.TryParse(str.Substring(13), out radius);
+                        }
+                        else if (str.StartsWith("damagetype:"))
+                        {
+                            int.TryParse(str.Substring(11), out damagetype);
+                        }
+                    }
+                }
+
+                var typeTargets = types.Where(x => targets.Contains(x.Name));
+                foreach (var type in typeTargets)
+                {
+                    RegisterAiFor(type, (unit) => Container.Prefab(unit, vision, radius, damagetype));
                 }
             }
         }
 
         public class Container
         {
-            [AiFor(typeof(Zombie))]
-            [AiFor(typeof(ZombieBoss))]
-            public static void ZombieAi(IUnit target)
+            public static void Prefab(IUnit target, int vision, int radius, int damagetype)
             {
                 var targetPlayer = GameManager.Current.Entities
-                .Where(e => e.X < target.X + 5 && e.X > target.X - 5 && e.Y < target.Y + 5 && e.Y > target.Y - 5)
+                .Where(e => e.X < target.X + vision && e.X > target.X - vision && e.Y < target.Y + vision && e.Y > target.Y - vision)
                 .Where(e => e is Player)
                 .FirstOrDefault();
 
@@ -72,12 +106,12 @@ namespace SRogue.Core.Modules
                     return;
                 }
 
-                var canAttack = (target.X + 1 == targetPlayer.X || target.X - 1 == targetPlayer.X || target.X == targetPlayer.X)
-                    && (target.Y + 1 == targetPlayer.Y || target.Y - 1 == targetPlayer.Y || target.Y == targetPlayer.Y);
+                var canAttack = (target.X + radius == targetPlayer.X || target.X - radius == targetPlayer.X || target.X == targetPlayer.X)
+                    && (target.Y + radius == targetPlayer.Y || target.Y - radius == targetPlayer.Y || target.Y == targetPlayer.Y);
 
                 if (canAttack)
                 {
-                    targetPlayer.Damage(target.Attack, Common.DamageType.Physical);
+                    targetPlayer.Damage(target.Attack, (Common.DamageType)damagetype);
                     UiManager.Current.Actions.Append("Taked {0} damage from {1}. ".FormatWith(target.Attack, target.GetType().Name));
                 }
                 else

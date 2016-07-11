@@ -37,9 +37,8 @@ namespace SRogue.Core.Modules
                 }
                 catch (Exception ex)
                 {
-                    using (var writer = new StreamWriter("log.txt"))
+                    using (var writer = new StreamWriter("log.txt", true))
                     {
-                        writer.WriteLine("============={0}================".FormatWith(DateTime.Now.ToString()));
                         writer.WriteLine("Exception while reading entity data:");
                         writer.WriteLine("File: {0}".FormatWith(path));
                         writer.WriteLine("Exception: {0}".FormatWith(ex.Message));
