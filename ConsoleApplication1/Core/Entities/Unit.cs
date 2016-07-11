@@ -131,12 +131,12 @@ namespace SRogue.Core.Entities
             }
         }
 
-        protected virtual float SummarizeArmor()
+        public virtual int SummarizeArmor()
         {
             return Armor;
         }
 
-        protected virtual float SummarizeResist()
+        public virtual int SummarizeResist()
         {
             return MagicResist;
         }

@@ -33,6 +33,7 @@ namespace SRogue.Core.Modules
             MakeUiBorders(ui);
             MakeDepthmeter(ui);
             MakeHealthmeter(ui);
+            MakeStats(ui);
             MakeGold(ui);
             MakeBuffs(ui);
 
@@ -229,16 +230,24 @@ namespace SRogue.Core.Modules
             Put("HP: {0}/{1}".FormatWith((int)GameManager.Current.Player.Health, GameManager.Current.Player.HealthMax), 1, 2, ui, true);
         }
 
+        protected void MakeStats(char[,] ui)
+        {
+            Put("STATS:", 1, 3, ui, true);
+            Put("damage: {0}".FormatWith(GameManager.Current.Player.SummarizeAttack()), 1, 4, ui, true);
+            Put("armor: {0}".FormatWith(GameManager.Current.Player.SummarizeArmor()), 1, 5, ui, true);
+            Put("resist: {0}".FormatWith(GameManager.Current.Player.SummarizeResist()), 1, 6, ui, true);
+        }
+
         protected void MakeGold(char[,] ui)
         {
-            Put("GOLD: {0}".FormatWith(GameState.Current.Gold), 1, 3, ui, true);
+            Put("GOLD: {0}".FormatWith(GameState.Current.Gold), 1, 7, ui, true);
         }
 
         protected void MakeBuffs(char[,] ui)
         {
-            Put("BUFFS:".FormatWith(GameState.Current.Depth), 1, 4, ui, true);
+            Put("BUFFS:".FormatWith(GameState.Current.Depth), 1, 8, ui, true);
             var firstfive = GameManager.Current.Player.Buffs.Take(5);
-            int index = 5;
+            int index = 9;
             foreach (var buff in firstfive)
             {
                 Put("{0}".FormatWith(buff.BuffName), 1, index, ui, true);

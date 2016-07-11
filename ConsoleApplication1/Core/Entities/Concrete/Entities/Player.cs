@@ -29,7 +29,7 @@ namespace SRogue.Core.Entities.Concrete.Entities
             {
                 var weapon = GameState.Current.Inventory.Weapon.Item as WeaponBase;
                 var targetUnit = target as HostileUnitBase;
-                var damage = Attack + weapon.Damage;
+                var damage = SummarizeAttack();
                 UiManager.Current.Actions.Append("Dealead {0} damage to Zombie. ".FormatWith(damage));
                 targetUnit.Damage(damage, Common.DamageType.Physical);
                 if (targetUnit.Health <= 0)
@@ -44,7 +44,12 @@ namespace SRogue.Core.Entities.Concrete.Entities
             }
         }
 
-        protected override float SummarizeArmor()
+        public virtual int SummarizeAttack()
+        {
+            return Attack + (GameState.Current.Inventory.Weapon.Item as WeaponBase).Damage;
+        }
+
+        public override int SummarizeArmor()
         {
             var inv = GameState.Current.Inventory;
             return base.SummarizeArmor() 
@@ -54,7 +59,7 @@ namespace SRogue.Core.Entities.Concrete.Entities
                 + (inv.Foot.Item as ArmorBase).Armor;
         }
 
-        protected override float SummarizeResist()
+        public override int SummarizeResist()
         {
             var inv = GameState.Current.Inventory;
             return base.SummarizeResist() 
