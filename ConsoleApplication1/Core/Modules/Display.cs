@@ -191,7 +191,7 @@ namespace SRogue.Core.Modules
                 }
             }
             //Clearing actions string
-            for (int i = 0; i < Width; i++)
+            for (int i = 0; i <= Width; i++)
             {
                 Console.SetCursorPosition(i, Height);
                 Console.Out.Write(" ");

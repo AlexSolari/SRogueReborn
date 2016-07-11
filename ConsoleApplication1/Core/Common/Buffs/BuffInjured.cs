@@ -12,7 +12,7 @@ namespace SRogue.Core.Common.Buffs
         {
             get
             {
-                return "INJURED";
+                return "injured";
             }
         }
     }
