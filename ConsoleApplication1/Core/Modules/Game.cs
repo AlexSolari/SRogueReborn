@@ -76,23 +76,21 @@ namespace SRogue.Core.Modules
                 {
                     case 'w':
                         Player.Move(Direction.Top);
-                        GameTick();
                         break;
                     case 's':
                         Player.Move(Direction.Bottom);
-                        GameTick();
                         break;
                     case 'a':
                         Player.Move(Direction.Left);
-                        GameTick();
                         break;
                     case 'd':
                         Player.Move(Direction.Right);
-                        GameTick();
                         break;
                     default:
                         break;
                 }
+
+                GameTick();
             }
             else
             {

@@ -29,10 +29,8 @@ namespace SRogue
 #endif
             do
             {
-                Console.Clear();
-
-                Console.Out.Write(DisplayManager.Current.Render());
-                Console.Out.Write(UiManager.Current.MakeActionsLine());
+                //Console.Clear();
+                DisplayManager.Current.Draw();
                 GameManager.Current.ProcessInput(Console.ReadKey().KeyChar);
             } while (true);
         }

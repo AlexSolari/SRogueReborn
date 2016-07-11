@@ -22,6 +22,7 @@ namespace SRogue.Core.Modules
         private char[,] OverlaySaver;
         private char[,] Overlay;
         private char[,] Screen;
+        private string Buffer;
         private readonly char Fog = '▒';
 
         public Display()
@@ -168,10 +169,39 @@ namespace SRogue.Core.Modules
                     var valueToDisplay = (Overlay[y, x] != '\0') ? Overlay[y, x] : Screen[y, x];
                     result.Append((valueToDisplay == '\0') ? ' ' : valueToDisplay);
                 }
-                result.AppendLine();
+                //result.AppendLine();
             }
 
             return result.ToString();
+        }
+
+        public void Draw()
+        {
+            //Drawing new screen, replacing updated cells
+            var newScreen = DisplayManager.Current.Render();
+            var length = newScreen.Length;
+
+            for (int i = 0; i < length; i++)
+            {
+                if (Buffer == null || newScreen[i] != Buffer[i])
+                {
+                    var y = i / Width;
+                    var x = i - (y * Width);
+                    Console.SetCursorPosition(x, y);
+                    Console.Out.Write(newScreen[i]);
+                }
+            }
+            //Clearing actions string
+            for (int i = 0; i < Width; i++)
+            {
+                Console.SetCursorPosition(i, Height);
+                Console.Out.Write(" ");
+            }
+
+            Console.SetCursorPosition(0, Height);
+            Console.Out.Write(UiManager.Current.MakeActionsLine());
+            Console.SetCursorPosition(0, Height + 1);
+            Buffer = newScreen;
         }
     }
 }
