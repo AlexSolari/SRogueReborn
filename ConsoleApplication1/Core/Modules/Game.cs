@@ -175,9 +175,11 @@ namespace SRogue.Core.Modules
             return (ignoreEntities || !isThereEntities) && !isThereTiles;
         }
 
-        public ITile GetRandomTile(bool pathable = false)
+        public ITile GetRandomTile(bool pathable = false, bool withoutEntities = true)
         {
+            var entities = Entities.ToList();
             var tiles = Tiles.Where(x => (pathable) ? x.Pathable : !x.Pathable).ToList();
+            entities.ForEach(t => tiles = tiles.Except(tiles.Where(e => e.X == t.X && e.Y == t.Y)).ToList());
             var tile = tiles[Rnd.Current.Next(tiles.Count())];
             return tile;
         }
@@ -307,6 +309,34 @@ namespace SRogue.Core.Modules
 
                     y = y.GoesTo(target.Y);
                 }
+            }
+
+            //Additional loop to make corridor from first room to last
+            var targetAdditional = centers.LastOrDefault();
+
+            var xAdditional = centers[0].X;
+            var yAdditional = centers[0].Y;
+            while (xAdditional != targetAdditional.X)
+            {
+                var tile = EntityLoadManager.Current.Load<Floor>();
+
+                tile.X = xAdditional;
+                tile.Y = yAdditional;
+
+                Add(tile);
+
+                xAdditional = xAdditional.GoesTo(targetAdditional.X);
+            }
+            while (yAdditional != targetAdditional.Y)
+            {
+                var tile = EntityLoadManager.Current.Load<Floor>();
+
+                tile.X = xAdditional;
+                tile.Y = yAdditional;
+
+                Add(tile);
+
+                yAdditional = yAdditional.GoesTo(targetAdditional.Y);
             }
         }
 

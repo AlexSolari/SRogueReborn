@@ -94,7 +94,7 @@ namespace SRogue.Core.Entities
 
         public void MoveInstantly(int x, int y)
         {
-            if (GameManager.Current.PlaceFree(x, y))
+            if (GameManager.Current.PlaceFree(x, y, false, false))
             {
                 X = x;
                 Y = y;
