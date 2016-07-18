@@ -76,12 +76,14 @@
     <Compile Include="Core\Entities\Concrete\Entities\Bases\DropUnitBase.cs" />
     <Compile Include="Core\Entities\Concrete\Entities\Bases\HostileUnitBase.cs" />
     <Compile Include="Core\Entities\Concrete\Entities\RandomItemDrop.cs" />
+    <Compile Include="Core\Entities\Concrete\Entities\Ghost.cs" />
     <Compile Include="Core\Entities\Concrete\Entities\ZombieBoss.cs" />
     <Compile Include="Core\Entities\Concrete\Entities\Zombie.cs" />
     <Compile Include="Core\Entities\Concrete\Entities\Player.cs" />
     <Compile Include="Core\Entities\Concrete\Tiles\SpikeTrap.cs" />
     <Compile Include="Core\Entities\Concrete\Tiles\Floor.cs" />
     <Compile Include="Core\Entities\Concrete\Tiles\Exit.cs" />
+    <Compile Include="Core\Entities\Interfaces\IActivatable.cs" />
     <Compile Include="Core\Entities\Interfaces\IAiControllable.cs" />
     <Compile Include="Core\Entities\Interfaces\IControllable.cs" />
     <Compile Include="Core\Entities\Interfaces\IDropContainer.cs" />
@@ -121,6 +123,9 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <None Include="res\ai\ghostAI.ai">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="res\ai\simpleHostileAI.ai">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -133,11 +138,16 @@
     <Content Include="res\Player.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="res\RandomItemDrop.xml" />
+    <Content Include="res\RandomItemDrop.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="res\SpikeTrap.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="res\Wall.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="res\Ghost.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="res\ZombieBoss.xml">

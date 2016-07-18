@@ -15,5 +15,10 @@ namespace System
 
             return first;
         }
+
+        public static bool IsInRange(this int a, int b, int c)
+        {
+            return a >= b && a <= c;
+        }
     }
 }

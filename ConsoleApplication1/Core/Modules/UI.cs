@@ -257,6 +257,7 @@ namespace SRogue.Core.Modules
 
         protected void MakeHints(char[,] ui)
         {
+            Put("e - examinate".FormatWith(GameState.Current.Depth), 1, 20, ui, true);
             Put("i - inventory".FormatWith(GameState.Current.Depth), 1, 21, ui, true);
             Put("wasd - control".FormatWith(GameState.Current.Depth), 1, 22, ui, true);
         }

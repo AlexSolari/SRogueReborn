@@ -46,7 +46,7 @@ namespace SRogue.Core.Entities
 
         public int Attack { get; set; }
 
-        public void Move(Direction direction)
+        public virtual void Move(Direction direction)
         {
             int targetX = X;
             int targetY = Y;

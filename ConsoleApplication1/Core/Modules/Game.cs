@@ -86,8 +86,11 @@ namespace SRogue.Core.Modules
                     case 'd':
                         Player.Move(Direction.Right);
                         break;
-                    default:
+                    case 'e':
+                        Player.Examine();
                         break;
+                    default:
+                        return;
                 }
 
                 GameTick();
@@ -256,6 +259,23 @@ namespace SRogue.Core.Modules
                     zombie.X = tile.X;
                     zombie.Y = tile.Y;
                     Add(zombie);
+                }
+            }
+
+            if (GameState.Current.Depth > 1)
+            {
+                if (Rnd.Current.NextDouble() > 0.5)
+                {
+                    var count = Rnd.Current.Next(1, 5);
+                    for (int i = 0; i < count; i++)
+                    {
+                        var ghost = EntityLoadManager.Current.Load<Ghost>();
+                        var tile = GetRandomTile(true);
+                        ghost.X = tile.X;
+                        ghost.Y = tile.Y;
+                        Add(ghost);
+                    }
+                    
                 }
             }
         }

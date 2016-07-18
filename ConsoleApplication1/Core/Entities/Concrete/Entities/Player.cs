@@ -68,5 +68,27 @@ namespace SRogue.Core.Entities.Concrete.Entities
                 + (inv.Legs.Item as ArmorBase).MagicResist
                 + (inv.Foot.Item as ArmorBase).MagicResist;
         }
+
+        public void Examine()
+        {
+            var tiles = GetNearbyTiles<IActivatable>();
+            
+            if (tiles.Count() == 0)
+            {
+                UiManager.Current.Actions.Append("Nothing found. ");
+            }
+
+            foreach (var tile in tiles)
+            {
+                tile.Activate();
+                UiManager.Current.Actions.Append("Found {0}. ".FormatWith(tile.GetType().Name));
+            }
+        }
+
+        protected IEnumerable<TType> GetNearbyTiles<TType>()
+            where TType : class
+        {
+            return GameManager.Current.Tiles.Where(t => t.X.IsInRange(X - 1, X + 1) && t.Y.IsInRange(Y - 1, Y + 1) && t is TType).Select(t => t as TType);
+        }
     }
 }

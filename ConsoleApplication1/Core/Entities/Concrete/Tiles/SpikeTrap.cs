@@ -8,13 +8,13 @@ using System.Text;
 
 namespace SRogue.Core.Entities.Concrete.Tiles
 {
-    public class SpikeTrap : Tile
+    public class SpikeTrap : Tile, IActivatable
     {
-        protected virtual bool Active { get; set; }
+        public virtual bool Active { get; set; }
 
         public override void OnStep(IUnit unit)
         {
-            Active = true;
+            Activate();
             GameManager.Current.OnTickEndEvents.Add(new EventSpikeTrapDamage(unit));
         }
 
@@ -27,6 +27,10 @@ namespace SRogue.Core.Entities.Concrete.Tiles
 
                 return base.Texture;
             }
+        }
+        public void Activate()
+        {
+            Active = true;
         }
     }
 }
