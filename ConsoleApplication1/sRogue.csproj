@@ -138,7 +138,7 @@
     <Content Include="res\Player.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="res\RandomItemDrop.xml">
+    <Content Include="res\RandomSwordDrop.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="res\SpikeTrap.xml">
