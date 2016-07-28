@@ -22,8 +22,8 @@ namespace SRogue.Core.Modules
 
         public bool InventoryOpened { get; set; }
 
-		public Dictionary<ConsoleKey, Action> UsualControl { get; set; }
-		public Dictionary<ConsoleKey, Action> InventoryControl { get; set; }
+        public Dictionary<ConsoleKey, Action> UsualControl { get; set; }
+        public Dictionary<ConsoleKey, Action> InventoryControl { get; set; }
 
 
 
@@ -34,20 +34,20 @@ namespace SRogue.Core.Modules
             Tiles = new List<ITile>();
             OnTickEndEvents = new List<TickEventBase>();
 
-			UsualControl = new Dictionary<ConsoleKey, Action> {
-				[ ConsoleKey.W ] = () => Player.Move(Direction.Top),
-				[ ConsoleKey.S ] = () => Player.Move(Direction.Bottom),
-				[ ConsoleKey.A ] = () => Player.Move(Direction.Left),
-				[ ConsoleKey.D ] = () => Player.Move(Direction.Right),
-				[ ConsoleKey.E ] = () => Player.Examine(),
-			};
+            UsualControl = new Dictionary<ConsoleKey, Action> {
+                [ ConsoleKey.W ] = () => Player.Move(Direction.Top),
+                [ ConsoleKey.S ] = () => Player.Move(Direction.Bottom),
+                [ ConsoleKey.A ] = () => Player.Move(Direction.Left),
+                [ ConsoleKey.D ] = () => Player.Move(Direction.Right),
+                [ ConsoleKey.E ] = () => Player.Examine(),
+            };
 
-			InventoryControl = new Dictionary<ConsoleKey, Action> {
-				[ ConsoleKey.W ] = () => GameState.Current.Inventory.SelectNext(),
-				[ ConsoleKey.S ] = () => GameState.Current.Inventory.SelectPrev(),
-				[ ConsoleKey.Q ] = () => GameState.Current.Inventory.EquipSelected(),
-				[ ConsoleKey.E ] = () => GameState.Current.Inventory.SellSelected(),
-			};
+            InventoryControl = new Dictionary<ConsoleKey, Action> {
+                [ ConsoleKey.W ] = () => GameState.Current.Inventory.SelectNext(),
+                [ ConsoleKey.S ] = () => GameState.Current.Inventory.SelectPrev(),
+                [ ConsoleKey.Q ] = () => GameState.Current.Inventory.EquipSelected(),
+                [ ConsoleKey.E ] = () => GameState.Current.Inventory.SellSelected(),
+            };
         }
 
 
@@ -87,28 +87,28 @@ namespace SRogue.Core.Modules
 
         public void ProcessInput(ConsoleKey input)
         {
-			if (input == ConsoleKey.I)
-			{
-				ToggleInventory();
-			}
+            if (input == ConsoleKey.I)
+            {
+                ToggleInventory();
+            }
 
             if (!InventoryOpened)
             { 
-				try 
-				{
-					UsualControl[input]();
-				}
-				catch (KeyNotFoundException) {}
+                try 
+                {
+                    UsualControl[input]();
+                }
+                catch (KeyNotFoundException) {}
 
                 GameTick();
             }
             else
             {
-				try 
-				{
-					InventoryControl[input]();
-				}
-				catch (KeyNotFoundException) {}
+                try 
+                {
+                    InventoryControl[input]();
+                }
+                catch (KeyNotFoundException) {}
             }
         }
 
