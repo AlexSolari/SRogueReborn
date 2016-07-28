@@ -22,13 +22,35 @@ namespace SRogue.Core.Modules
 
         public bool InventoryOpened { get; set; }
 
+		public Dictionary<ConsoleKey, Action> UsualControl { get; set; }
+		public Dictionary<ConsoleKey, Action> InventoryControl { get; set; }
+
+
+
         public Game()   
         {
             InventoryOpened = false;
             Entities = new List<IUnit>();
             Tiles = new List<ITile>();
             OnTickEndEvents = new List<TickEventBase>();
+
+			UsualControl = new Dictionary<ConsoleKey, Action> {
+				[ ConsoleKey.W ] = () => Player.Move(Direction.Top),
+				[ ConsoleKey.S ] = () => Player.Move(Direction.Bottom),
+				[ ConsoleKey.A ] = () => Player.Move(Direction.Left),
+				[ ConsoleKey.D ] = () => Player.Move(Direction.Right),
+				[ ConsoleKey.E ] = () => Player.Examine(),
+			};
+
+			InventoryControl = new Dictionary<ConsoleKey, Action> {
+				[ ConsoleKey.W ] = () => GameState.Current.Inventory.SelectNext(),
+				[ ConsoleKey.S ] = () => GameState.Current.Inventory.SelectPrev(),
+				[ ConsoleKey.Q ] = () => GameState.Current.Inventory.EquipSelected(),
+				[ ConsoleKey.E ] = () => GameState.Current.Inventory.SellSelected(),
+			};
         }
+
+
 
         #region GameObjects
         
@@ -63,57 +85,30 @@ namespace SRogue.Core.Modules
 
         #region GameStatus
 
-        public void ProcessInput(char input)
+        public void ProcessInput(ConsoleKey input)
         {
-            input = char.ToLower(input);
-
-            if (input == 'i')
-                ToggleInventory();
+			if (input == ConsoleKey.I)
+			{
+				ToggleInventory();
+			}
 
             if (!InventoryOpened)
             { 
-                switch (input)
-                {
-                    case 'w':
-                        Player.Move(Direction.Top);
-                        break;
-                    case 's':
-                        Player.Move(Direction.Bottom);
-                        break;
-                    case 'a':
-                        Player.Move(Direction.Left);
-                        break;
-                    case 'd':
-                        Player.Move(Direction.Right);
-                        break;
-                    case 'e':
-                        Player.Examine();
-                        break;
-                    default:
-                        return;
-                }
+				try 
+				{
+					UsualControl[input]();
+				}
+				catch (KeyNotFoundException) {}
 
                 GameTick();
             }
             else
             {
-                switch (input)
-                {
-                    case 'w':
-                        GameState.Current.Inventory.SelectNext();
-                        break;
-                    case 's':
-                        GameState.Current.Inventory.SelectPrev();
-                        break;
-                    case 'q':
-                        GameState.Current.Inventory.EquipSelected();
-                        break;
-                    case 'e':
-                        GameState.Current.Inventory.SellSelected();
-                        break;
-                    default:
-                        break;
-                }
+				try 
+				{
+					InventoryControl[input]();
+				}
+				catch (KeyNotFoundException) {}
             }
         }
 

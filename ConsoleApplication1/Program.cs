@@ -9,20 +9,39 @@ using System.Threading.Tasks;
 
 namespace SRogue
 {
-    class Program
+    internal static class Program
     {
-        static void Init()
+        static Program()
         {
             Console.Title = "SRogue";
-            Console.SetWindowSize(80, 27);
+
+			Console.SetWindowSize(80, 27);
+
+			switch (Environment.OSVersion.Platform)
+			{
+				case PlatformID.Unix:
+					Console.WriteLine("Please, set the console window size as " +
+						"80 x 27 or more and press any key");
+					Console.ReadKey(true); 
+					break;
+
+				case PlatformID.Win32NT:
+				case PlatformID.Win32S:
+				case PlatformID.Win32Windows:
+				case PlatformID.WinCE:
+					break;
+
+				default:
+					Console.WriteLine("Your platform is probably not supported, " +
+						"we're sorry if there will be any bugs");
+					break;
+			}
 
             AiManager.Current.InitializeDefaults();
         }
 
-        static void Main(string[] args)
+        private static ssssssssvoid Main(string[] args)
         {
-            Init();
-
             GameManager.Current.GenerateWorld();
 #if !DEBUG
             MusicManager.Current.Play();
@@ -32,19 +51,17 @@ namespace SRogue
 #if DEBUG
                 var startTime = DateTime.Now;
 #endif
-
                 DisplayManager.Current.Draw();
-
 #if DEBUG
                 var span = DateTime.Now.Ticks - startTime.Ticks;
                     
                 using (var writer = new System.IO.StreamWriter("log.txt", true))
                 {
-                    writer.WriteLine("{0} ticks taken to draw ({1} ms)".FormatWith(span, span / TimeSpan.TicksPerMillisecond));
+					writer.WriteLine($"{span} ticks taken to draw ({span / TimeSpan.TicksPerMillisecond} ms)");
                 }
 #endif
-                GameManager.Current.ProcessInput(Console.ReadKey().KeyChar);
-            } while (true);
+                GameManager.Current.ProcessInput(Console.ReadKey().Key);
+			} while (true);
         }
     }
 }
