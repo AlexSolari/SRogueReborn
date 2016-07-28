@@ -94,21 +94,19 @@ namespace SRogue.Core.Modules
 
             if (!InventoryOpened)
             { 
-                try 
-                {
+				if (UsualControl.ContainsKey(input))
+				{
                     UsualControl[input]();
                 }
-                catch (KeyNotFoundException) {}
 
                 GameTick();
             }
             else
             {
-                try 
-                {
+				if (InventoryControl.ContainsKey(input))
+				{
                     InventoryControl[input]();
                 }
-                catch (KeyNotFoundException) {}
             }
         }
 
