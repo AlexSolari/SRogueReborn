@@ -3,6 +3,7 @@ using SRogue.Core.Entities;
 using SRogue.Core.Modules;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -45,22 +46,36 @@ namespace SRogue
             GameManager.Current.GenerateWorld();
 #if !DEBUG
             MusicManager.Current.Play();
+#else
+            var watch = new Stopwatch();
 #endif
             do
             {
 #if DEBUG
-                var startTime = DateTime.Now;
+                watch.Start();
 #endif
                 DisplayManager.Current.Draw();
 #if DEBUG
-                var span = DateTime.Now.Ticks - startTime.Ticks;
+                watch.Stop();
                     
                 using (var writer = new System.IO.StreamWriter("log.txt", true))
                 {
-                    writer.WriteLine($"{span} ticks taken to draw ({span / TimeSpan.TicksPerMillisecond} ms)");
+                    writer.WriteLine($"{watch.ElapsedTicks} ticks taken to draw ({watch.ElapsedMilliseconds} ms)");
                 }
+
+                watch.Reset();
+                watch.Start();
 #endif
                 GameManager.Current.ProcessInput(Console.ReadKey().Key);
+#if DEBUG
+                watch.Stop();
+                    
+                using (var writer = new System.IO.StreamWriter("log.txt", true))
+                {
+                    writer.WriteLine($"{watch.ElapsedTicks} ticks taken to update ({watch.ElapsedMilliseconds} ms)");
+                }
+                watch.Reset();
+#endif
             } while (true);
         }
     }
