@@ -1,4 +1,6 @@
 ﻿using SRogue.Core.Common.Items.Bases;
+using SRogue.Core.Common.Items.Concrete;
+using SRogue.Core.Common.Items.Slots;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +11,11 @@ namespace SRogue.Core.Common.Items
 {
     public class Inventory
     {
-        public ItemSlot Head { get; set; }
-        public ItemSlot Chest { get; set; }
-        public ItemSlot Legs { get; set; }
-        public ItemSlot Foot { get; set; }
-        public ItemSlot Weapon { get; set; }
+        public ArmorSlot<Helmet> Head { get; set; }
+        public ArmorSlot<Armor> Chest { get; set; }
+        public ArmorSlot<Leggins> Legs { get; set; }
+        public ArmorSlot<Boots> Foot { get; set; }
+        public WeaponSlot Weapon { get; set; }
 
         public IList<ItemBase> Backpack { get; set; }
 
@@ -23,11 +25,11 @@ namespace SRogue.Core.Common.Items
         {
             Backpack = new List<ItemBase>();
 
-            Head = new ItemSlot(ItemType.Head);
-            Chest = new ItemSlot(ItemType.Chest);
-            Legs = new ItemSlot(ItemType.Legs);
-            Foot = new ItemSlot(ItemType.Foot);
-            Weapon = new ItemSlot(ItemType.Weapon);
+            Head = new ArmorSlot<Helmet>();
+            Chest = new ArmorSlot<Armor>();
+            Legs = new ArmorSlot<Leggins>();
+            Foot = new ArmorSlot<Boots>();
+            Weapon = new WeaponSlot();
         }
 
         public void SelectNext()
@@ -73,27 +75,27 @@ namespace SRogue.Core.Common.Items
                 case ItemType.Head:
                     if (Head.Item != null && !Head.Item.isEmpty)
                         Backpack.Add(Head.Dequip());
-                    Head.Equip(Selected);
+                    Head.Equip((Helmet)Selected);
                     break;
                 case ItemType.Chest:
                     if (Chest.Item != null && !Chest.Item.isEmpty)
                         Backpack.Add(Chest.Dequip());
-                    Chest.Equip(Selected);
+                    Chest.Equip((Armor)Selected);
                     break;
                 case ItemType.Legs:
                     if (Legs.Item != null && !Legs.Item.isEmpty)
                         Backpack.Add(Legs.Dequip());
-                    Legs.Equip(Selected);
+                    Legs.Equip((Leggins)Selected);
                     break;
                 case ItemType.Foot:
                     if (Foot.Item != null && !Foot.Item.isEmpty)
                         Backpack.Add(Foot.Dequip());
-                    Foot.Equip(Selected);
+                    Foot.Equip((Boots)Selected);
                     break;
                 case ItemType.Weapon:
                     if (Weapon.Item != null && !Weapon.Item.isEmpty)
                         Backpack.Add(Weapon.Dequip());
-                    Weapon.Equip(Selected);
+                    Weapon.Equip((WeaponBase)Selected);
                     break;
                 default:
                     break;
@@ -115,6 +117,22 @@ namespace SRogue.Core.Common.Items
         public void Deselect()
         {
             Selected = null;
+        }
+
+        public int SummarizeArmor()
+        {
+            return Head.Item.Armor
+                 + Chest.Item.Armor
+                 + Legs.Item.Armor
+                 + Foot.Item.Armor;
+        }
+
+        public int SummarizeResist()
+        {
+            return Head.Item.MagicResist
+                 + Chest.Item.MagicResist
+                 + Legs.Item.MagicResist
+                 + Foot.Item.MagicResist;
         }
     }
 }

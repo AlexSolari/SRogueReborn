@@ -62,7 +62,9 @@
     <Compile Include="Core\Common\Items\Inventory.cs" />
     <Compile Include="Core\Common\Items\ItemMaterial.cs" />
     <Compile Include="Core\Common\Items\ItemQuality.cs" />
-    <Compile Include="Core\Common\Items\ItemSlot.cs" />
+    <Compile Include="Core\Common\Items\Slots\WeaponSlot.cs" />
+    <Compile Include="Core\Common\Items\Slots\ArmorSlot.cs" />
+    <Compile Include="Core\Common\Items\Slots\ItemSlotBase.cs" />
     <Compile Include="Core\Common\Items\ItemType.cs" />
     <Compile Include="Core\Common\Point.cs" />
     <Compile Include="Core\Common\Rnd.cs" />
