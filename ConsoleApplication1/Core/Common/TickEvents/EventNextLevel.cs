@@ -1,4 +1,5 @@
-﻿using SRogue.Core.Entities.Interfaces;
+﻿using SRogue.Core.Common.TickEvents.Bases;
+using SRogue.Core.Entities.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,18 +8,9 @@ using System.Threading.Tasks;
 
 namespace SRogue.Core.Common.TickEvents
 {
-    public class EventNextLevel : TickEventBase
+    public class EventNextLevel : SingleTimeEvent
     {
-        public override Action Event
-        {
-            get
-            {
-                UiManager.Current.Actions.Append("Explored new level. ");
-                return () => GameManager.Current.GenerateWorld();
-            }
-        }
-
-        public EventNextLevel()
+        public EventNextLevel(): base(() => { UiManager.Current.Actions.Append("Explored new level. "); GameManager.Current.GenerateWorld(); })
         {
             TicksRemaining = 1;
         }

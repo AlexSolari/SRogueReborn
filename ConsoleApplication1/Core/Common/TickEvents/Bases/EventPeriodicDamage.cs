@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SRogue.Core.Common.TickEvents
+namespace SRogue.Core.Common.TickEvents.Bases
 {
     public abstract class EventPeriodicDamage : TickEventBase
     {

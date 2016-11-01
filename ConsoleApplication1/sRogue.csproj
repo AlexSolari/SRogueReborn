@@ -69,13 +69,14 @@
     <Compile Include="Core\Common\Point.cs" />
     <Compile Include="Core\Common\Rnd.cs" />
     <Compile Include="Core\Common\Singleton.cs" />
+    <Compile Include="Core\Common\TickEvents\Bases\SingleTimeEvent.cs" />
     <Compile Include="Core\Common\TickEvents\EventItemDrop.cs" />
-    <Compile Include="Core\Common\TickEvents\EventPeriodicDamage.cs" />
+    <Compile Include="Core\Common\TickEvents\Bases\EventPeriodicDamage.cs" />
     <Compile Include="Core\Common\TickEvents\EventTileRemove.cs" />
     <Compile Include="Core\Common\TickEvents\EventEntityRemove.cs" />
     <Compile Include="Core\Common\TickEvents\EventSpikeTrapDamage.cs" />
     <Compile Include="Core\Common\TickEvents\EventNextLevel.cs" />
-    <Compile Include="Core\Common\TickEvents\TickEventBase.cs" />
+    <Compile Include="Core\Common\TickEvents\Bases\TickEventBase.cs" />
     <Compile Include="Core\DisplayManager.cs" />
     <Compile Include="Core\Entities\Concrete\Entities\Bases\DropUnitBase.cs" />
     <Compile Include="Core\Entities\Concrete\Entities\Bases\HostileUnitBase.cs" />
@@ -93,6 +94,7 @@
     <Compile Include="Core\Entities\Interfaces\IDropContainer.cs" />
     <Compile Include="Core\Entities\Interfaces\IHostile.cs" />
     <Compile Include="Core\Entities\Interfaces\IInteractable.cs" />
+    <Compile Include="Core\Entities\Interfaces\ILootable.cs" />
     <Compile Include="Core\Entities\Unit.cs" />
     <Compile Include="Core\Entities\Interfaces\IDamageble.cs" />
     <Compile Include="Core\Entities\Interfaces\IDisplayable.cs" />
@@ -143,7 +145,7 @@
     <Content Include="res\Player.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="res\RandomSwordDrop.xml">
+    <Content Include="res\RandomItemDrop.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="res\SpikeTrap.xml">

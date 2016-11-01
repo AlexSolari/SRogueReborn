@@ -26,6 +26,6 @@ namespace SRogue.Core.Common
         public const char Ghost = 's';
 
         public const char Item = 'u';
-        public const char RandomSwordDrop = Item;
+        public const char RandomItemDrop = Item;
     }
 }

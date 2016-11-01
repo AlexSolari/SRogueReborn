@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace SRogue.Core.Entities.Concrete.Entities
 {
-    public class RandomSwordDrop : DropUnitBase
+    public class RandomItemDrop : DropUnitBase
     {
-        public RandomSwordDrop()
+        public RandomItemDrop()
             :base()
         {
             Droplist.Add(new Sword());

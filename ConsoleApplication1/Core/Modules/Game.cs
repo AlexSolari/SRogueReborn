@@ -1,5 +1,6 @@
 ﻿using SRogue.Core.Common;
 using SRogue.Core.Common.TickEvents;
+using SRogue.Core.Common.TickEvents.Bases;
 using SRogue.Core.Entities;
 using SRogue.Core.Entities.Concrete.Entities;
 using SRogue.Core.Entities.Concrete.Tiles;

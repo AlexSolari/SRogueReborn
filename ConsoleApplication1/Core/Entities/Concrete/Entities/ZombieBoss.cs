@@ -12,14 +12,24 @@ using System.Xml.Serialization;
 
 namespace SRogue.Core.Entities.Concrete.Entities
 {
-    public class ZombieBoss : HostileUnitBase
+    public class ZombieBoss : HostileUnitBase, ILootable
     {
-        public override void Kill()
+        public bool DroppedLoot { get; set; }
+
+        public void DropLoot()
         {
-            var drop = EntityLoadManager.Current.Load<RandomSwordDrop>();
+            var drop = EntityLoadManager.Current.Load<RandomItemDrop>();
             drop.X = X;
             drop.Y = Y;
-            GameManager.Current.OnTickEndEvents.Add(new EventItemDrop(drop));
+            GameManager.Current.OnTickEndEvents.Add(new Common.TickEvents.EventItemDrop<RandomItemDrop>(drop));
+            DroppedLoot = true;
+        }
+
+        public override void Kill()
+        {
+            if (!DroppedLoot)
+                DropLoot();
+
             base.Kill();
         }
     }

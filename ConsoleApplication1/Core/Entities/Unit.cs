@@ -46,6 +46,8 @@ namespace SRogue.Core.Entities
 
         public int Attack { get; set; }
 
+        public bool IsAlive { get { return Health > 0; } }
+
         public virtual void Move(Direction direction)
         {
             int targetX = X;
@@ -104,7 +106,7 @@ namespace SRogue.Core.Entities
         public virtual void Damage(float pure, DamageType type)
         {
             Health -= DecreaseDamage(pure, type);
-            if (Health <= 0)
+            if (!IsAlive)
             {
                 Kill();
             }
@@ -112,7 +114,6 @@ namespace SRogue.Core.Entities
 
         public virtual void Kill()
         {
-            Health = 0;
             GameManager.Current.OnTickEndEvents.Add(new EventEntityRemove(this));
         }
 

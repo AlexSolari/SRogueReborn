@@ -1,4 +1,5 @@
-﻿using SRogue.Core.Entities.Interfaces;
+﻿using SRogue.Core.Common.TickEvents.Bases;
+using SRogue.Core.Entities.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,22 +8,10 @@ using System.Threading.Tasks;
 
 namespace SRogue.Core.Common.TickEvents
 {
-    public class EventTileRemove : TickEventBase
+    public class EventTileRemove : SingleTimeEvent
     {
-        public override Action Event
+        public EventTileRemove(ITile tile) : base(() => GameManager.Current.Tiles.Remove(tile))
         {
-            get
-            {
-                return () => {
-                    GameManager.Current.Tiles.Remove(Target as ITile);
-                };
-            }
-        }
-
-        public EventTileRemove(ITile tile)
-        {
-            Target = tile;
-            TicksRemaining = 1;
         }
     }
 }

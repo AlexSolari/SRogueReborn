@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace SRogue.Core.Entities.Interfaces
 {
-    public interface IKillable
+    public interface ILootable
     {
-        bool IsAlive { get; }
-        void Kill();
+        bool DroppedLoot { get; set; }
+        void DropLoot();
     }
 }

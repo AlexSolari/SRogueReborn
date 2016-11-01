@@ -1,4 +1,5 @@
 ﻿using SRogue.Core.Common.Buffs;
+using SRogue.Core.Common.TickEvents.Bases;
 using SRogue.Core.Entities.Interfaces;
 using System;
 using System.Collections.Generic;

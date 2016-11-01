@@ -1,4 +1,5 @@
-﻿using SRogue.Core.Entities.Interfaces;
+﻿using SRogue.Core.Common.TickEvents.Bases;
+using SRogue.Core.Entities.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,27 +8,18 @@ using System.Threading.Tasks;
 
 namespace SRogue.Core.Common.TickEvents
 {
-    public class EventEntityRemove : TickEventBase
+    public class EventEntityRemove : SingleTimeEvent
     {
-        public override Action Event
-        {
-            get
-            {
-                return () => {
-                    GameManager.Current.Entities.Remove(Target as IUnit);
+        public EventEntityRemove(IUnit unit) : base(
+            () => {
+                GameManager.Current.Entities.Remove(unit);
 
-                    if (Target == GameManager.Current.Player)
-                    {
-                        UiManager.Current.LoseGame();
-                    }
-                };
+                if (unit == GameManager.Current.Player)
+                {
+                    UiManager.Current.LoseGame();
+                }
             }
-        }
-
-        public EventEntityRemove(IUnit unit)
-        {
-            Target = unit;
-            TicksRemaining = 1;
-        }
+        )
+        { }
     }
 }

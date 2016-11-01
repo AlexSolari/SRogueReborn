@@ -1,4 +1,5 @@
-﻿using SRogue.Core.Entities.Interfaces;
+﻿using SRogue.Core.Common.TickEvents.Bases;
+using SRogue.Core.Entities.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,22 +8,12 @@ using System.Threading.Tasks;
 
 namespace SRogue.Core.Common.TickEvents
 {
-    public class EventItemDrop : TickEventBase
+    public class EventItemDrop<IDropUnitContainer> : SingleTimeEvent 
+        where IDropUnitContainer: IUnit, IDropContainer
     {
-        public override Action Event
+        public EventItemDrop(IDropUnitContainer unit) : base(() => GameManager.Current.Entities.Add(unit))
+            
         {
-            get
-            {
-                return () => {
-                    GameManager.Current.Entities.Add(Target as IUnit);
-                };
-            }
-        }
-
-        public EventItemDrop(IDropContainer unit)
-        {
-            Target = unit as IUnit;
-            TicksRemaining = 1;
         }
     }
 }
