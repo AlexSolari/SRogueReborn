@@ -22,15 +22,19 @@ namespace SRogue.Core.Modules
         public List<TickEventBase> OnTickEndEvents { get; set; }
 
         public bool InventoryOpened { get; set; }
+        public bool ShopOpened { get; set; }
 
         public Dictionary<ConsoleKey, Action> UsualControl { get; set; }
         public Dictionary<ConsoleKey, Action> InventoryControl { get; set; }
-
-
+        public Dictionary<ConsoleKey, Action> ShopControl { get; set; }
+        public bool PopupOpened { get; set; }
+        public string PopupMessage { get; set; }
 
         public Game()   
         {
+            PopupOpened = false;
             InventoryOpened = false;
+            ShopOpened = false;
             Entities = new List<IUnit>();
             Tiles = new List<ITile>();
             OnTickEndEvents = new List<TickEventBase>();
@@ -48,6 +52,13 @@ namespace SRogue.Core.Modules
                 [ ConsoleKey.S ] = () => GameState.Current.Inventory.SelectPrev(),
                 [ ConsoleKey.Q ] = () => GameState.Current.Inventory.EquipSelected(),
                 [ ConsoleKey.E ] = () => GameState.Current.Inventory.SellSelected(),
+            };
+
+            ShopControl = new Dictionary<ConsoleKey, Action>
+            {
+                [ConsoleKey.W] = () => GameState.Current.Shop.SelectNext(),
+                [ConsoleKey.S] = () => GameState.Current.Shop.SelectPrev(),
+                [ConsoleKey.Q] = () => GameState.Current.Shop.ActivateSelected(),
             };
         }
 
@@ -88,26 +99,44 @@ namespace SRogue.Core.Modules
 
         public void ProcessInput(ConsoleKey input)
         {
+            if (PopupOpened)
+            {
+                if (input == ConsoleKey.Q)
+                {
+                    PopupOpened = false;
+                    DisplayManager.Current.LoadOverlay();
+                }
+                else
+                    return;
+            }
+
             if (input == ConsoleKey.I)
             {
                 ToggleInventory();
             }
 
-            if (!InventoryOpened)
-            { 
-				if (UsualControl.ContainsKey(input))
-				{
+            if (ShopOpened)
+            {
+                if (ShopControl.ContainsKey(input))
+                {
+                    ShopControl[input]();
+                }
+            }
+            else if (InventoryOpened)
+            {
+                if (InventoryControl.ContainsKey(input))
+                {
+                    InventoryControl[input]();
+                }
+            }
+            else
+            {
+                if (UsualControl.ContainsKey(input))
+                {
                     UsualControl[input]();
                 }
 
                 GameTick();
-            }
-            else
-            {
-				if (InventoryControl.ContainsKey(input))
-				{
-                    InventoryControl[input]();
-                }
             }
         }
 
@@ -188,11 +217,17 @@ namespace SRogue.Core.Modules
         public void GenerateWorld()
         {
             GameState.Current.Depth++;
+            var isCity = GameState.Current.Depth % 5 == 0 && GameState.Current.Depth <= 35;
+            var isBoss = !isCity && GameState.Current.Depth % 4 == 0 || GameState.Current.Depth > 36;
 
             Tiles.Clear();
             Entities.Clear();
 
             var roomsCount = Rnd.Current.Next(6, 14);
+
+            if (isCity)
+                roomsCount = 3;
+
             var centers = new List<Point>();
             for (int i = 0; i < roomsCount; i++)
             {
@@ -203,21 +238,53 @@ namespace SRogue.Core.Modules
 
             Fill();
 
-            GenerateTraps();
+            if (!isCity)
+            {
 
+                GenerateTraps();
+
+                GenerateEnemies(isBoss);
+
+            }
             AddPlayer(centers);
 
-            GenerateEnemies();
+            if (isCity)
+            {
+                PopupMessage = "This place is safe. There is a shop nearby.";
+                PopupOpened = true;
+                GenerateCity(centers);
+            }
+
+            if (isBoss)
+            {
+                PopupMessage = "You feel evil presense of powerful creature.";
+                PopupOpened = true;
+            }
 
             GenerateExit(centers);
 #if !DEBUG
             DisplayManager.Current.ResetOverlay();
 #endif
+            DisplayManager.Current.SaveOverlay();
+
+            if (isBoss)
+            {
+                MusicManager.Current.Play(Music.Theme.Boss);
+            }
+            else if (isCity)
+            {
+                MusicManager.Current.Play(Music.Theme.City);
+            }
+            else
+            {
+                MusicManager.Current.Play(Music.Theme.Default);
+            }
         }
 
         private void AddPlayer(IList<Point> centers)
         {
-            Player = EntityLoadManager.Current.Load<Player>();
+            Player = Player ?? EntityLoadManager.Current.Load<Player>();
+            Player.Health = Player.HealthMax;
             Player.X = centers.First().X;
             Player.Y = centers.First().Y;
             Add(Player);
@@ -231,9 +298,17 @@ namespace SRogue.Core.Modules
             Add(exit);
         }
 
-        protected void GenerateEnemies()
+        protected void GenerateCity(IList<Point> centers)
         {
-            if (GameState.Current.Depth % 4 == 0)
+            var shop = EntityLoadManager.Current.Load<ItemShop>();
+            shop.X = centers.Skip(1).First().X;
+            shop.Y = centers.Skip(1).First().Y;
+            Add(shop);
+        }
+
+        protected void GenerateEnemies(bool isBoss)
+        {
+            if (isBoss)
             {
                 for (int index = 0; index < GameState.Current.Depth / 4; index++)
                 {

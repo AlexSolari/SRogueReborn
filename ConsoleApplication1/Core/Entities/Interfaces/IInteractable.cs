@@ -8,5 +8,6 @@ namespace SRogue.Core.Entities.Interfaces
 {
     public interface IInteractable
     {
+        void Interact(IUnit initiator);
     }
 }

@@ -46,9 +46,7 @@ namespace SRogue
         private static void Main(string[] args)
         {
             GameManager.Current.GenerateWorld();
-#if !DEBUG
-            MusicManager.Current.Play();
-#else
+#if DEBUG
             var watch = new Stopwatch();
 #endif
             do

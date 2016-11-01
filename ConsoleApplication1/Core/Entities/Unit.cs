@@ -141,5 +141,10 @@ namespace SRogue.Core.Entities
         {
             return MagicResist;
         }
+
+        public virtual int SummarizeAttack()
+        {
+            return Attack;
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Media;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,86 +10,48 @@ namespace SRogue.Core.Modules
 {
     public class Music
     {
-        public static List<int> Notes = new List<int>();
-
-        private static void AddNote(int freq)
+        public enum Theme
         {
-            Notes.Add(freq);
+            Default, 
+            Boss,
+            City,
+            Death,
+            None
         }
 
-        public void Play()
-        {
-            AddNote(262);
-            AddNote(294);
-            AddNote(330);
-            AddNote(350);
-            AddNote(392);
-            AddNote(440);
-            AddNote(494);
-            AddNote(523);
-            AddNote(587);
-            AddNote(659);
-            AddNote(698);
-            AddNote(783);
-            AddNote(880);
-            AddNote(988); 
-            
-            var melody = new Thread(Melody);
-            melody.Start();
-        }
+        public Theme CurrentTheme = Theme.None;
 
-        private static void Melody()
+        public SoundPlayer LoopPlayer = new SoundPlayer();
+
+        public void Play(Theme level)
         {
-            var generator = new Random();
-            while(true)
+            if (CurrentTheme == level)
+                return;
+
+            MusicManager.Current.LoopPlayer.Stop();
+            var theme = string.Empty;
+
+            switch (level)
             {
-                var pos = 0;
-                switch (generator.Next(4))
-                {
-                    case 0:
-                        pos = generator.Next(4, Notes.Count);
-                        Console.Beep(Music.Notes[pos], 333);
-                        Console.Beep(Music.Notes[pos-1], 333);
-                        Console.Beep(Music.Notes[pos-2], 333);
-                        Console.Beep(Music.Notes[pos-3], 333);
-                        break;
-                    case 1:
-                        pos = generator.Next(2, Notes.Count - 4);
-                        Console.Beep(Music.Notes[pos], 333);
-                        Console.Beep(Music.Notes[pos-2], 333);
-                        Console.Beep(Music.Notes[pos], 333);
-                        Console.Beep(Music.Notes[pos-2], 333);
-                        Console.Beep(Music.Notes[pos], 333);
-                        Console.Beep(Music.Notes[pos+2], 333);
-                        Console.Beep(Music.Notes[pos], 333);
-                        Console.Beep(Music.Notes[pos+2], 333);
-                        break;
-                    case 2:
-                        Console.Beep(Music.Notes[generator.Next(Notes.Count)], 333);
-                        Console.Beep(Music.Notes[generator.Next(Notes.Count)], 333);
-                        Console.Beep(Music.Notes[generator.Next(Notes.Count)], 333);
-                        Console.Beep(Music.Notes[generator.Next(Notes.Count)], 333);
-                        Console.Beep(Music.Notes[generator.Next(Notes.Count)], 333);
-                        break;
-                    case 3:
-                        Console.Beep(Music.Notes[generator.Next(Notes.Count)], 333);
-                        Console.Beep(Music.Notes[generator.Next(Notes.Count)], 333);
-                        Console.Beep(Music.Notes[0], 333);
-                        Console.Beep(Music.Notes[generator.Next(Notes.Count)], 333);
-                        Console.Beep(Music.Notes[generator.Next(Notes.Count)], 333);
-                        Console.Beep(Music.Notes[0], 333);
-                        Console.Beep(Music.Notes[generator.Next(Notes.Count)], 333);
-                        Console.Beep(Music.Notes[generator.Next(Notes.Count)], 333);
-                        Console.Beep(Music.Notes[0], 333);
-                        Console.Beep(Music.Notes[generator.Next(Notes.Count)], 333);
-                        Console.Beep(Music.Notes[generator.Next(Notes.Count)], 333);
-                        Console.Beep(Music.Notes[0], 333);
-                        break;
-                    default:
-                        break;
-                }
-                
+                case Theme.Boss:
+                    theme = "res/ost/boss.wav";
+                    break;
+                case Theme.City:
+                    theme = "res/ost/city.wav";
+                    break;
+                case Theme.Default:
+                    theme = "res/ost/level.wav";
+                    break;
+                case Theme.Death:
+                    theme = "res/ost/death.wav";
+                    break;
+                default:
+                    return;
             }
+
+            CurrentTheme = level;
+            LoopPlayer.SoundLocation = theme;
+            LoopPlayer.PlayLooping();
         }
     }
 }

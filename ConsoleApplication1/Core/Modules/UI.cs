@@ -46,10 +46,33 @@ namespace SRogue.Core.Modules
         {
             var ui = new char[InventoryHeight, InventoryWidth];
 
-            FillInventory(ui);
-            RenderInventoryBorders(ui);
+            FillPopup(ui);
+            RenderPopupBorders(ui);
             MakeInventoryHeader(ui);
             MakeInvenotyItems(ui);
+
+            return ui;
+        }
+
+        public char[,] RenderShop()
+        {
+            var ui = new char[InventoryHeight, InventoryWidth];
+
+            FillPopup(ui);
+            MakeShopHeader(ui);
+            MakeShopItems(ui);
+            RenderPopupBorders(ui);
+
+            return ui;
+        }
+
+        public char[,] RenderPopup(string msg)
+        {
+            var ui = new char[InventoryHeight, InventoryWidth];
+
+            FillPopup(ui);
+            AddPopupText(ui, msg);
+            RenderPopupBorders(ui);
 
             return ui;
         }
@@ -96,7 +119,44 @@ namespace SRogue.Core.Modules
             Put(Padding("w,s - navigate, q - equip, e - sell", InventoryWidth), 1, 2, ui);
         }
 
-        protected void FillInventory(char[,] ui)
+        #endregion
+
+        #region Shop
+        protected void MakeShopHeader(char[,] ui)
+        {
+            Put(Padding("SHOP", InventoryWidth), 1, 1, ui);
+            Put(Padding("w,s - navigate, q - activate", InventoryWidth), 1, 2, ui);
+
+            var messagemultiline = GameState.Current.Shop.Message.Split('#');
+            for (int i = 0; i < messagemultiline.Length; i++)
+            {
+                Put(Padding(messagemultiline[i], InventoryWidth), 1, i + 4, ui);
+            }
+            
+        }
+        protected void MakeShopItems(char[,] ui)
+        {
+            var shp = GameState.Current.Shop;
+            var index = 15;
+
+            var formatStr = (shp.CurrentOption == State.CityShop.Options.Training) ? ">> {0} <<" : "{0}";
+            Put(Padding(formatStr.FormatWith(State.CityShop.Options.Training), InventoryWidth), 1, index++, ui);
+            formatStr = (shp.CurrentOption == State.CityShop.Options.Story) ? ">> {0} <<" : "{0}";
+            Put(Padding(formatStr.FormatWith(State.CityShop.Options.Story), InventoryWidth), 1, index++, ui);
+            formatStr = (shp.CurrentOption == State.CityShop.Options.Exit) ? ">> {0} <<" : "{0}";
+            Put(Padding(formatStr.FormatWith(State.CityShop.Options.Exit), InventoryWidth), 1, index++, ui);
+        }
+        #endregion
+
+        #region Popup
+
+        protected void AddPopupText(char[,] ui, string text)
+        {
+            Put(Padding(text, InventoryWidth), 1, 10, ui);
+            Put(Padding(">> q - OK <<", InventoryWidth), 1, 15, ui);
+        }
+
+        protected void FillPopup(char[,] ui)
         {
             for (int x = 0; x < InventoryWidth; x++)
             {
@@ -107,7 +167,7 @@ namespace SRogue.Core.Modules
             }
         }
 
-        protected void RenderInventoryBorders(char[,] ui)
+        protected void RenderPopupBorders(char[,] ui)
         {
             var x = 0;
             var y = 0;
@@ -160,6 +220,9 @@ namespace SRogue.Core.Modules
 
             for (int i = 0; i < s.Length; i++)
             {
+                if (x + i >= 56)
+                    break;
+
                 ui[y, x + i] = s[i];
             }
         }

@@ -15,5 +15,9 @@ namespace SRogue.Core.Entities.Interfaces
         int MagicResist { get; set; }
         float DecreaseDamage(float pureDamage, DamageType type);
         int Attack { get; set; }
+
+        int SummarizeAttack();
+        int SummarizeArmor();
+        int SummarizeResist();
     }
 }

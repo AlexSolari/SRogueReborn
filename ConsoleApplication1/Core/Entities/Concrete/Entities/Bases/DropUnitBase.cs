@@ -33,5 +33,10 @@ namespace SRogue.Core.Entities.Concrete.Entities.Bases
                 Picked = true;
             }
         }
+
+        public void Interact(IUnit initiator)
+        {
+            GiveItem();
+        }
     }
 }

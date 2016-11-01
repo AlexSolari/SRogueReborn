@@ -83,6 +83,8 @@ namespace SRogue.Core.Modules
             Put("YOU DIED", 36, 12, Destination.Overlay);
 
             Console.Out.Write(Render(false));
+
+            MusicManager.Current.Play(Music.Theme.Death);
         }
 
         public void Put(string s, int x, int y, Destination destination)
@@ -125,7 +127,19 @@ namespace SRogue.Core.Modules
                 }
             }
 
-            if (GameManager.Current.InventoryOpened)
+            if (GameManager.Current.PopupOpened)
+            {
+                var popup = UiManager.Current.RenderPopup(GameManager.Current.PopupMessage);
+
+                for (int x = 1; x < UI.InventoryWidth + 1; x++)
+                {
+                    for (int y = 1; y < UI.InventoryHeight + 1; y++)
+                    {
+                        Put(popup[y - 1, x - 1], x, y, Destination.Overlay);
+                    }
+                }
+            }
+            else if (GameManager.Current.InventoryOpened)
             {
                 var inventory = UiManager.Current.RenderInventory();
 
@@ -134,6 +148,18 @@ namespace SRogue.Core.Modules
                     for (int y = 1; y < UI.InventoryHeight + 1; y++)
                     {
                         Put(inventory[y - 1, x - 1], x, y, Destination.Overlay);
+                    }
+                }
+            }
+            else if (GameManager.Current.ShopOpened)
+            {
+                var shop = UiManager.Current.RenderShop();
+
+                for (int x = 1; x < UI.InventoryWidth + 1; x++)
+                {
+                    for (int y = 1; y < UI.InventoryHeight + 1; y++)
+                    {
+                        Put(shop[y - 1, x - 1], x, y, Destination.Overlay);
                     }
                 }
             }

@@ -25,6 +25,7 @@ namespace SRogue.Core.Common
         public const char ZombieBoss = 'Z';
         public const char Ghost = 's';
 
+        public const char ItemShop = 'O';
         public const char Item = 'u';
         public const char RandomItemDrop = Item;
     }
