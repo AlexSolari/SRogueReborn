@@ -12,6 +12,9 @@ namespace SRogue
 {
     internal static class Program
     {
+        [System.Runtime.InteropServices.DllImport("libc")]
+        private static extern int system(string exec);
+
         static Program()
         {
             Console.Title = "SRogue";
@@ -21,8 +24,7 @@ namespace SRogue
             switch (Environment.OSVersion.Platform)
             {
                 case PlatformID.Unix:
-                    Console.WriteLine("Please, set the console window size as " +
-                        "80 x 27 or more and press any key");
+                    system("resize -s 27 80 > /dev/null");
                     Console.ReadKey(true); 
                     break;
 
