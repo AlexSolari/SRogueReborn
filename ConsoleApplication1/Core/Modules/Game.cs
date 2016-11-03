@@ -218,7 +218,7 @@ namespace SRogue.Core.Modules
         {
             GameState.Current.Depth++;
             var isCity = GameState.Current.Depth % 5 == 0 && GameState.Current.Depth <= 35;
-            var isBoss = !isCity && GameState.Current.Depth % 4 == 0 || GameState.Current.Depth > 36;
+            var isBoss = !isCity && GameState.Current.Depth % 5 == 4 || GameState.Current.Depth > 35;
 
             Tiles.Clear();
             Entities.Clear();

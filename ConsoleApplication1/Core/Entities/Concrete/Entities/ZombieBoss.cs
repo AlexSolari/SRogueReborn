@@ -21,7 +21,7 @@ namespace SRogue.Core.Entities.Concrete.Entities
             var drop = EntityLoadManager.Current.Load<RandomItemDrop>();
             drop.X = X;
             drop.Y = Y;
-            GameManager.Current.OnTickEndEvents.Add(new Common.TickEvents.EventItemDrop<RandomItemDrop>(drop));
+            GameManager.Current.OnTickEndEvents.Add(new EventItemDrop<RandomItemDrop>(drop));
             DroppedLoot = true;
         }
 

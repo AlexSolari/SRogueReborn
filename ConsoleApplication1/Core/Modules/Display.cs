@@ -1,4 +1,5 @@
-﻿using SRogue.Core.Entities.Interfaces;
+﻿using SRogue.Core.Common;
+using SRogue.Core.Entities.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,10 @@ namespace SRogue.Core.Modules
         private char[,] Overlay;
         private char[,] Screen;
         private string Buffer;
-        private readonly char Fog = '▒';
+
+        private const char Fog = Assets.Fog;
+        private const char PlayerVisionMarker = Assets.PlayerVisionMarker;
+        private const char PlayerVision = Assets.PlayerVision;
 
         public Display()
         {
@@ -80,7 +84,7 @@ namespace SRogue.Core.Modules
                 }
             }
 
-            Put("YOU DIED", 36, 12, Destination.Overlay);
+            Put("YOU DIED", 15, 20, Destination.Overlay);
 
             Console.Out.Write(Render(false));
 
@@ -123,43 +127,32 @@ namespace SRogue.Core.Modules
                 for (int y = Math.Max(GameManager.Current.Player.Y - 3, 0);
                 y < Math.Min(GameManager.Current.Player.Y + 3, FieldHeight); y++)
                 {
-                    Put('\0', x, y, Destination.Overlay);
+                    Put(PlayerVisionMarker, x, y, Destination.Overlay);
                 }
             }
 
+            char[,] popup = null;
+
             if (GameManager.Current.PopupOpened)
             {
-                var popup = UiManager.Current.RenderPopup(GameManager.Current.PopupMessage);
+                popup = UiManager.Current.RenderPopup(GameManager.Current.PopupMessage);
+            }
+            else if (GameManager.Current.InventoryOpened)
+            {
+                popup = UiManager.Current.RenderInventory();
+            }
+            else if (GameManager.Current.ShopOpened)
+            {
+                popup = UiManager.Current.RenderShop();
+            }
 
+            if (popup != null)
+            {
                 for (int x = 1; x < UI.InventoryWidth + 1; x++)
                 {
                     for (int y = 1; y < UI.InventoryHeight + 1; y++)
                     {
                         Put(popup[y - 1, x - 1], x, y, Destination.Overlay);
-                    }
-                }
-            }
-            else if (GameManager.Current.InventoryOpened)
-            {
-                var inventory = UiManager.Current.RenderInventory();
-
-                for (int x = 1; x < UI.InventoryWidth + 1; x++)
-                {
-                    for (int y = 1; y < UI.InventoryHeight + 1; y++)
-                    {
-                        Put(inventory[y - 1, x - 1], x, y, Destination.Overlay);
-                    }
-                }
-            }
-            else if (GameManager.Current.ShopOpened)
-            {
-                var shop = UiManager.Current.RenderShop();
-
-                for (int x = 1; x < UI.InventoryWidth + 1; x++)
-                {
-                    for (int y = 1; y < UI.InventoryHeight + 1; y++)
-                    {
-                        Put(shop[y - 1, x - 1], x, y, Destination.Overlay);
                     }
                 }
             }
@@ -192,8 +185,8 @@ namespace SRogue.Core.Modules
             {
                 for (int x = 0; x < Width; x++)
                 {
-                    var valueToDisplay = (Overlay[y, x] != '\0') ? Overlay[y, x] : Screen[y, x];
-                    result.Append((valueToDisplay == '\0') ? ' ' : valueToDisplay);
+                    var valueToDisplay = (Overlay[y, x] != PlayerVisionMarker) ? Overlay[y, x] : Screen[y, x];
+                    result.Append((valueToDisplay == PlayerVisionMarker) ? PlayerVision : valueToDisplay);
                 }
             }
 
@@ -202,7 +195,6 @@ namespace SRogue.Core.Modules
 
         public void Draw()
         {
-            //Drawing new screen, replacing updated cells
             var newScreen = DisplayManager.Current.Render();
             var length = newScreen.Length;
 
@@ -216,7 +208,7 @@ namespace SRogue.Core.Modules
                     Console.Out.Write(newScreen[i]);
                 }
             }
-            //Clearing actions string
+            
             for (int i = 0; i <= Width; i++)
             {
                 Console.SetCursorPosition(i, Height);

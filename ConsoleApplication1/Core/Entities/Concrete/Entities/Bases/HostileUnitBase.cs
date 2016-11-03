@@ -24,7 +24,7 @@ namespace SRogue.Core.Entities.Concrete.Entities.Bases
             var targetUnit = this;
             var damage = initiator.SummarizeAttack();
             UiManager.Current.Actions.Append("Dealead {0} damage to {1}. ".FormatWith(damage, this.GetType().Name));
-            targetUnit.Damage(damage, Common.DamageType.Physical);
+            targetUnit.Damage(damage, DamageType.Physical);
             if (targetUnit.Health <= 0)
             {
                 GameState.Current.Gold += (int)(targetUnit.Reward * (Rnd.Current.NextDouble() + 0.5f));

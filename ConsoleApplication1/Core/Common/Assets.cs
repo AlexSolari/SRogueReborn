@@ -28,5 +28,11 @@ namespace SRogue.Core.Common
         public const char ItemShop = 'O';
         public const char Item = 'u';
         public const char RandomItemDrop = Item;
+
+        /***UI***/
+        public const char UiBorder = '▓';
+        public const char Fog = '▒';
+        public const char PlayerVisionMarker = '\0';
+        public const char PlayerVision = ' ';
     }
 }

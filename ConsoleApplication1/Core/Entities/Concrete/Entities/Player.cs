@@ -26,14 +26,6 @@ namespace SRogue.Core.Entities.Concrete.Entities
         public void Interact(IInteractable target)
         {
             target.Interact(this);
-            if (target is HostileUnitBase)
-            {
-                
-            }
-            if (target is DropUnitBase)
-            {
-                
-            }
         }
 
         public override int SummarizeAttack()

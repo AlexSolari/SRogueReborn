@@ -31,18 +31,18 @@ namespace SRogue.Core.Common.Items.Bases
                 case ItemMaterial.Wooden:
                 case ItemMaterial.Iron:
                 case ItemMaterial.Steel:
-                    Armor = armor + (int)Material + (int)Quality;
+                    Armor = armor + (int)Material * 2 + (int)Quality / 2;
                     MagicResist = 0;
                     break;
                 case ItemMaterial.Glass:
                 case ItemMaterial.Golden:
                     Armor = 0;
-                    MagicResist = resist + (int)Material + (int)Quality;
+                    MagicResist = resist + (int)Material / 2 + (int)Quality * 2;
                     break;
                 case ItemMaterial.Diamond:
                 case ItemMaterial.Torium:
-                    Armor = armor + (int)Material + (int)Quality;
-                    MagicResist = resist + (int)Material + (int)Quality;
+                    Armor = armor + ((int)Material * 3 + (int)Quality * 3) / 2;
+                    MagicResist = resist + ((int)Material * 3 + (int)Quality * 3) / 2;
                     break;
                 default:
                     break;

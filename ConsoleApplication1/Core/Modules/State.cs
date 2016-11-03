@@ -12,11 +12,8 @@ namespace SRogue.Core.Modules
     public class State
     {
         public int Depth { get; set; }
-
         public Inventory Inventory { get; set; }
-
         public int Gold { get; set; }
-
         public CityShop Shop { get; set; }
 
         public State()

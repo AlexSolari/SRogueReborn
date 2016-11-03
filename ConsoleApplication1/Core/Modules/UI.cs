@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SRogue.Core.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,7 +18,7 @@ namespace SRogue.Core.Modules
         public const int MarginWidth = 59;
         public const int MarginHeight = 0;
 
-        public const char UiBorder = '▓';
+        public const char UiBorder = Assets.UiBorder;
 
         public StringBuilder Actions { get; private set; }
 
