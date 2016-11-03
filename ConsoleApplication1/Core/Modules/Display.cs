@@ -265,11 +265,16 @@ namespace SRogue.Core.Modules
                 {
                     var y = i / Width;
                     var x = i - (y * Width);
+                    var customColored = ResolveColoring(x, newScreen[i]);
                     Console.SetCursorPosition(x, y);
+
                     Console.Out.Write(newScreen[i]);
+
+                    if (customColored)
+                        Console.ResetColor();
                 }
             }
-            
+
             for (int i = 0; i <= Width; i++)
             {
                 Console.SetCursorPosition(i, Height);
@@ -280,6 +285,53 @@ namespace SRogue.Core.Modules
             Console.Out.Write(UiManager.Current.MakeActionsLine());
             Console.SetCursorPosition(0, Height + 1);
             Buffer = newScreen;
+        }
+
+        private bool ResolveColoring(int x, char newChar)
+        {
+            var customColored = false;
+
+            if (!GameManager.Current.InventoryOpened && !GameManager.Current.ShopOpened && !GameManager.Current.PopupOpened && x <= FieldWidth)
+            {
+                if (newChar == Assets.Zombie)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    customColored = true;
+                }
+                else if (newChar == Assets.Floor || newChar == Assets.Wall)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGray;
+                    customColored = true;
+                }
+                else if (newChar == Assets.Ghost)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkCyan;
+                    customColored = true;
+                }
+                else if (newChar == Assets.ZombieBoss)
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    customColored = true;
+                }
+                else if (newChar == Assets.Item)
+                {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    customColored = true;
+                }
+                else if (newChar == Assets.Exit)
+                {
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    customColored = true;
+                }
+                else if (newChar == Assets.ItemShop)
+                {
+                    Console.ForegroundColor = ConsoleColor.Magenta;
+                    customColored = true;
+                }
+
+            }
+
+            return customColored;
         }
     }
 }
