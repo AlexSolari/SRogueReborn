@@ -1,4 +1,5 @@
 ﻿using SRogue.Core.Common;
+using SRogue.Core.Entities.Concrete.Tiles;
 using SRogue.Core.Entities.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -121,15 +122,7 @@ namespace SRogue.Core.Modules
                 }
             }
 
-            for (int x = Math.Max(GameManager.Current.Player.X - 3, 0);
-                x < Math.Min(GameManager.Current.Player.X + 3, FieldWidth); x++)
-            {
-                for (int y = Math.Max(GameManager.Current.Player.Y - 3, 0);
-                y < Math.Min(GameManager.Current.Player.Y + 3, FieldHeight); y++)
-                {
-                    Put(PlayerVisionMarker, x, y, Destination.Overlay);
-                }
-            }
+            MakeVision();
 
             char[,] popup = null;
 
@@ -155,6 +148,80 @@ namespace SRogue.Core.Modules
                         Put(popup[y - 1, x - 1], x, y, Destination.Overlay);
                     }
                 }
+            }
+        }
+
+        private void MakeVision()
+        {
+            var playerX = GameManager.Current.Player.X;
+            var playerY = GameManager.Current.Player.Y;
+            // render nearby
+            for (int x = Math.Max(playerX - 1, 0);
+                x < Math.Min(playerX + 2, FieldWidth); x++)
+            {
+                for (int y = Math.Max(playerY - 1, 0);
+                y < Math.Min(playerY + 2, FieldHeight); y++)
+                {
+                    Put(PlayerVisionMarker, x, y, Destination.Overlay);
+                }
+            }
+            //render direct
+            for (int x = Math.Max(playerX - 3, 0); x < playerX; x++)
+            {
+                var y = playerY;
+                if (!GameManager.Current.GetTilesAt(x + 1, y).Any(t => t is Wall))
+                {
+                    Put(PlayerVisionMarker, x, y, Destination.Overlay);
+                }
+            }
+            for (int x = Math.Min(playerX + 3, FieldWidth); x > playerX; x--)
+            {
+                var y = playerY;
+                if (!GameManager.Current.GetTilesAt(x - 1, y).Any(t => t is Wall))
+                {
+                    Put(PlayerVisionMarker, x, y, Destination.Overlay);
+                }
+            }
+            for (int y = Math.Max(playerY - 3, 0); y < playerY; y++)
+            {
+                var x = playerX;
+                if (!GameManager.Current.GetTilesAt(x, y + 1).Any(t => t is Wall))
+                {
+                    Put(PlayerVisionMarker, x, y, Destination.Overlay);
+                }
+            }
+            for (int y = Math.Min(playerY + 3, FieldHeight); y > playerY; y--)
+            {
+                var x = playerX;
+                if (!GameManager.Current.GetTilesAt(x, y - 1).Any(t => t is Wall))
+                {
+                    Put(PlayerVisionMarker, x, y, Destination.Overlay);
+                }
+            }
+            //render angles
+            var topleftfree = !GameManager.Current.GetTilesAt(playerX - 1, playerY - 1).Any(t => t is Wall);
+            var toprightfree = !GameManager.Current.GetTilesAt(playerX + 1, playerY - 1).Any(t => t is Wall);
+            var bottomleftfree = !GameManager.Current.GetTilesAt(playerX - 1, playerY + 1).Any(t => t is Wall);
+            var bottomrightfree = !GameManager.Current.GetTilesAt(playerX + 1, playerY + 1).Any(t => t is Wall);
+            if (topleftfree)
+            {
+                Put(PlayerVisionMarker, playerX - 2, playerY - 1, Destination.Overlay);
+                Put(PlayerVisionMarker, playerX - 1, playerY - 2, Destination.Overlay);
+            }
+            if (toprightfree)
+            {
+                Put(PlayerVisionMarker, playerX + 2, playerY - 1, Destination.Overlay);
+                Put(PlayerVisionMarker, playerX + 1, playerY - 2, Destination.Overlay);
+            }
+            if (bottomleftfree)
+            {
+                Put(PlayerVisionMarker, playerX - 2, playerY + 1, Destination.Overlay);
+                Put(PlayerVisionMarker, playerX - 1, playerY + 2, Destination.Overlay);
+            }
+            if (bottomrightfree)
+            {
+                Put(PlayerVisionMarker, playerX + 2, playerY + 1, Destination.Overlay);
+                Put(PlayerVisionMarker, playerX + 1, playerY + 2, Destination.Overlay);
             }
         }
 
