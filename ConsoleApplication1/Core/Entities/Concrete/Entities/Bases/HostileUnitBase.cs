@@ -20,6 +20,11 @@ namespace SRogue.Core.Entities.Concrete.Entities.Bases
 
         public void Interact(IUnit initiator)
         {
+            if (this is Ghost && Rnd.Current.NextDouble() < 0.5)
+            {
+                UiManager.Current.Actions.Append("Ghost dodged. ");
+                return;
+            }
             var weapon = GameState.Current.Inventory.Weapon.Item as WeaponBase;
             var targetUnit = this;
             var damage = initiator.SummarizeAttack();

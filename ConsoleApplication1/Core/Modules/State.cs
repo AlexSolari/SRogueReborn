@@ -15,9 +15,11 @@ namespace SRogue.Core.Modules
         public Inventory Inventory { get; set; }
         public int Gold { get; set; }
         public CityShop Shop { get; set; }
+        public int TrainingLevel { get; set; }
 
         public State()
         {
+            TrainingLevel = 1;
             Shop = new CityShop();
             Inventory = new Inventory();
 
@@ -67,18 +69,18 @@ namespace SRogue.Core.Modules
 
         public class CityShop
         {
-            public enum Options
+            public class Options
             {
-                Training,
-                Story,
-                Exit,
+                public const string Training = "Training ({0} GOLD)";
+                public const string Story = "Story";
+                public const string Exit = "Exit";
             }
 
             public string Message;
 
             public List<string> Story = new List<string>();
 
-            public Options CurrentOption = Options.Exit;
+            public string CurrentOption = Options.Exit;
 
             public void Load(int depth)
             {
@@ -97,21 +99,21 @@ namespace SRogue.Core.Modules
 
             public void SelectNext()
             {
-                if (CurrentOption == Options.Exit)
+                if (CurrentOption.Equals(Options.Exit))
                     CurrentOption = Options.Story;
-                else if (CurrentOption == Options.Story)
+                else if (CurrentOption.Equals(Options.Story))
                     CurrentOption = Options.Training;
-                else if (CurrentOption == Options.Training)
+                else if (CurrentOption.Equals(Options.Training))
                     CurrentOption = Options.Exit;
             }
 
             public void SelectPrev()
             {
-                if (CurrentOption == Options.Story)
+                if (CurrentOption.Equals(Options.Story))
                     CurrentOption = Options.Exit;
-                else if (CurrentOption == Options.Training)
+                else if (CurrentOption.Equals(Options.Training))
                     CurrentOption = Options.Story;
-                else if (CurrentOption == Options.Exit)
+                else if (CurrentOption.Equals(Options.Exit))
                     CurrentOption = Options.Training;
             }
 
@@ -120,12 +122,13 @@ namespace SRogue.Core.Modules
                 switch (CurrentOption)
                 {
                     case Options.Training:
-                        if (GameState.Current.Gold > 100)
+                        if (GameState.Current.Gold > Math.Pow(2, GameState.Current.TrainingLevel))
                         {
-                            GameState.Current.Gold -= 100;
+                            GameState.Current.Gold -= (int)Math.Pow(2, GameState.Current.TrainingLevel);
+                            GameState.Current.TrainingLevel++;
                             GameManager.Current.Player.Attack++;
                             GameManager.Current.Player.HealthMax += 10;
-                            Message = "FEEL THE POWER! *you feeling yourself stronger*";
+                            Message = "*you feeling yourself stronger* (+1 DMG, +10 HP)";
                         }
                         else
                         {

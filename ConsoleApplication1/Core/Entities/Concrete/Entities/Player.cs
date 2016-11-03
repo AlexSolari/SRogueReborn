@@ -47,7 +47,7 @@ namespace SRogue.Core.Entities.Concrete.Entities
         {
             var tiles = GetNearbyTiles<IActivatable>();
             
-            if (tiles.Count() == 0)
+            if (!tiles.Any())
             {
                 UiManager.Current.Actions.Append("Nothing found. ");
             }

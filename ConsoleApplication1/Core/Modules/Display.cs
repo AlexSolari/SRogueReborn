@@ -166,37 +166,31 @@ namespace SRogue.Core.Modules
                 }
             }
             //render direct
-            for (int x = Math.Max(playerX - 3, 0); x < playerX; x++)
+            var dX = playerX;
+            var dY = playerY;
+            while (!GameManager.Current.GetTilesAt(dX - 1, dY).Any(t => t is Wall) && dX <= playerX + 3)
             {
-                var y = playerY;
-                if (!GameManager.Current.GetTilesAt(x + 1, y).Any(t => t is Wall))
-                {
-                    Put(PlayerVisionMarker, x, y, Destination.Overlay);
-                }
+                Put(PlayerVisionMarker, dX, dY, Destination.Overlay);
+                dX++;
             }
-            for (int x = Math.Min(playerX + 3, FieldWidth); x > playerX; x--)
+            dX = playerX;
+            while (!GameManager.Current.GetTilesAt(dX + 1, dY).Any(t => t is Wall) && dX >= playerX - 3)
             {
-                var y = playerY;
-                if (!GameManager.Current.GetTilesAt(x - 1, y).Any(t => t is Wall))
-                {
-                    Put(PlayerVisionMarker, x, y, Destination.Overlay);
-                }
+                Put(PlayerVisionMarker, dX, dY, Destination.Overlay);
+                dX--;
             }
-            for (int y = Math.Max(playerY - 3, 0); y < playerY; y++)
+            dX = playerX;
+            dY = playerY;
+            while (!GameManager.Current.GetTilesAt(dX, dY - 1).Any(t => t is Wall) && dY <= playerY + 3)
             {
-                var x = playerX;
-                if (!GameManager.Current.GetTilesAt(x, y + 1).Any(t => t is Wall))
-                {
-                    Put(PlayerVisionMarker, x, y, Destination.Overlay);
-                }
+                Put(PlayerVisionMarker, dX, dY, Destination.Overlay);
+                dY++;
             }
-            for (int y = Math.Min(playerY + 3, FieldHeight); y > playerY; y--)
+            dY = playerY;
+            while (!GameManager.Current.GetTilesAt(dX, dY + 1).Any(t => t is Wall) && dY >= playerY - 3)
             {
-                var x = playerX;
-                if (!GameManager.Current.GetTilesAt(x, y - 1).Any(t => t is Wall))
-                {
-                    Put(PlayerVisionMarker, x, y, Destination.Overlay);
-                }
+                Put(PlayerVisionMarker, dX, dY, Destination.Overlay);
+                dY--;
             }
             //render angles
             var topleftfree = !GameManager.Current.GetTilesAt(playerX - 1, playerY - 1).Any(t => t is Wall);
