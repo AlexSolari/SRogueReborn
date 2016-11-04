@@ -45,6 +45,7 @@ namespace SRogue
 
         private static void Main(string[] args)
         {
+            var redrawActionLine = true;
             GameManager.Current.GenerateWorld();
 #if DEBUG
             var watch = new Stopwatch();
@@ -54,7 +55,7 @@ namespace SRogue
 #if DEBUG
                 watch.Start();
 #endif
-                DisplayManager.Current.Draw();
+                DisplayManager.Current.Draw(redrawActionLine);
 #if DEBUG
                 watch.Stop();
                     
@@ -66,7 +67,7 @@ namespace SRogue
                 watch.Reset();
                 watch.Start();
 #endif
-                GameManager.Current.ProcessInput(Console.ReadKey().Key);
+                redrawActionLine = GameManager.Current.ProcessInput(Console.ReadKey().Key);
 #if DEBUG
                 watch.Stop();
                     

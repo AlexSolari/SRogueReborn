@@ -17,6 +17,7 @@ namespace SRogue.Core.Modules
             Screen
 	    }
 
+        public Point ExaminatedPoint = null;
         public readonly int Width = 79;
         public readonly int Height = 25;
         public readonly int FieldWidth = 59;
@@ -28,6 +29,7 @@ namespace SRogue.Core.Modules
 
         private const char Fog = Assets.Fog;
         private const char PlayerVisionMarker = Assets.PlayerVisionMarker;
+        private const char ExaminatedMarker = Assets.ExaminatedMarker;
         private const char PlayerVision = Assets.PlayerVision;
 
         public Display()
@@ -112,6 +114,34 @@ namespace SRogue.Core.Modules
 
         protected void MakeOverlay()
         {
+            FillOverlay();
+            MakeVision();
+            MakeExaminated();
+            MakePopup();
+        }
+
+        private void MakeExaminated()
+        {
+            if (((object)ExaminatedPoint) == null)
+                return;
+
+            var tragetX = ExaminatedPoint.X;
+            var targetY = ExaminatedPoint.Y;
+            // render nearby
+            for (int x = Math.Max(tragetX - 1, 0);
+                x < Math.Min(tragetX + 2, FieldWidth); x++)
+            {
+                for (int y = Math.Max(targetY - 1, 0);
+                y < Math.Min(targetY + 2, FieldHeight); y++)
+                {
+                    Put(ExaminatedMarker, x, y, Destination.Overlay);
+                }
+            }
+            Put(PlayerVisionMarker, tragetX, targetY, Destination.Overlay);
+        }
+
+        private void FillOverlay()
+        {
             var ui = UiManager.Current.Render();
 
             for (int x = UI.MarginWidth; x < Width; x++)
@@ -121,9 +151,10 @@ namespace SRogue.Core.Modules
                     Put(ui[y, x - UI.MarginWidth], x, y, Destination.Overlay);
                 }
             }
+        }
 
-            MakeVision();
-
+        private void MakePopup()
+        {
             char[,] popup = null;
 
             if (GameManager.Current.PopupOpened)
@@ -254,7 +285,7 @@ namespace SRogue.Core.Modules
             return result.ToString();
         }
 
-        public void Draw()
+        public void Draw(bool redrawActions = true)
         {
             var newScreen = DisplayManager.Current.Render();
             var length = newScreen.Length;
@@ -275,6 +306,16 @@ namespace SRogue.Core.Modules
                 }
             }
 
+            if (redrawActions)
+                DrawActionsLine();
+
+            Console.SetCursorPosition(0, Height + 1);
+            Buffer = newScreen;
+            ExaminatedPoint = null;
+        }
+
+        private void DrawActionsLine()
+        {
             for (int i = 0; i <= Width; i++)
             {
                 Console.SetCursorPosition(i, Height);
@@ -283,8 +324,6 @@ namespace SRogue.Core.Modules
 
             Console.SetCursorPosition(0, Height);
             Console.Out.Write(UiManager.Current.MakeActionsLine());
-            Console.SetCursorPosition(0, Height + 1);
-            Buffer = newScreen;
         }
 
         private bool ResolveColoring(int x, char newChar)
@@ -328,7 +367,11 @@ namespace SRogue.Core.Modules
                     Console.ForegroundColor = ConsoleColor.Magenta;
                     customColored = true;
                 }
-
+                else if (newChar == Assets.ExaminatedMarker)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    customColored = true;
+                }
             }
 
             return customColored;

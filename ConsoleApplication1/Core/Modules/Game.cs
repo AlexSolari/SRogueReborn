@@ -10,6 +10,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SRogue.Core.Modules
@@ -97,8 +98,10 @@ namespace SRogue.Core.Modules
 
         #region GameStatus
 
-        public void ProcessInput(ConsoleKey input)
+        public bool ProcessInput(ConsoleKey input)
         {
+            var redrawActions = true;
+
             if (PopupOpened)
             {
                 if (input == ConsoleKey.Q)
@@ -107,7 +110,7 @@ namespace SRogue.Core.Modules
                     DisplayManager.Current.LoadOverlay();
                 }
                 else
-                    return;
+                    return redrawActions;
             }
 
             if (input == ConsoleKey.I)
@@ -134,10 +137,19 @@ namespace SRogue.Core.Modules
                 if (UsualControl.ContainsKey(input))
                 {
                     UsualControl[input]();
+                    if (input == ConsoleKey.E)
+                    {
+                        DisplayManager.Current.Draw();
+                        Thread.Sleep(333);
+                        redrawActions = false;
+                    }
+                    
                 }
 
                 GameTick();
             }
+
+            return redrawActions;
         }
 
         private void ToggleInventory()

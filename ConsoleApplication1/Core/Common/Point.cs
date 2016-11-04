@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SRogue.Core.Common
 {
-    public struct Point
+    public class Point
     {
         public int X { get; set; }
         public int Y { get; set; }

@@ -57,6 +57,8 @@ namespace SRogue.Core.Entities.Concrete.Entities
                 tile.Activate();
                 UiManager.Current.Actions.Append("Found {0}. ".FormatWith(tile.GetType().Name));
             }
+
+            DisplayManager.Current.ExaminatedPoint = new Point() { X = X, Y = Y };
         }
 
         protected IEnumerable<TType> GetNearbyTiles<TType>()
