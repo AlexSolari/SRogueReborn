@@ -92,6 +92,7 @@
     <Compile Include="Core\Entities\Interfaces\IActivatable.cs" />
     <Compile Include="Core\Entities\Interfaces\IAiControllable.cs" />
     <Compile Include="Core\Entities\Interfaces\IControllable.cs" />
+    <Compile Include="Core\Entities\Interfaces\IDodger.cs" />
     <Compile Include="Core\Entities\Interfaces\IDropContainer.cs" />
     <Compile Include="Core\Entities\Interfaces\IHostile.cs" />
     <Compile Include="Core\Entities\Interfaces\IInteractable.cs" />

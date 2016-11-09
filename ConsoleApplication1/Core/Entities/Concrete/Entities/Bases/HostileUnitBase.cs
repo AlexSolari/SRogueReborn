@@ -20,9 +20,9 @@ namespace SRogue.Core.Entities.Concrete.Entities.Bases
 
         public void Interact(IUnit initiator)
         {
-            if (this is Ghost && Rnd.Current.NextDouble() < 0.5)
+            if (this is IDodger && Rnd.Current.NextDouble() > ((IDodger)this).DodgeChance)
             {
-                UiManager.Current.Actions.Append("Ghost dodged. ");
+                UiManager.Current.Actions.Append("{0} dodged. ".FormatWith(this.GetType().Name));
                 return;
             }
             var weapon = GameState.Current.Inventory.Weapon.Item as WeaponBase;

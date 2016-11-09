@@ -10,7 +10,7 @@ using System.Xml.Serialization;
 
 namespace SRogue.Core.Entities
 {
-    public abstract class Unit : IUnit, IMovable, IDamageble
+    public abstract class Unit : IUnit
     {
         protected char textureCache;
 
@@ -124,9 +124,9 @@ namespace SRogue.Core.Entities
                 case DamageType.Pure:
                     return pureDamage;
                 case DamageType.Physical:
-                    return (float)Math.Pow((double)GameplayConstants.PhysicalDamageDecreaseComponent, SummarizeArmor()) * pureDamage;
+                    return (float)Math.Pow(GameplayConstants.PhysicalDamageDecreaseComponent, SummarizeArmor()) * pureDamage;
                 case DamageType.Magical:
-                    return (float)Math.Pow((double)GameplayConstants.MagicalDamageDecreaseComponent, SummarizeResist()) * pureDamage;
+                    return (float)Math.Pow(GameplayConstants.MagicalDamageDecreaseComponent, SummarizeResist()) * pureDamage;
                 default:
                     throw new ArgumentException("Unknown damage type");
             }
