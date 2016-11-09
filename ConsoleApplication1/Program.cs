@@ -47,36 +47,11 @@ namespace SRogue
         {
             var redrawActionLine = true;
             GameManager.Current.GenerateWorld();
-#if DEBUG
-            var watch = new Stopwatch();
-#endif
+
             do
             {
-#if DEBUG
-                watch.Start();
-#endif
                 DisplayManager.Current.Draw(redrawActionLine);
-#if DEBUG
-                watch.Stop();
-                    
-                using (var writer = new System.IO.StreamWriter("log.txt", true))
-                {
-                    writer.WriteLine($"{watch.ElapsedTicks} ticks taken to draw ({watch.ElapsedMilliseconds} ms)");
-                }
-
-                watch.Reset();
-                watch.Start();
-#endif
                 redrawActionLine = GameManager.Current.ProcessInput(Console.ReadKey().Key);
-#if DEBUG
-                watch.Stop();
-                    
-                using (var writer = new System.IO.StreamWriter("log.txt", true))
-                {
-                    writer.WriteLine($"{watch.ElapsedTicks} ticks taken to update ({watch.ElapsedMilliseconds} ms)");
-                }
-                watch.Reset();
-#endif
             } while (true);
         }
     }
