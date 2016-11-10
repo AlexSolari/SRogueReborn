@@ -19,7 +19,7 @@ namespace SRogue.Core.Modules
         public TType Load<TType>()
             where TType : class, IEntity
         {
-            string xml = string.Empty;
+            var xml = string.Empty;
 
             if (!Cache.ContainsKey(typeof(TType)))
             {
@@ -44,18 +44,19 @@ namespace SRogue.Core.Modules
                         writer.WriteLine("Exception: {0}".FormatWith(ex.Message));
                         writer.WriteLine("Stack Trace: {0}".FormatWith(ex.StackTrace));
                     }
+                    var instance = Activator.CreateInstance<TType>();
                     if (CreateNewFileIfLoadingFailed)
                     {
                         using (var writer = new StreamWriter(path))
                         {
-                            writer.Write(Activator.CreateInstance<TType>().Serialize());
+                            writer.Write(instance.Serialize());
                         }
                     }
                     if (CreateNewInstanceIfLoadingFailed)
                     {
-                        return Activator.CreateInstance<TType>(); 
+                        return instance; 
                     }
-                    throw;
+                    throw ex;
                 }
                 
             }

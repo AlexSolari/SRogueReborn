@@ -11,27 +11,16 @@ namespace SRogue.Core.Common.Items
 {
     public class Inventory
     {
-        public ArmorSlot<Helmet> Head { get; set; }
-        public ArmorSlot<Armor> Chest { get; set; }
-        public ArmorSlot<Leggins> Legs { get; set; }
-        public ArmorSlot<Boots> Foot { get; set; }
-        public WeaponSlot Weapon { get; set; }
+        public ArmorSlot<Helmet> Head { get; set; } = new ArmorSlot<Helmet>();
+        public ArmorSlot<Armor> Chest { get; set; } = new ArmorSlot<Armor>();
+        public ArmorSlot<Leggins> Legs { get; set; } = new ArmorSlot<Leggins>();
+        public ArmorSlot<Boots> Foot { get; set; } = new ArmorSlot<Boots>();
+        public WeaponSlot Weapon { get; set; } = new WeaponSlot();
 
-        public IList<ItemBase> Backpack { get; set; }
+        public IList<ItemBase> Backpack { get; set; } = new List<ItemBase>();
 
         public ItemBase Selected = null;
-
-        public Inventory()
-        {
-            Backpack = new List<ItemBase>();
-
-            Head = new ArmorSlot<Helmet>();
-            Chest = new ArmorSlot<Armor>();
-            Legs = new ArmorSlot<Leggins>();
-            Foot = new ArmorSlot<Boots>();
-            Weapon = new WeaponSlot();
-        }
-
+        
         public void SelectNext()
         {
             if (Selected == null)
@@ -109,7 +98,7 @@ namespace SRogue.Core.Common.Items
             if (Selected == null)
                 return;
 
-            GameState.Current.Gold += 15 + (int)Selected.Material * 2 + (int)Selected.Quality * 3;
+            GameState.Current.Gold += Math.Max(1, 15 + (int)Selected.Material * 2 + (int)Selected.Quality * 3);
             Backpack.Remove(Selected);
             Deselect();
         }

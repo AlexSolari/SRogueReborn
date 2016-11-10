@@ -15,11 +15,6 @@ namespace SRogue.Core.Entities.Concrete.Entities
     {
         public float DodgeChance { get; set; }
 
-        public Ghost()
-        {
-            DodgeChance = 0.5f;
-        }
-
         public override void Move(Direction direction)
         {
             int targetX = X;

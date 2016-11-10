@@ -18,6 +18,8 @@ namespace SRogue.Core.Modules
 	    }
 
         public Point ExaminatedPoint = null;
+        public readonly int ScreenWidth = 80;
+        public readonly int ScreenHeight = 27;
         public readonly int Width = 79;
         public readonly int Height = 25;
         public readonly int FieldWidth = 59;

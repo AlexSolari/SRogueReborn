@@ -19,7 +19,7 @@ namespace SRogue
         {
             Console.Title = "SRogue";
 
-            Console.SetWindowSize(80, 27);
+            Console.SetWindowSize(DisplayManager.Current.ScreenWidth, DisplayManager.Current.ScreenHeight);
 
             switch (Environment.OSVersion.Platform)
             {

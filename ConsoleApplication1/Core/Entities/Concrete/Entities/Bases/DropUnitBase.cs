@@ -13,14 +13,9 @@ namespace SRogue.Core.Entities.Concrete.Entities.Bases
     public abstract class DropUnitBase : Unit, IDropContainer
     {
         [XmlIgnore]
-        public IList<ItemBase> Droplist { get; set; }
+        public IList<ItemBase> Droplist { get; set; } = new List<ItemBase>();
 
         public bool Picked { get; set; }
-
-        public DropUnitBase()
-        {
-            Droplist = new List<ItemBase>();
-        }
 
         public void GiveItem()
         {

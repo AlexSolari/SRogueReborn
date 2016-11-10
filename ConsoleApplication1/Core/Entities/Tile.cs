@@ -16,7 +16,7 @@ namespace SRogue.Core.Entities
             Id = Guid.NewGuid();
         }
 
-        protected char textureCache;
+        protected char textureCache = '\0';
 
         [XmlIgnore]
         public Guid Id { get; set; }
@@ -36,10 +36,7 @@ namespace SRogue.Core.Entities
                 return textureCache;
             }
         }
-        
-        public virtual void OnStep(IUnit unit)
-        {
-            
-        }
+
+        public abstract void OnStep(IUnit unit);
     }
 }

@@ -12,7 +12,7 @@ namespace SRogue.Core.Entities
 {
     public abstract class Unit : IUnit
     {
-        protected char textureCache;
+        protected char textureCache = '\0';
 
         public Unit()
         {

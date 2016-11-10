@@ -16,13 +16,8 @@ namespace SRogue.Core.Entities.Concrete.Entities
     public class Player : Unit, IControllable
     {
         [XmlIgnore]
-        public List<BuffBase> Buffs { get; set; }
-
-        public Player()
-        {
-            Buffs = new List<BuffBase>();
-        }
-
+        public List<BuffBase> Buffs { get; set; } = new List<BuffBase>();
+        
         public void Interact(IInteractable target)
         {
             target.Interact(this);

@@ -11,18 +11,14 @@ namespace SRogue.Core.Modules
 {
     public class State
     {
-        public int Depth { get; set; }
-        public Inventory Inventory { get; set; }
-        public int Gold { get; set; }
-        public CityShop Shop { get; set; }
-        public int TrainingLevel { get; set; }
+        public int Depth { get; set; } = 0;
+        public Inventory Inventory { get; set; } = new Inventory();
+        public int Gold { get; set; } = 0;
+        public CityShop Shop { get; set; } = new CityShop();
+        public int TrainingLevel { get; set; } = 1;
 
         public State()
         {
-            TrainingLevel = 1;
-            Shop = new CityShop();
-            Inventory = new Inventory();
-
             var sword = new Sword();
             sword.Quality = ItemQuality.Good;
             sword.Material = ItemMaterial.Wooden;
@@ -76,11 +72,11 @@ namespace SRogue.Core.Modules
                 public const string Exit = "Exit";
             }
 
-            public string Message;
+            public string Message { get; set; }
 
-            public List<string> Story = new List<string>();
+            public List<string> Story { get; set; } = new List<string>();
 
-            public string CurrentOption = Options.Exit;
+            public string CurrentOption { get; set; } = Options.Exit;
 
             public void Load(int depth)
             {
@@ -127,8 +123,8 @@ namespace SRogue.Core.Modules
                             GameState.Current.Gold -= (int)Math.Pow(2, GameState.Current.TrainingLevel);
                             GameState.Current.TrainingLevel++;
                             GameManager.Current.Player.Attack++;
-                            GameManager.Current.Player.HealthMax += 10;
-                            Message = "*you feeling yourself stronger* (+1 DMG, +10 HP)";
+                            GameManager.Current.Player.HealthMax += 5;
+                            Message = "*you feeling yourself stronger* (+1 DMG, +5 HP)";
                         }
                         else
                         {

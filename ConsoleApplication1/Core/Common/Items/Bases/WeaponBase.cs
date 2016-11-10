@@ -16,7 +16,7 @@ namespace SRogue.Core.Common.Items.Bases
             {
                 return _Damage + (int)Material + (int)Quality;
             }
-            set
+            protected set
             {
                 _Damage = value;
             }

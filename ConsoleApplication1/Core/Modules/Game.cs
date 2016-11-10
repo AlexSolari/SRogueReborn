@@ -18,28 +18,21 @@ namespace SRogue.Core.Modules
     public class Game
     {
         public Player Player { get; set; }
-        public IList<IUnit> Entities { get; private set; }
-        public IList<ITile> Tiles { get; private set; }
-        public List<TickEventBase> OnTickEndEvents { get; set; }
+        public IList<IUnit> Entities { get; private set; } = new List<IUnit>();
+        public IList<ITile> Tiles { get; private set; } = new List<ITile>();
+        public List<TickEventBase> OnTickEndEvents { get; set; } = new List<TickEventBase>();
 
-        public bool InventoryOpened { get; set; }
-        public bool ShopOpened { get; set; }
+        public bool InventoryOpened { get; set; } = false;
+        public bool ShopOpened { get; set; } = false;
 
         public Dictionary<ConsoleKey, Action> UsualControl { get; set; }
         public Dictionary<ConsoleKey, Action> InventoryControl { get; set; }
         public Dictionary<ConsoleKey, Action> ShopControl { get; set; }
-        public bool PopupOpened { get; set; }
-        public string PopupMessage { get; set; }
+        public bool PopupOpened { get; set; } = false;
+        public string PopupMessage { get; set; } 
 
         public Game()   
         {
-            PopupOpened = false;
-            InventoryOpened = false;
-            ShopOpened = false;
-            Entities = new List<IUnit>();
-            Tiles = new List<ITile>();
-            OnTickEndEvents = new List<TickEventBase>();
-
             UsualControl = new Dictionary<ConsoleKey, Action> {
                 [ ConsoleKey.W ] = () => Player.Move(Direction.Top),
                 [ ConsoleKey.S ] = () => Player.Move(Direction.Bottom),

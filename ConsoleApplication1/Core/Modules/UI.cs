@@ -11,10 +11,8 @@ namespace SRogue.Core.Modules
     {
         public const int UiWidth = 20;
         public const int UiHeight = 25;
-
         public const int InventoryWidth = 56;
         public const int InventoryHeight = 23;
-
         public const int MarginWidth = 59;
         public const int MarginHeight = 0;
 
