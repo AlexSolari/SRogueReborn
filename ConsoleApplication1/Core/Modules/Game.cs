@@ -162,7 +162,8 @@ namespace SRogue.Core.Modules
 
         public void GameTick()
         {
-            foreach (var entity in Entities)
+            var enitities = Entities.OrderBy(x => (x is Player));
+            foreach (var entity in enitities)
             {
                 if (entity is IAiControllable)
                 {
