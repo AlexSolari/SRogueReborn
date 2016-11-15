@@ -95,7 +95,12 @@ namespace SRogue.Core.Modules
         {
             public static void Prefab(IUnit target, int vision, int radius, int damagetype)
             {
-                var targetPoint = GetNextPointToMove(target, vision);
+                Point targetPoint = null;
+
+                if (GetDistanceToPlayer(target) <= vision)
+                {
+                    targetPoint = GetNextPointToMove(target, vision);
+                }
 
                 if (((object)targetPoint) == null)
                 {
@@ -124,6 +129,13 @@ namespace SRogue.Core.Modules
             }
 
             #region PathFinding
+
+            private static int GetDistanceToPlayer(IUnit from)
+            {
+                var dX = from.X - GameManager.Current.Player.X;
+                var dY = from.X - GameManager.Current.Player.X;
+                return (int)Math.Ceiling(Math.Sqrt((dX * dX) + (dY * dY)));
+            }
 
             private class PathfindNode
             {
@@ -155,7 +167,9 @@ namespace SRogue.Core.Modules
                         if (point.Position.Y > 0 && point.Position.Y < DisplayManager.Current.FieldHeight &&
                             point.Position.X > 0 && point.Position.X < DisplayManager.Current.FieldWidth)
                         {
-                            if (GameManager.Current.GetTilesAt(point.Position.X, point.Position.Y).All(x => x.Pathable))
+                            var tiles = GameManager.Current.GetTilesAt(point.Position.X, point.Position.Y);
+                            var entities = GameManager.Current.GetEntitiesAt(point.Position.X, point.Position.Y);
+                            if (tiles.All(x => x.Pathable) || target is IPathingIgnorer)
                             {
                                 field[point.Position.Y, point.Position.X].Value = step;
                                 field[point.Position.Y, point.Position.X].Previous = point?.Previous;
@@ -167,6 +181,7 @@ namespace SRogue.Core.Modules
                                     {
                                         temp.Add(new PathfindNode() { Position = new Point() { X = dX, Y = dY }, Value = step + 1, Previous = field[point.Position.Y, point.Position.X] });
                                     }
+
                                 }
                                 for (int dY = point.Position.Y - 1; dY <= point.Position.Y + 1; dY++)
                                 {

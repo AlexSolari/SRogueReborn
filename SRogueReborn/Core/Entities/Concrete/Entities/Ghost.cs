@@ -11,7 +11,7 @@ using System.Xml.Serialization;
 
 namespace SRogue.Core.Entities.Concrete.Entities
 {
-    public class Ghost : HostileUnitBase, IDodger
+    public class Ghost : HostileUnitBase, IDodger, IPathingIgnorer
     {
         public float DodgeChance { get; set; }
 

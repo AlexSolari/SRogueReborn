@@ -97,6 +97,7 @@
     <Compile Include="Core\Entities\Interfaces\IHostile.cs" />
     <Compile Include="Core\Entities\Interfaces\IInteractable.cs" />
     <Compile Include="Core\Entities\Interfaces\ILootable.cs" />
+    <Compile Include="Core\Entities\Interfaces\IPathingIgnorer.cs" />
     <Compile Include="Core\Entities\Unit.cs" />
     <Compile Include="Core\Entities\Interfaces\IDamageble.cs" />
     <Compile Include="Core\Entities\Interfaces\IDisplayable.cs" />
