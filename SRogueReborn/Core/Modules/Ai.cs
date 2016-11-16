@@ -132,9 +132,16 @@ namespace SRogue.Core.Modules
 
             private static int GetDistanceToPlayer(IUnit from)
             {
-                var dX = from.X - GameManager.Current.Player.X;
-                var dY = from.X - GameManager.Current.Player.X;
-                return (int)Math.Ceiling(Math.Sqrt((dX * dX) + (dY * dY))) - 1;
+                int dX = Math.Abs(from.X - GameManager.Current.Player.X);
+                int dY = Math.Abs(from.Y - GameManager.Current.Player.Y);
+
+                int min = Math.Min(dX, dY);
+                int max = Math.Max(dX, dY);
+
+                int diagonalSteps = min;
+                int straightSteps = max - min;
+
+                return diagonalSteps + straightSteps;
             }
 
             private class PathfindNode
