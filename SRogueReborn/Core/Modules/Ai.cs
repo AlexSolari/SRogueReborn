@@ -134,7 +134,7 @@ namespace SRogue.Core.Modules
             {
                 var dX = from.X - GameManager.Current.Player.X;
                 var dY = from.X - GameManager.Current.Player.X;
-                return (int)Math.Ceiling(Math.Sqrt((dX * dX) + (dY * dY)));
+                return (int)Math.Ceiling(Math.Sqrt((dX * dX) + (dY * dY))) - 1;
             }
 
             private class PathfindNode
@@ -149,6 +149,7 @@ namespace SRogue.Core.Modules
                 var step = 0;
                 var pointsToProcess = new List<PathfindNode>();
                 pointsToProcess.Add(new PathfindNode() { Position = new Point() { X = target.X, Y = target.Y }, Previous = null, Value = 0 });
+
                 var field = new PathfindNode[DisplayManager.Current.FieldHeight, DisplayManager.Current.FieldWidth];
                 for (int x = 0; x < DisplayManager.Current.FieldWidth; x++)
                 {
@@ -172,7 +173,7 @@ namespace SRogue.Core.Modules
                             if (tiles.All(x => x.Pathable) || target is IPathingIgnorer)
                             {
                                 field[point.Position.Y, point.Position.X].Value = step;
-                                field[point.Position.Y, point.Position.X].Previous = point?.Previous;
+                                field[point.Position.Y, point.Position.X].Previous = point.Previous;
 
                                 for (int dX = point.Position.X - 1; dX <= point.Position.X + 1; dX++)
                                 {

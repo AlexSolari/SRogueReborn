@@ -12,9 +12,6 @@ namespace SRogue
 {
     internal static class Program
     {
-        [System.Runtime.InteropServices.DllImport("libc")]
-        private static extern int system(string exec);
-
         static Program()
         {
             Console.Title = "SRogue";
@@ -23,11 +20,6 @@ namespace SRogue
 
             switch (Environment.OSVersion.Platform)
             {
-                case PlatformID.Unix:
-                    system("resize -s 27 80 > /dev/null");
-                    Console.ReadKey(true); 
-                    break;
-
                 case PlatformID.Win32NT:
                 case PlatformID.Win32S:
                 case PlatformID.Win32Windows:
@@ -35,8 +27,9 @@ namespace SRogue
                     break;
 
                 default:
-                    Console.WriteLine("Your platform is probably not supported, " +
-                        "we're sorry if there will be any bugs");
+                    Console.WriteLine("Your platform is probably not supported, we're sorry if there will be any bugs.");
+                    Console.WriteLine("Press any key to continue.");
+                    Console.ReadKey(true);
                     break;
             }
 
@@ -51,7 +44,7 @@ namespace SRogue
             do
             {
                 DisplayManager.Current.Draw(redrawActionLine);
-                redrawActionLine = GameManager.Current.ProcessInput(Console.ReadKey().Key);
+                redrawActionLine = GameManager.Current.ProcessInput(Console.ReadKey(true).Key);
             } while (true);
         }
     }
