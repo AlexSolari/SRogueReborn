@@ -86,14 +86,19 @@ namespace SRogue.Core.Modules
                 var typeTargets = types.Where(x => targets.Contains(x.Name));
                 foreach (var type in typeTargets)
                 {
-                    RegisterAiFor(type, (unit) => Container.Prefab(unit, vision, radius, damagetype));
+                    RegisterAiFor(type, Container.CreatePrefab(vision, radius, damagetype));
                 }
             }
         }
 
         public class Container
         {
-            public static void Prefab(IUnit target, int vision, int radius, int damagetype)
+            public static Action<IUnit> CreatePrefab(int vision, int radius, int damagetype)
+            {
+                return (unit) => Prefab(unit, vision, radius, damagetype);
+            }
+
+            private static void Prefab(IUnit target, int vision, int radius, int damagetype)
             {
                 Point targetPoint = null;
 
