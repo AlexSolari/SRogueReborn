@@ -354,7 +354,7 @@ namespace SRogue.Core.Modules
                     Console.ForegroundColor = ConsoleColor.Green;
                     customColored = true;
                 }
-                else if (newChar == Assets.Item)
+                else if (newChar == Assets.Item || newChar == Assets.GoldDrop)
                 {
                     Console.ForegroundColor = ConsoleColor.Yellow;
                     customColored = true;

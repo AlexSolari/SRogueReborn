@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SRogue.Core.Common.Items.Bases
 {
-    public class WeaponBase : ItemBase
+    public class WeaponBase : EquipmentBase
     {
         protected int _Damage;
 

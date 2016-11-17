@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SRogue.Core.Common.Items.Bases
 {
-    public class ArmorBase : ItemBase
+    public class ArmorBase : EquipmentBase
     {
         public int Armor { get; set; }
 

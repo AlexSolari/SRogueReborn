@@ -23,8 +23,7 @@ namespace SRogue.Core.Entities.Concrete.Entities.Bases
             {
                 var item = Droplist[Rnd.Current.Next(Droplist.Count)];
                 Kill();
-                GameState.Current.Inventory.Backpack.Add(item);
-                UiManager.Current.Actions.Append("You picked up '{0}'. ".FormatWith(item.Name));
+                item.OnPickup();
                 Picked = true;
             }
         }

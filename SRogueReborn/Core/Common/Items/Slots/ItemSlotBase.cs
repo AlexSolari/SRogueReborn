@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace SRogue.Core.Common.Items.Slots
 {
     public class ItemSlotBase<TItem>
-        where TItem : ItemBase
+        where TItem : EquipmentBase
     {
         protected ItemType Type { get; set; }
 

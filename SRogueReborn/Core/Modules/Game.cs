@@ -254,6 +254,10 @@ namespace SRogue.Core.Modules
                 GameState.Current.PopupOpened = true;
                 GenerateCity(centers);
             }
+            else
+            {
+                AddGoldPickups();
+            }
 
             if (isBoss)
             {
@@ -278,6 +282,19 @@ namespace SRogue.Core.Modules
             else
             {
                 MusicManager.Current.Play(Music.Theme.Default);
+            }
+        }
+
+        private void AddGoldPickups()
+        {
+            var count = Rnd.Current.Next(3, 12);
+            for (int i = 0; i < count; i++)
+            {
+                var drop = EntityLoadManager.Current.Load<GoldDrop>();
+                var tile = GetRandomTile(true);
+                drop.X = tile.X;
+                drop.Y = tile.Y;
+                Add(drop);
             }
         }
 

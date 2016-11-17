@@ -17,9 +17,9 @@ namespace SRogue.Core.Common.Items
         public ArmorSlot<Boots> Foot { get; set; } = new ArmorSlot<Boots>();
         public WeaponSlot Weapon { get; set; } = new WeaponSlot();
 
-        public IList<ItemBase> Backpack { get; set; } = new List<ItemBase>();
+        public IList<EquipmentBase> Backpack { get; set; } = new List<EquipmentBase>();
 
-        public ItemBase Selected = null;
+        public EquipmentBase Selected = null;
         
         public void SelectNext()
         {

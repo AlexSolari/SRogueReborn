@@ -52,7 +52,10 @@
     <Compile Include="Core\Common\Direction.cs" />
     <Compile Include="Core\Common\GameplayConstants.cs" />
     <Compile Include="Core\Common\Items\Bases\ArmorBase.cs" />
+    <Compile Include="Core\Common\Items\Bases\EquipmentBase.cs" />
+    <Compile Include="Core\Common\Items\Bases\PickupBase.cs" />
     <Compile Include="Core\Common\Items\Bases\WeaponBase.cs" />
+    <Compile Include="Core\Common\Items\Concrete\Gold.cs" />
     <Compile Include="Core\Common\Items\Concrete\Helmet.cs" />
     <Compile Include="Core\Common\Items\Concrete\Leggins.cs" />
     <Compile Include="Core\Common\Items\Concrete\Boots.cs" />
@@ -81,6 +84,7 @@
     <Compile Include="Core\Entities\Concrete\Entities\Bases\DropUnitBase.cs" />
     <Compile Include="Core\Entities\Concrete\Entities\Bases\HostileUnitBase.cs" />
     <Compile Include="Core\Entities\Concrete\Entities\ItemShop.cs" />
+    <Compile Include="Core\Entities\Concrete\Entities\GoldDrop.cs" />
     <Compile Include="Core\Entities\Concrete\Entities\RandomItemDrop.cs" />
     <Compile Include="Core\Entities\Concrete\Entities\Ghost.cs" />
     <Compile Include="Core\Entities\Concrete\Entities\ZombieBoss.cs" />
