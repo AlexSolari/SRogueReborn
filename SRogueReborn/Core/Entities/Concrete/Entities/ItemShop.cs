@@ -11,7 +11,7 @@ namespace SRogue.Core.Entities.Concrete.Entities
     {
         public void Interact(IUnit initiator)
         {
-            GameManager.Current.ShopOpened = true;
+            GameState.Current.ShopOpened = true;
             GameState.Current.ActivateShop();
         }
     }

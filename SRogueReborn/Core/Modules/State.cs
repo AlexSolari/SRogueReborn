@@ -1,5 +1,6 @@
 ﻿using SRogue.Core.Common.Items;
 using SRogue.Core.Common.Items.Concrete;
+using SRogue.Core.Entities.Concrete.Entities;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,6 +12,12 @@ namespace SRogue.Core.Modules
 {
     public class State
     {
+        public bool InventoryOpened { get; set; } = false;
+        public bool ShopOpened { get; set; } = false;
+        public bool PopupOpened { get; set; } = false;
+        public string PopupMessage { get; set; }
+        public Player Player { get; set; }
+
         public int Depth { get; set; } = 0;
         public Inventory Inventory { get; set; } = new Inventory();
         public int Gold { get; set; } = 0;
@@ -122,8 +129,8 @@ namespace SRogue.Core.Modules
                         {
                             GameState.Current.Gold -= (int)Math.Pow(2, GameState.Current.TrainingLevel);
                             GameState.Current.TrainingLevel++;
-                            GameManager.Current.Player.Attack++;
-                            GameManager.Current.Player.HealthMax += 5;
+                            GameState.Current.Player.Attack++;
+                            GameState.Current.Player.HealthMax += 5;
                             Message = "*you feeling yourself stronger* (+1 DMG, +5 HP)";
                         }
                         else
@@ -136,7 +143,7 @@ namespace SRogue.Core.Modules
                         break;
                     case Options.Exit:
                         DisplayManager.Current.LoadOverlay();
-                        GameManager.Current.ShopOpened = false;
+                        GameState.Current.ShopOpened = false;
                         break;
                     default:
                         break;

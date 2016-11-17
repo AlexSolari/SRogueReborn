@@ -159,15 +159,15 @@ namespace SRogue.Core.Modules
         {
             char[,] popup = null;
 
-            if (GameManager.Current.PopupOpened)
+            if (GameState.Current.PopupOpened)
             {
-                popup = UiManager.Current.RenderPopup(GameManager.Current.PopupMessage);
+                popup = UiManager.Current.RenderPopup(GameState.Current.PopupMessage);
             }
-            else if (GameManager.Current.InventoryOpened)
+            else if (GameState.Current.InventoryOpened)
             {
                 popup = UiManager.Current.RenderInventory();
             }
-            else if (GameManager.Current.ShopOpened)
+            else if (GameState.Current.ShopOpened)
             {
                 popup = UiManager.Current.RenderShop();
             }
@@ -186,8 +186,8 @@ namespace SRogue.Core.Modules
 
         private void MakeVision()
         {
-            var playerX = GameManager.Current.Player.X;
-            var playerY = GameManager.Current.Player.Y;
+            var playerX = GameState.Current.Player.X;
+            var playerY = GameState.Current.Player.Y;
             // render nearby
             for (int x = Math.Max(playerX - 1, 0);
                 x < Math.Min(playerX + 2, FieldWidth); x++)
@@ -332,7 +332,7 @@ namespace SRogue.Core.Modules
         {
             var customColored = false;
 
-            if (!GameManager.Current.InventoryOpened && !GameManager.Current.ShopOpened && !GameManager.Current.PopupOpened && x <= FieldWidth)
+            if (!GameState.Current.InventoryOpened && !GameState.Current.ShopOpened && !GameState.Current.PopupOpened && x <= FieldWidth)
             {
                 if (newChar == Assets.Zombie)
                 {

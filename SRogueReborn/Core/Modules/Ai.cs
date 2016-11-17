@@ -113,11 +113,11 @@ namespace SRogue.Core.Modules
                     return;
                 }
 
-                var canAttack = GameManager.Current.Player.X == targetPoint.X && GameManager.Current.Player.Y == targetPoint.Y;
+                var canAttack = GameState.Current.Player.X == targetPoint.X && GameState.Current.Player.Y == targetPoint.Y;
 
                 if (canAttack)
                 {
-                    GameManager.Current.Player.Damage(target.Attack, (Common.DamageType)damagetype);
+                    GameState.Current.Player.Damage(target.Attack, (Common.DamageType)damagetype);
                     UiManager.Current.Actions.Append("Taked {0} damage from {1}. ".FormatWith(target.Attack, target.GetType().Name));
                 }
                 else
@@ -137,8 +137,8 @@ namespace SRogue.Core.Modules
 
             private static int GetDistanceToPlayer(IUnit from)
             {
-                int dX = Math.Abs(from.X - GameManager.Current.Player.X);
-                int dY = Math.Abs(from.Y - GameManager.Current.Player.Y);
+                int dX = Math.Abs(from.X - GameState.Current.Player.X);
+                int dY = Math.Abs(from.Y - GameState.Current.Player.Y);
 
                 int min = Math.Min(dX, dY);
                 int max = Math.Max(dX, dY);
@@ -215,7 +215,7 @@ namespace SRogue.Core.Modules
                     step++;
                 }
 
-                var currentPoint = field[GameManager.Current.Player.Y, GameManager.Current.Player.X];
+                var currentPoint = field[GameState.Current.Player.Y, GameState.Current.Player.X];
                 var chain = new List<PathfindNode>();
 
                 while (currentPoint.Previous != null)

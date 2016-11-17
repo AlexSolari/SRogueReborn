@@ -14,7 +14,7 @@ namespace SRogue.Core.Common.TickEvents
             () => {
                 GameManager.Current.Entities.Remove(unit);
 
-                if (unit == GameManager.Current.Player)
+                if (unit == GameState.Current.Player)
                 {
                     UiManager.Current.LoseGame();
                 }

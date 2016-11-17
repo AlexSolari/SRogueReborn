@@ -12,7 +12,7 @@ namespace SRogue.Core.Entities.Concrete.Tiles
     {
         public override void OnStep(IUnit unit)
         {
-            if (unit == GameManager.Current.Player)
+            if (unit == GameState.Current.Player)
             {
                 GameManager.Current.OnTickEndEvents.Add(new EventNextLevel());
             }

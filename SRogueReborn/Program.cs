@@ -34,12 +34,12 @@ namespace SRogue
             }
 
             AiManager.Current.InitializeDefaults();
+            GameManager.Current.GenerateWorld();
         }
 
         private static void Main(string[] args)
         {
             var redrawActionLine = true;
-            GameManager.Current.GenerateWorld();
 
             do
             {

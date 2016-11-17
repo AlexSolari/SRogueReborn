@@ -17,28 +17,22 @@ namespace SRogue.Core.Modules
 {
     public class Game
     {
-        public Player Player { get; set; }
         public IList<IUnit> Entities { get; private set; } = new List<IUnit>();
         public IList<ITile> Tiles { get; private set; } = new List<ITile>();
         public List<TickEventBase> OnTickEndEvents { get; set; } = new List<TickEventBase>();
 
-        public bool InventoryOpened { get; set; } = false;
-        public bool ShopOpened { get; set; } = false;
-
         public Dictionary<ConsoleKey, Action> UsualControl { get; set; }
         public Dictionary<ConsoleKey, Action> InventoryControl { get; set; }
         public Dictionary<ConsoleKey, Action> ShopControl { get; set; }
-        public bool PopupOpened { get; set; } = false;
-        public string PopupMessage { get; set; } 
 
         public Game()   
         {
             UsualControl = new Dictionary<ConsoleKey, Action> {
-                [ ConsoleKey.W ] = () => Player.Move(Direction.Top),
-                [ ConsoleKey.S ] = () => Player.Move(Direction.Bottom),
-                [ ConsoleKey.A ] = () => Player.Move(Direction.Left),
-                [ ConsoleKey.D ] = () => Player.Move(Direction.Right),
-                [ ConsoleKey.E ] = () => Player.Examine(),
+                [ ConsoleKey.W ] = () => GameState.Current.Player.Move(Direction.Top),
+                [ ConsoleKey.S ] = () => GameState.Current.Player.Move(Direction.Bottom),
+                [ ConsoleKey.A ] = () => GameState.Current.Player.Move(Direction.Left),
+                [ ConsoleKey.D ] = () => GameState.Current.Player.Move(Direction.Right),
+                [ ConsoleKey.E ] = () => GameState.Current.Player.Examine(),
             };
 
             InventoryControl = new Dictionary<ConsoleKey, Action> {
@@ -95,11 +89,11 @@ namespace SRogue.Core.Modules
         {
             var redrawActions = true;
 
-            if (PopupOpened)
+            if (GameState.Current.PopupOpened)
             {
                 if (input == ConsoleKey.Q)
                 {
-                    PopupOpened = false;
+                    GameState.Current.PopupOpened = false;
                     DisplayManager.Current.LoadOverlay();
                 }
                 else
@@ -111,14 +105,14 @@ namespace SRogue.Core.Modules
                 ToggleInventory();
             }
 
-            if (ShopOpened)
+            if (GameState.Current.ShopOpened)
             {
                 if (ShopControl.ContainsKey(input))
                 {
                     ShopControl[input]();
                 }
             }
-            else if (InventoryOpened)
+            else if (GameState.Current.InventoryOpened)
             {
                 if (InventoryControl.ContainsKey(input))
                 {
@@ -147,7 +141,7 @@ namespace SRogue.Core.Modules
 
         private void ToggleInventory()
         {
-            if (InventoryOpened)
+            if (GameState.Current.InventoryOpened)
             {
                 DisplayManager.Current.LoadOverlay();
                 GameState.Current.Inventory.Deselect();
@@ -157,7 +151,7 @@ namespace SRogue.Core.Modules
                 DisplayManager.Current.SaveOverlay();
                 GameState.Current.Inventory.SelectNext();
             }
-            InventoryOpened = !InventoryOpened;
+            GameState.Current.InventoryOpened = !GameState.Current.InventoryOpened;
         }
 
         public void GameTick()
@@ -256,15 +250,15 @@ namespace SRogue.Core.Modules
 
             if (isCity)
             {
-                PopupMessage = "This place is safe. There is a shop nearby.";
-                PopupOpened = true;
+                GameState.Current.PopupMessage = "This place is safe. There is a shop nearby.";
+                GameState.Current.PopupOpened = true;
                 GenerateCity(centers);
             }
 
             if (isBoss)
             {
-                PopupMessage = "You feel evil presense of powerful creature.";
-                PopupOpened = true;
+                GameState.Current.PopupMessage = "You feel evil presense of powerful creature.";
+                GameState.Current.PopupOpened = true;
             }
 
             GenerateExit(centers);
@@ -289,11 +283,11 @@ namespace SRogue.Core.Modules
 
         private void AddPlayer(IList<Point> centers)
         {
-            Player = Player ?? EntityLoadManager.Current.Load<Player>();
-            Player.Health = Player.HealthMax;
-            Player.X = centers.First().X;
-            Player.Y = centers.First().Y;
-            Add(Player);
+            var player = GameState.Current.Player = GameState.Current.Player ?? EntityLoadManager.Current.Load<Player>();
+            player.Health = player.HealthMax;
+            player.X = centers.First().X;
+            player.Y = centers.First().Y;
+            Add(player);
         }
 
         protected void GenerateExit(IList<Point> centers)

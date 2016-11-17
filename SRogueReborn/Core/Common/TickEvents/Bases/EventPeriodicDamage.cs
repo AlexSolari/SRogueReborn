@@ -31,9 +31,9 @@ namespace SRogue.Core.Common.TickEvents.Bases
             get
             {
                 return () => {
-                    if (Target == GameManager.Current.Player)
+                    if (Target == GameState.Current.Player)
                     {
-                        GameManager.Current.Player.Buffs.Remove(Debuff);
+                        GameState.Current.Player.Buffs.Remove(Debuff);
                     }
                 };
             }
@@ -46,9 +46,9 @@ namespace SRogue.Core.Common.TickEvents.Bases
             Damage = damagePure;
             Debuff = debuff;
             DamageType = type;
-            if (Target == GameManager.Current.Player)
+            if (Target == GameState.Current.Player)
             {
-                GameManager.Current.Player.Buffs.Add(Debuff);
+                GameState.Current.Player.Buffs.Add(Debuff);
             }
         }
     }

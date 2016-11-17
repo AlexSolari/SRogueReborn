@@ -15,7 +15,7 @@ namespace SRogue.Core.Common.TickEvents
         {
             get
             {
-                if (Target == GameManager.Current.Player)
+                if (Target == GameState.Current.Player)
                 {
                     UiManager.Current.Actions.Append("Taked {0} damage form bleeding. ".FormatWith(Damage));
                 }
