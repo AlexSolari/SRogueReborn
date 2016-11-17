@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SRogue.Core.Entities.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -35,5 +36,22 @@ namespace SRogue.Core.Common
         public const char PlayerVisionMarker = '\0';
         public const char PlayerVision = ' ';
         public const char ExaminatedMarker = '*';
+
+
+        /*** Cache ***/
+
+        public static Dictionary<Type, char> Cache = new Dictionary<Type, char>();
+
+        public static char GetTexture(Type type)
+        {
+            if (Cache.ContainsKey(type))
+                return Cache[type];
+
+            var value = (char)typeof(Assets).GetField(type.Name).GetValue(null);
+
+            Cache[type] = value;
+
+            return value;
+        }
     }
 }

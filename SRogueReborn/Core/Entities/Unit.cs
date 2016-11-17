@@ -12,8 +12,6 @@ namespace SRogue.Core.Entities
 {
     public abstract class Unit : IUnit
     {
-        protected char textureCache = '\0';
-
         public Unit()
         {
             Id = Guid.NewGuid();
@@ -30,9 +28,7 @@ namespace SRogue.Core.Entities
         {
             get
             {
-                if (textureCache == '\0')
-                    textureCache = (char)typeof(Assets).GetField(this.GetType().Name).GetValue(null);
-                return textureCache;
+                return Assets.GetTexture(this.GetType());
             }
         }
 

@@ -15,9 +15,7 @@ namespace SRogue.Core.Entities
         {
             Id = Guid.NewGuid();
         }
-
-        protected char textureCache = '\0';
-
+        
         [XmlIgnore]
         public Guid Id { get; set; }
 
@@ -31,9 +29,7 @@ namespace SRogue.Core.Entities
         {
             get
             {
-                if (textureCache == '\0')
-                    textureCache = (char)typeof(Assets).GetField(this.GetType().Name).GetValue(null);
-                return textureCache;
+                return Assets.GetTexture(this.GetType());
             }
         }
 
