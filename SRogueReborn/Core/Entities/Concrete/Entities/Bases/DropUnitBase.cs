@@ -22,9 +22,13 @@ namespace SRogue.Core.Entities.Concrete.Entities.Bases
             if (!Picked)
             {
                 var item = Droplist[Rnd.Current.Next(Droplist.Count)];
-                Kill();
-                item.OnPickup();
-                Picked = true;
+                var pickupSuccessful = item.OnPickup();
+
+                if (pickupSuccessful)
+                {
+                    Picked = true;
+                    Kill();
+                }
             }
         }
 

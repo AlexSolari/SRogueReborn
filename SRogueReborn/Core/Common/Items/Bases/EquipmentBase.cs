@@ -27,10 +27,15 @@ namespace SRogue.Core.Common.Items.Bases
             }
         }
 
-        public override void OnPickup()
+        public override bool OnPickup()
         {
-            GameState.Current.Inventory.Backpack.Add(this);
-            base.OnPickup();
+            if (GameState.Current.Inventory.Backpack.Count < GameState.Current.Inventory.Size) { 
+                GameState.Current.Inventory.Backpack.Add(this);
+                return base.OnPickup();
+            }
+
+            UiManager.Current.Actions.Append("Inventory full. ");
+            return false;
         }
 
         public EquipmentBase()

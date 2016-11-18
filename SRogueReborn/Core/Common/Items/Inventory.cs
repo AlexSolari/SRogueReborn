@@ -20,6 +20,12 @@ namespace SRogue.Core.Common.Items
         public IList<EquipmentBase> Backpack { get; set; } = new List<EquipmentBase>();
 
         public EquipmentBase Selected = null;
+        public int Size;
+
+        public Inventory(int size)
+        {
+            Size = size;
+        }
         
         public void SelectNext()
         {
@@ -101,6 +107,7 @@ namespace SRogue.Core.Common.Items
             GameState.Current.Gold += Math.Max(1, 15 + (int)Selected.Material * 2 + (int)Selected.Quality * 3);
             Backpack.Remove(Selected);
             Deselect();
+            Selected = Backpack.FirstOrDefault();
         }
 
         public void Deselect()

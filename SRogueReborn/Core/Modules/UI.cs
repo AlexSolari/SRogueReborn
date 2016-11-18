@@ -103,7 +103,8 @@ namespace SRogue.Core.Modules
                 Put(Padding("Equiped: {0}".FormatWith(inv.Foot.Item.Name), InventoryWidth), 1, index++, ui);
             }
 
-            var backpack = inv.Backpack.Take(InventoryHeight - 3 - index);
+            var backpack = inv.Backpack;
+            index++;
 
             foreach (var item in backpack)
             {

@@ -10,9 +10,10 @@ namespace SRogue.Core.Common.Items.Bases
     {
         public abstract string Name { get; }
 
-        public virtual void OnPickup()
+        public virtual bool OnPickup()
         {
             UiManager.Current.Actions.Append("You picked up '{0}'. ".FormatWith(this.Name));
+            return true;
         }
     }
 }

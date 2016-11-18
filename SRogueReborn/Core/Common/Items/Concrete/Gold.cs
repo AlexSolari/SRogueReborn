@@ -19,10 +19,11 @@ namespace SRogue.Core.Common.Items.Concrete
             }
         }
 
-        public override void OnPickup()
+        public override bool OnPickup()
         {
             GameState.Current.Gold += Count;
-            base.OnPickup();
+
+            return base.OnPickup();
         }
 
         public Gold()

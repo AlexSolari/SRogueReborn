@@ -12,6 +12,8 @@ namespace SRogue.Core.Modules
 {
     public class State
     {
+        public const int InventorySize = 9;
+
         public bool InventoryOpened { get; set; } = false;
         public bool ShopOpened { get; set; } = false;
         public bool PopupOpened { get; set; } = false;
@@ -19,7 +21,7 @@ namespace SRogue.Core.Modules
         public Player Player { get; set; }
 
         public int Depth { get; set; } = 0;
-        public Inventory Inventory { get; set; } = new Inventory();
+        public Inventory Inventory { get; set; } = new Inventory(InventorySize);
         public int Gold { get; set; } = 0;
         public CityShop Shop { get; set; } = new CityShop();
         public int TrainingLevel { get; set; } = 1;
