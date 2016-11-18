@@ -348,11 +348,11 @@ namespace SRogue.Core.Modules
                 }
             }
 
-            if (GameState.Current.Depth > 1)
+            if (GameState.Current.Depth > 2)
             {
                 if (Rnd.Current.NextDouble() > 0.5)
                 {
-                    var count = Rnd.Current.Next(1, 5);
+                    var count = Rnd.Current.Next(1, GameState.Current.Depth / 2);
                     for (int i = 0; i < count; i++)
                     {
                         var ghost = EntityLoadManager.Current.Load<Ghost>();
