@@ -76,7 +76,7 @@ namespace SRogue.Core.Common.Items
             if (Selected is IEquipment)
             {
                 var selectedEquipment = Selected as IEquipment;
-                GameState.Current.Gold += Math.Max(1, 15 + (int)selectedEquipment.Material * 2 + (int)selectedEquipment.Quality * 3);
+                GameState.Current.Gold += (int)Math.Floor((Rnd.Current.Next(5, 10) + (1 + (int)selectedEquipment.Material) * 7) * (1 + 0.2*(int)selectedEquipment.Quality));
             }
             else if (Selected is HealingPotion)
             {
