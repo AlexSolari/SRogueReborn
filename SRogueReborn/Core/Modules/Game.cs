@@ -287,7 +287,7 @@ namespace SRogue.Core.Modules
 
         private void AddGoldPickups()
         {
-            var count = Rnd.Current.Next(3, 12);
+            var count = Rnd.Current.Next(3, 8);
             for (int i = 0; i < count; i++)
             {
                 var drop = EntityLoadManager.Current.Load<GoldDrop>();
