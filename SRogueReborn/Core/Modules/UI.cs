@@ -142,6 +142,8 @@ namespace SRogue.Core.Modules
 
             var formatStr = (shp.CurrentOption == State.CityShop.Options.Training) ? ">> {0} <<" : "{0}";
             Put(Padding(formatStr.FormatWith(State.CityShop.Options.Training.FormatWith(Math.Pow(2, GameState.Current.TrainingLevel))), InventoryWidth), 1, index++, ui);
+            formatStr = (shp.CurrentOption == State.CityShop.Options.Healing) ? ">> {0} <<" : "{0}";
+            Put(Padding(formatStr.FormatWith(State.CityShop.Options.Healing), InventoryWidth), 1, index++, ui);
             formatStr = (shp.CurrentOption == State.CityShop.Options.Story) ? ">> {0} <<" : "{0}";
             Put(Padding(formatStr.FormatWith(State.CityShop.Options.Story), InventoryWidth), 1, index++, ui);
             formatStr = (shp.CurrentOption == State.CityShop.Options.Exit) ? ">> {0} <<" : "{0}";

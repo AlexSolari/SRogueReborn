@@ -82,6 +82,7 @@ namespace SRogue.Core.Modules
             public class Options
             {
                 public const string Training = "Training ({0} GOLD)";
+                public const string Healing = "Healing Potion (40 GOLD)";
                 public const string Story = "Story";
                 public const string Exit = "Exit";
             }
@@ -112,6 +113,8 @@ namespace SRogue.Core.Modules
                 if (CurrentOption.Equals(Options.Exit))
                     CurrentOption = Options.Story;
                 else if (CurrentOption.Equals(Options.Story))
+                    CurrentOption = Options.Healing;
+                else if (CurrentOption.Equals(Options.Healing))
                     CurrentOption = Options.Training;
                 else if (CurrentOption.Equals(Options.Training))
                     CurrentOption = Options.Exit;
@@ -122,6 +125,8 @@ namespace SRogue.Core.Modules
                 if (CurrentOption.Equals(Options.Story))
                     CurrentOption = Options.Exit;
                 else if (CurrentOption.Equals(Options.Training))
+                    CurrentOption = Options.Healing;
+                else if (CurrentOption.Equals(Options.Healing))
                     CurrentOption = Options.Story;
                 else if (CurrentOption.Equals(Options.Exit))
                     CurrentOption = Options.Training;
@@ -151,6 +156,28 @@ namespace SRogue.Core.Modules
                     case Options.Exit:
                         DisplayManager.Current.LoadOverlay();
                         GameState.Current.ShopOpened = false;
+                        break;
+                    case Options.Healing:
+                        if (GameState.Current.Gold > 40)
+                        {
+                            if (GameState.Current.Inventory.Backpack.Count < GameState.Current.Inventory.Size)
+                            {
+                                GameState.Current.Gold -= 40;
+                                var potion = new HealingPotion();
+                                var power = ((GameState.Current.Depth / 5) - 1 ) / 3;
+                                potion.Power = power;
+                                GameState.Current.Inventory.Backpack.Add(potion);
+                                Message = "'{0}' added to your inventory".FormatWith(potion.Name);
+                            }
+                            else
+                            {
+                                Message = "Your inventory full.";
+                            }
+                        }
+                        else
+                        {
+                            Message = "You can't efford this.";
+                        }
                         break;
                     default:
                         break;
