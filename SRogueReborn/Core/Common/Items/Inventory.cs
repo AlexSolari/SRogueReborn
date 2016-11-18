@@ -1,5 +1,6 @@
 ﻿using SRogue.Core.Common.Items.Bases;
 using SRogue.Core.Common.Items.Concrete;
+using SRogue.Core.Common.Items.Interfaces;
 using SRogue.Core.Common.Items.Slots;
 using System;
 using System.Collections.Generic;
@@ -17,9 +18,9 @@ namespace SRogue.Core.Common.Items
         public ArmorSlot<Boots> Foot { get; set; } = new ArmorSlot<Boots>();
         public WeaponSlot Weapon { get; set; } = new WeaponSlot();
 
-        public IList<EquipmentBase> Backpack { get; set; } = new List<EquipmentBase>();
+        public IList<IActivatable> Backpack { get; set; } = new List<IActivatable>();
 
-        public EquipmentBase Selected = null;
+        public IActivatable Selected = null;
         public int Size;
 
         public Inventory(int size)
@@ -59,44 +60,12 @@ namespace SRogue.Core.Common.Items
             }
         }
 
-        public void EquipSelected()
+        public void ActivateSelected()
         {
             if (Selected == null)
                 return;
 
-            Backpack.Remove(Selected);
-            switch (Selected.Slot)
-            {
-                case ItemType.Head:
-                    if (Head.Item != null && !Head.Item.isEmpty)
-                        Backpack.Add(Head.Dequip());
-                    Head.Equip((Helmet)Selected);
-                    break;
-                case ItemType.Chest:
-                    if (Chest.Item != null && !Chest.Item.isEmpty)
-                        Backpack.Add(Chest.Dequip());
-                    Chest.Equip((Armor)Selected);
-                    break;
-                case ItemType.Legs:
-                    if (Legs.Item != null && !Legs.Item.isEmpty)
-                        Backpack.Add(Legs.Dequip());
-                    Legs.Equip((Leggins)Selected);
-                    break;
-                case ItemType.Foot:
-                    if (Foot.Item != null && !Foot.Item.isEmpty)
-                        Backpack.Add(Foot.Dequip());
-                    Foot.Equip((Boots)Selected);
-                    break;
-                case ItemType.Weapon:
-                    if (Weapon.Item != null && !Weapon.Item.isEmpty)
-                        Backpack.Add(Weapon.Dequip());
-                    Weapon.Equip((WeaponBase)Selected);
-                    break;
-                default:
-                    break;
-            }
-            Deselect();
-            SelectNext();
+            Selected.Activate();
         }
 
         public void SellSelected()
@@ -104,7 +73,16 @@ namespace SRogue.Core.Common.Items
             if (Selected == null)
                 return;
 
-            GameState.Current.Gold += Math.Max(1, 15 + (int)Selected.Material * 2 + (int)Selected.Quality * 3);
+            if (Selected is IEquipment)
+            {
+                var selectedEquipment = Selected as IEquipment;
+                GameState.Current.Gold += Math.Max(1, 15 + (int)selectedEquipment.Material * 2 + (int)selectedEquipment.Quality * 3);
+            }
+            else if (Selected is HealingPotion)
+            {
+                GameState.Current.Gold += Rnd.Current.Next(2,5) + 20 + (int)Math.Pow(5, (Selected as HealingPotion).Power);
+            }
+            
             Backpack.Remove(Selected);
             Deselect();
             Selected = Backpack.FirstOrDefault();

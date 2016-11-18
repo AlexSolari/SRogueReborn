@@ -1,4 +1,5 @@
 ﻿using SRogue.Core.Common;
+using SRogue.Core.Common.Items.Bases;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -109,14 +110,14 @@ namespace SRogue.Core.Modules
             foreach (var item in backpack)
             {
                 var formatStr = (item == inv.Selected) ? ">> {0} <<" : "{0}";
-                Put(Padding(formatStr.FormatWith(item.Name), InventoryWidth), 1, index++, ui);
+                Put(Padding(formatStr.FormatWith((item as ItemBase).Name), InventoryWidth), 1, index++, ui);
             }
         }
 
         protected void MakeInventoryHeader(char[,] ui)
         {
             Put(Padding("INVENTORY", InventoryWidth), 1, 1, ui);
-            Put(Padding("w,s - navigate, q - equip, e - sell", InventoryWidth), 1, 2, ui);
+            Put(Padding("w,s - navigate, q - equip/activate, e - sell", InventoryWidth), 1, 2, ui);
         }
 
         #endregion

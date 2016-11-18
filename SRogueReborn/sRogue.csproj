@@ -56,12 +56,15 @@
     <Compile Include="Core\Common\Items\Bases\PickupBase.cs" />
     <Compile Include="Core\Common\Items\Bases\WeaponBase.cs" />
     <Compile Include="Core\Common\Items\Concrete\Gold.cs" />
+    <Compile Include="Core\Common\Items\Concrete\HealingPotion.cs" />
     <Compile Include="Core\Common\Items\Concrete\Helmet.cs" />
     <Compile Include="Core\Common\Items\Concrete\Leggins.cs" />
     <Compile Include="Core\Common\Items\Concrete\Boots.cs" />
     <Compile Include="Core\Common\Items\Concrete\Armor.cs" />
     <Compile Include="Core\Common\Items\Concrete\Sword.cs" />
     <Compile Include="Core\Common\Items\Bases\ItemBase.cs" />
+    <Compile Include="Core\Common\Items\Interfaces\IEquipment.cs" />
+    <Compile Include="Core\Common\Items\Interfaces\IActivateble.cs" />
     <Compile Include="Core\Common\Items\Inventory.cs" />
     <Compile Include="Core\Common\Items\ItemMaterial.cs" />
     <Compile Include="Core\Common\Items\ItemQuality.cs" />

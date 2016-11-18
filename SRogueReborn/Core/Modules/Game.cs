@@ -38,7 +38,7 @@ namespace SRogue.Core.Modules
             InventoryControl = new Dictionary<ConsoleKey, Action> {
                 [ ConsoleKey.W ] = () => GameState.Current.Inventory.SelectNext(),
                 [ ConsoleKey.S ] = () => GameState.Current.Inventory.SelectPrev(),
-                [ ConsoleKey.Q ] = () => GameState.Current.Inventory.EquipSelected(),
+                [ ConsoleKey.Q ] = () => GameState.Current.Inventory.ActivateSelected(),
                 [ ConsoleKey.E ] = () => GameState.Current.Inventory.SellSelected(),
             };
 

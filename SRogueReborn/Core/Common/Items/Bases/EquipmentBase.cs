@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SRogue.Core.Common.Items.Concrete;
+using SRogue.Core.Common.Items.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SRogue.Core.Common.Items.Bases
 {
-    public abstract class EquipmentBase : ItemBase
+    public abstract class EquipmentBase : ItemBase, IEquipment, IActivatable
     {
         public bool isEmpty { get; set; }
 
@@ -36,6 +38,43 @@ namespace SRogue.Core.Common.Items.Bases
 
             UiManager.Current.Actions.Append("Inventory full. ");
             return false;
+        }
+
+        public void Activate()
+        {
+            GameState.Current.Inventory.Backpack.Remove(this);
+            switch (Slot)
+            {
+                case ItemType.Head:
+                    if (GameState.Current.Inventory.Head.Item != null && !GameState.Current.Inventory.Head.Item.isEmpty)
+                        GameState.Current.Inventory.Backpack.Add(GameState.Current.Inventory.Head.Dequip());
+                    GameState.Current.Inventory.Head.Equip((Helmet)this);
+                    break;
+                case ItemType.Chest:
+                    if (GameState.Current.Inventory.Chest.Item != null && !GameState.Current.Inventory.Chest.Item.isEmpty)
+                        GameState.Current.Inventory.Backpack.Add(GameState.Current.Inventory.Chest.Dequip());
+                    GameState.Current.Inventory.Chest.Equip((Armor)this);
+                    break;
+                case ItemType.Legs:
+                    if (GameState.Current.Inventory.Legs.Item != null && !GameState.Current.Inventory.Legs.Item.isEmpty)
+                        GameState.Current.Inventory.Backpack.Add(GameState.Current.Inventory.Legs.Dequip());
+                    GameState.Current.Inventory.Legs.Equip((Leggins)this);
+                    break;
+                case ItemType.Foot:
+                    if (GameState.Current.Inventory.Foot.Item != null && !GameState.Current.Inventory.Foot.Item.isEmpty)
+                        GameState.Current.Inventory.Backpack.Add(GameState.Current.Inventory.Foot.Dequip());
+                    GameState.Current.Inventory.Foot.Equip((Boots)this);
+                    break;
+                case ItemType.Weapon:
+                    if (GameState.Current.Inventory.Weapon.Item != null && !GameState.Current.Inventory.Weapon.Item.isEmpty)
+                        GameState.Current.Inventory.Backpack.Add(GameState.Current.Inventory.Weapon.Dequip());
+                    GameState.Current.Inventory.Weapon.Equip((WeaponBase)this);
+                    break;
+                default:
+                    break;
+            }
+            GameState.Current.Inventory.Deselect();
+            GameState.Current.Inventory.SelectNext();
         }
 
         public EquipmentBase()

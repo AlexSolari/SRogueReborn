@@ -64,6 +64,11 @@ namespace SRogue.Core.Modules
             boots.MagicResist = 0;
             boots.isEmpty = true;
             Inventory.Foot.Equip(boots);
+
+            for (int i = 0; i < 3; i++)
+            {
+                Inventory.Backpack.Add(new HealingPotion());
+            }
         }
 
         public void ActivateShop()
