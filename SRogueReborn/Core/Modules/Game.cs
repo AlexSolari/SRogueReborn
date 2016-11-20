@@ -27,19 +27,23 @@ namespace SRogue.Core.Modules
 
         public Game()   
         {
-            UsualControl = new Dictionary<ConsoleKey, Action> {
-                [ ConsoleKey.W ] = () => GameState.Current.Player.Move(Direction.Top),
-                [ ConsoleKey.S ] = () => GameState.Current.Player.Move(Direction.Bottom),
-                [ ConsoleKey.A ] = () => GameState.Current.Player.Move(Direction.Left),
-                [ ConsoleKey.D ] = () => GameState.Current.Player.Move(Direction.Right),
-                [ ConsoleKey.E ] = () => GameState.Current.Player.Examine(),
+            UsualControl = new Dictionary<ConsoleKey, Action>
+            {
+                [ConsoleKey.W] = () => GameState.Current.Player.Move(Direction.Top),
+                [ConsoleKey.S] = () => GameState.Current.Player.Move(Direction.Bottom),
+                [ConsoleKey.A] = () => GameState.Current.Player.Move(Direction.Left),
+                [ConsoleKey.D] = () => GameState.Current.Player.Move(Direction.Right),
+                [ConsoleKey.E] = () => GameState.Current.Player.Examine(),
+                [ConsoleKey.I] = () => ToggleInventory(),
             };
 
-            InventoryControl = new Dictionary<ConsoleKey, Action> {
-                [ ConsoleKey.W ] = () => GameState.Current.Inventory.SelectNext(),
-                [ ConsoleKey.S ] = () => GameState.Current.Inventory.SelectPrev(),
-                [ ConsoleKey.Q ] = () => GameState.Current.Inventory.ActivateSelected(),
-                [ ConsoleKey.E ] = () => GameState.Current.Inventory.SellSelected(),
+            InventoryControl = new Dictionary<ConsoleKey, Action>
+            {
+                [ConsoleKey.W] = () => GameState.Current.Inventory.SelectNext(),
+                [ConsoleKey.S] = () => GameState.Current.Inventory.SelectPrev(),
+                [ConsoleKey.Q] = () => GameState.Current.Inventory.ActivateSelected(),
+                [ConsoleKey.E] = () => GameState.Current.Inventory.SellSelected(),
+                [ConsoleKey.I] = () => ToggleInventory(),
             };
 
             ShopControl = new Dictionary<ConsoleKey, Action>
@@ -98,11 +102,6 @@ namespace SRogue.Core.Modules
                 }
                 else
                     return redrawActions;
-            }
-
-            if (input == ConsoleKey.I)
-            {
-                ToggleInventory();
             }
 
             if (GameState.Current.ShopOpened)
