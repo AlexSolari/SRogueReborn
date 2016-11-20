@@ -21,20 +21,20 @@ namespace SRogue.Core.Modules
         public IList<ITile> Tiles { get; private set; } = new List<ITile>();
         public List<TickEventBase> OnTickEndEvents { get; set; } = new List<TickEventBase>();
 
-        public Dictionary<ConsoleKey, Action> UsualControl { get; set; }
+        public Dictionary<ConsoleKey, Func<bool>> UsualControl { get; set; }
         public Dictionary<ConsoleKey, Action> InventoryControl { get; set; }
         public Dictionary<ConsoleKey, Action> ShopControl { get; set; }
 
         public Game()   
         {
-            UsualControl = new Dictionary<ConsoleKey, Action>
+            UsualControl = new Dictionary<ConsoleKey, Func<bool>> // if returns true, then call GameTick after action
             {
-                [ConsoleKey.W] = () => GameState.Current.Player.Move(Direction.Top),
-                [ConsoleKey.S] = () => GameState.Current.Player.Move(Direction.Bottom),
-                [ConsoleKey.A] = () => GameState.Current.Player.Move(Direction.Left),
-                [ConsoleKey.D] = () => GameState.Current.Player.Move(Direction.Right),
-                [ConsoleKey.E] = () => GameState.Current.Player.Examine(),
-                [ConsoleKey.I] = () => ToggleInventory(),
+                [ConsoleKey.W] = () => { GameState.Current.Player.Move(Direction.Top); return true; },
+                [ConsoleKey.S] = () => { GameState.Current.Player.Move(Direction.Bottom); return true; },
+                [ConsoleKey.A] = () => { GameState.Current.Player.Move(Direction.Left); return true; },
+                [ConsoleKey.D] = () => { GameState.Current.Player.Move(Direction.Right); return true; },
+                [ConsoleKey.E] = () => { GameState.Current.Player.Examine(); return true; },
+                [ConsoleKey.I] = () => { ToggleInventory(); return false; },
             };
 
             InventoryControl = new Dictionary<ConsoleKey, Action>
@@ -120,9 +120,10 @@ namespace SRogue.Core.Modules
             }
             else
             {
+                var needToTick = true;
                 if (UsualControl.ContainsKey(input))
                 {
-                    UsualControl[input]();
+                    needToTick = UsualControl[input]();
                     if (input == ConsoleKey.E)
                     {
                         DisplayManager.Current.Draw();
@@ -132,7 +133,8 @@ namespace SRogue.Core.Modules
                     
                 }
 
-                GameTick();
+                if (needToTick)
+                    GameTick();
             }
 
             return redrawActions;
