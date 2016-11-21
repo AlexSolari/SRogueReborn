@@ -15,6 +15,24 @@ namespace SRogue.Core.Common.Items.Slots
         {
         }
 
+        public int Armor
+        {
+            get
+            {
+                return (Item == null) ? 0 : Item.Armor;
+            }
+
+        }
+
+        public int MagicResist
+        {
+            get
+            {
+                return (Item == null) ? 0 : Item.MagicResist;
+            }
+
+        }
+
         private static ItemType ResolveArmorType()
         {
             var type = typeof(TArmorType);

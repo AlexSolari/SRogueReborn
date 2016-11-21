@@ -182,6 +182,7 @@
     <Content Include="res\RandomItemDrop.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="res\ScrollDrop.xml" />
     <Content Include="res\SpikeTrap.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

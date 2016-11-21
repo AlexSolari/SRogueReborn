@@ -34,7 +34,8 @@ namespace SRogue.Core.Common.Items.Concrete
                     var equiped = GameState.Current.Inventory.Equiped;
                     foreach (var item in equiped)
                     {
-                        item.Quality = (ItemQuality)Math.Min((int)item.Quality + 1, (int)ItemQuality.Godly);
+                        if (item != null)
+                            item.Quality = (ItemQuality)Math.Min((int)item.Quality + 1, (int)ItemQuality.Godly);
                     }
                     break;
                 case 1:

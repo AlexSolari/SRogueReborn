@@ -21,6 +21,9 @@ namespace SRogue.Core.Common.Items.Slots
 
         public void Equip(TItem item)
         {
+            if (item == null)
+                return;
+
             if(Type == item.Slot)
             {
                 Item = item;

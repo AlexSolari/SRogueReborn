@@ -25,20 +25,11 @@ namespace SRogue.Core.Common.Items
             {
                 var result = new List<IEquipment>();
 
-                if (!Head.Item.isEmpty)
-                    result.Add(Head.Item);
-
-                if (!Chest.Item.isEmpty)
-                    result.Add(Chest.Item);
-
-                if (!Legs.Item.isEmpty)
-                    result.Add(Legs.Item);
-
-                if (!Foot.Item.isEmpty)
-                    result.Add(Foot.Item);
-
-                if (!Weapon.Item.isEmpty)
-                    result.Add(Weapon.Item);
+                result.Add(Head.Item);
+                result.Add(Chest.Item);
+                result.Add(Legs.Item);
+                result.Add(Foot.Item);
+                result.Add(Weapon.Item);
 
                 return result;
             }
@@ -123,18 +114,18 @@ namespace SRogue.Core.Common.Items
 
         public int SummarizeArmor()
         {
-            return Head.Item.Armor
-                 + Chest.Item.Armor
-                 + Legs.Item.Armor
-                 + Foot.Item.Armor;
+             return Head.Armor
+                 + Chest.Armor
+                 + Legs.Armor
+                 + Foot.Armor;
         }
 
         public int SummarizeResist()
         {
-            return Head.Item.MagicResist
-                 + Chest.Item.MagicResist
-                 + Legs.Item.MagicResist
-                 + Foot.Item.MagicResist;
+            return Head.MagicResist
+                 + Chest.MagicResist
+                 + Legs.MagicResist
+                 + Foot.MagicResist;
         }
     }
 }

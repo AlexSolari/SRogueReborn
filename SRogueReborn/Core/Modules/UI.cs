@@ -82,35 +82,66 @@ namespace SRogue.Core.Modules
         protected void MakeInvenotyItems(char[,] ui)
         {
             var inv = GameState.Current.Inventory;
-            var index = 3;
+            var index = 4;
+
             if (inv.Weapon.Item != null)
             {
                 Put(Padding("Equiped: {0}".FormatWith(inv.Weapon.Item.Name), InventoryWidth), 1, index++, ui);
             }
+            else
+            {
+                Put(Padding("Equiped: [No Weapon]", InventoryWidth), 1, index++, ui);
+            }
+
             if (inv.Head.Item != null)
             {
                 Put(Padding("Equiped: {0}".FormatWith(inv.Head.Item.Name), InventoryWidth), 1, index++, ui);
             }
+            else
+            {
+                Put(Padding("Equiped: [No Helmet]", InventoryWidth), 1, index++, ui);
+            }
+
             if (inv.Chest.Item != null)
             {
                 Put(Padding("Equiped: {0}".FormatWith(inv.Chest.Item.Name), InventoryWidth), 1, index++, ui);
             }
+            else
+            {
+                Put(Padding("Equiped: [No Armor]", InventoryWidth), 1, index++, ui);
+            }
+
             if (inv.Legs.Item != null)
             {
                 Put(Padding("Equiped: {0}".FormatWith(inv.Legs.Item.Name), InventoryWidth), 1, index++, ui);
             }
+            else
+            {
+                Put(Padding("Equiped: [No Leggins]", InventoryWidth), 1, index++, ui);
+            }
+
             if (inv.Foot.Item != null)
             {
                 Put(Padding("Equiped: {0}".FormatWith(inv.Foot.Item.Name), InventoryWidth), 1, index++, ui);
+            }
+            else
+            {
+                Put(Padding("Equiped: [No Boots]", InventoryWidth), 1, index++, ui);
             }
 
             var backpack = inv.Backpack;
             index++;
 
+            var itemCount = 1;
             foreach (var item in backpack)
             {
-                var formatStr = (item == inv.Selected) ? ">> {0} <<" : "{0}";
-                Put(Padding(formatStr.FormatWith((item as ItemBase).Name), InventoryWidth), 1, index++, ui);
+                var formatStr = (item == inv.Selected) ? ">> {1}) {0} <<" : "{1}) {0}";
+                Put(Padding(formatStr.FormatWith((item as ItemBase).Name, itemCount++), InventoryWidth), 1, index++, ui);
+            }
+
+            for (; itemCount <= GameState.Current.Inventory.Size; itemCount++)
+            {
+                Put(Padding("{0}) [Empty]".FormatWith(itemCount), InventoryWidth), 1, index++, ui);
             }
         }
 

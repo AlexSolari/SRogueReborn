@@ -26,9 +26,6 @@ namespace SRogue.Core.Common.Items.Bases
         {
             get
             {
-                if (isEmpty)
-                    return base.Name;
-
                 return base.Name + " ({0} dmg)".FormatWith(Damage);   
             }
         }
