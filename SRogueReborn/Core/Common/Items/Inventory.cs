@@ -19,6 +19,30 @@ namespace SRogue.Core.Common.Items
         public WeaponSlot Weapon { get; set; } = new WeaponSlot();
 
         public IList<IActivatable> Backpack { get; set; } = new List<IActivatable>();
+        public IList<IEquipment> Equiped
+        {
+            get
+            {
+                var result = new List<IEquipment>();
+
+                if (!Head.Item.isEmpty)
+                    result.Add(Head.Item);
+
+                if (!Chest.Item.isEmpty)
+                    result.Add(Chest.Item);
+
+                if (!Legs.Item.isEmpty)
+                    result.Add(Legs.Item);
+
+                if (!Foot.Item.isEmpty)
+                    result.Add(Foot.Item);
+
+                if (!Weapon.Item.isEmpty)
+                    result.Add(Weapon.Item);
+
+                return result;
+            }
+        }
 
         public IActivatable Selected = null;
         public int Size;
@@ -32,22 +56,6 @@ namespace SRogue.Core.Common.Items
         {
             if (Selected == null)
             {
-                Selected = Backpack.FirstOrDefault();
-            }
-            else if (Selected != Backpack.LastOrDefault())
-            {
-                Selected = Backpack[Backpack.IndexOf(Selected) + 1];
-            }
-            else
-            {
-                Selected = Backpack.FirstOrDefault();
-            }
-        }
-
-        public void SelectPrev()
-        {
-            if (Selected == null)
-            {
                 Selected = Backpack.LastOrDefault();
             }
             else if (Selected != Backpack.FirstOrDefault())
@@ -57,6 +65,22 @@ namespace SRogue.Core.Common.Items
             else
             {
                 Selected = Backpack.LastOrDefault();
+            }
+        }
+
+        public void SelectPrev()
+        {
+            if (Selected == null)
+            {
+                Selected = Backpack.FirstOrDefault();
+            }
+            else if (Selected != Backpack.LastOrDefault())
+            {
+                Selected = Backpack[Backpack.IndexOf(Selected) + 1];
+            }
+            else
+            {
+                Selected = Backpack.FirstOrDefault();
             }
         }
 
@@ -82,7 +106,11 @@ namespace SRogue.Core.Common.Items
             {
                 GameState.Current.Gold += Rnd.Current.Next(2,5) + 20 + (int)Math.Pow(5, (Selected as HealingPotion).Power);
             }
-            
+            else if (Selected is Scroll)
+            {
+                GameState.Current.Gold += Rnd.Current.Next(12, 25) + 100;
+            }
+
             Backpack.Remove(Selected);
             Deselect();
             Selected = Backpack.FirstOrDefault();

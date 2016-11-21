@@ -1,5 +1,6 @@
 ﻿using SRogue.Core.Common;
 using SRogue.Core.Common.Buffs;
+using SRogue.Core.Common.TickEvents;
 using SRogue.Core.Entities.Concrete.Entities.Bases;
 using SRogue.Core.Entities.Interfaces;
 using System;
@@ -11,9 +12,20 @@ using System.Xml.Serialization;
 
 namespace SRogue.Core.Entities.Concrete.Entities
 {
-    public class Ghost : HostileUnitBase, IDodger, IPathingIgnorer
+    public class Ghost : HostileUnitBase, IDodger, IPathingIgnorer, ILootable
     {
         public float DodgeChance { get; set; }
+
+        public bool DroppedLoot { get; set; }
+
+        public void DropLoot()
+        {
+            var drop = EntityLoadManager.Current.Load<ScrollDrop>();
+            drop.X = X;
+            drop.Y = Y;
+            GameManager.Current.OnTickEndEvents.Add(new EventItemDrop<ScrollDrop>(drop));
+            DroppedLoot = true;
+        }
 
         public override void Move(Direction direction)
         {
@@ -50,6 +62,14 @@ namespace SRogue.Core.Entities.Concrete.Entities
             X = (X < 0) ? 0 : X;
             Y = (Y >= DisplayManager.Current.FieldHeight) ? DisplayManager.Current.FieldHeight - 1 : Y;
             Y = (Y < 0) ? 0 : Y;
+        }
+
+        public override void Kill()
+        {
+            if (!DroppedLoot)
+                DropLoot();
+
+            base.Kill();
         }
     }
 }

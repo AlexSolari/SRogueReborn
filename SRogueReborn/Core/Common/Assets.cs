@@ -24,12 +24,13 @@ namespace SRogue.Core.Common
         public const char Player = '@';
         public const char Zombie = 'z';
         public const char ZombieBoss = 'Z';
-        public const char Ghost = 's';
+        public const char Ghost = 'g';
 
         public const char ItemShop = 'O';
         public const char Item = 'u';
         public const char RandomItemDrop = Item;
         public const char GoldDrop = '8';
+        public const char ScrollDrop = 's';
 
         /***UI***/
         public const char UiBorder = '▓';

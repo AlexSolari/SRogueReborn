@@ -13,6 +13,7 @@ namespace SRogue.Core.Modules
     {
         public enum Destination
     	{
+            SavedOverlay,
 	        Overlay,
             Screen
 	    }
@@ -66,6 +67,9 @@ namespace SRogue.Core.Modules
         {
             switch (destination)
             {
+                case Destination.SavedOverlay:
+                    OverlaySaver[y, x] = c;
+                    break;
                 case Destination.Overlay:
                     Overlay[y, x] = c;
                     break;
@@ -102,6 +106,9 @@ namespace SRogue.Core.Modules
             {
                 switch (destination)
                 {
+                    case Destination.SavedOverlay:
+                        OverlaySaver[y, x] = s[i];
+                        break;
                     case Destination.Overlay:
                         Overlay[y, x + i] = s[i];
                         break;
@@ -354,7 +361,7 @@ namespace SRogue.Core.Modules
                     Console.ForegroundColor = ConsoleColor.Green;
                     customColored = true;
                 }
-                else if (newChar == Assets.Item || newChar == Assets.GoldDrop)
+                else if (newChar == Assets.Item || newChar == Assets.GoldDrop || newChar == Assets.ScrollDrop)
                 {
                     Console.ForegroundColor = ConsoleColor.Yellow;
                     customColored = true;
