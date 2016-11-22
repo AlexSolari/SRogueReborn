@@ -104,7 +104,7 @@ namespace SRogue.Core.Modules
 
                 if (GetDistanceToPlayer(target) <= vision)
                 {
-                    targetPoint = GetNextPointToMove(target, vision);
+                    targetPoint = GetNextPoint(target, vision);
                 }
 
                 if (((object)targetPoint) == null)
@@ -154,58 +154,71 @@ namespace SRogue.Core.Modules
                 public PathfindNode Previous { get; set; }
                 public Point Position { get; set; }
                 public int Value { get; set; }
+
+                public bool Equals(PathfindNode obj)
+                {
+                    return this.GetHashCode() == obj.GetHashCode();
+                }
+
+                public override int GetHashCode()
+                {
+                    return Position.X * 31 + Position.Y;
+                }
+            }
+            
+            private static Point GetNextPoint(IUnit from, int vision)
+            {
+                var currentPoint = PathMap[from.Y, from.X];
+                var chain = new List<PathfindNode>();
+
+                while (currentPoint.Previous != null)
+                {
+                    currentPoint = currentPoint.Previous;
+                    chain.Add(currentPoint);
+                    
+                }
+
+                return chain.FirstOrDefault()?.Position;
             }
 
-            private static Point GetNextPointToMove(IUnit target, int vision)
+            private static PathfindNode[,] PathMap;
+
+            public static void RecalculatePlayerPathmap()
             {
+                CreateOrErasePathMap();
+
                 var step = 0;
                 var pointsToProcess = new List<PathfindNode>();
-                pointsToProcess.Add(new PathfindNode() { Position = new Point() { X = target.X, Y = target.Y }, Previous = null, Value = 0 });
+                pointsToProcess.Add(new PathfindNode() { Position = new Point() { X = GameState.Current.Player.X, Y = GameState.Current.Player.Y }, Previous = null, Value = 0 });
 
-                var field = new PathfindNode[DisplayManager.Current.FieldHeight, DisplayManager.Current.FieldWidth];
-                for (int x = 0; x < DisplayManager.Current.FieldWidth; x++)
+                while (true)
                 {
-                    for (int y = 0; y < DisplayManager.Current.FieldHeight; y++)
-                    {
-                        field[y, x] = new PathfindNode() { Position = new Point() { X = x, Y = y }, Previous = null, Value = -1 };
-                    }
-                }
-                
-                while (step <= vision)
-                {
+                    if (!pointsToProcess.Any())
+                        break;
+
                     var temp = new List<PathfindNode>();
 
                     foreach (var point in pointsToProcess)
                     {
-                        if (point.Position.Y > 0 && point.Position.Y < DisplayManager.Current.FieldHeight &&
-                            point.Position.X > 0 && point.Position.X < DisplayManager.Current.FieldWidth)
+                        PathMap[point.Position.Y, point.Position.X].Value = step;
+                        PathMap[point.Position.Y, point.Position.X].Previous = point.Previous;
+
+                        for (int dX = point.Position.X - 1; dX <= point.Position.X + 1; dX++)
                         {
-                            var tiles = GameManager.Current.GetTilesAt(point.Position.X, point.Position.Y);
-                            var entities = GameManager.Current.GetEntitiesAt(point.Position.X, point.Position.Y);
-                            if (tiles.All(x => x.Pathable) || target is IPathingIgnorer)
+                            var dY = point.Position.Y;
+                            if (dY > 0 && dY < DisplayManager.Current.FieldHeight && dX > 0 && dX < DisplayManager.Current.FieldWidth && PathMap[dY, dX].Value == -1 && !temp.Any(x => x.Equals(PathMap[dY, dX])))
                             {
-                                field[point.Position.Y, point.Position.X].Value = step;
-                                field[point.Position.Y, point.Position.X].Previous = point.Previous;
-
-                                for (int dX = point.Position.X - 1; dX <= point.Position.X + 1; dX++)
-                                {
-                                    var dY = point.Position.Y;
-                                    if (dY > 0 && dY < DisplayManager.Current.FieldHeight && dX > 0 && dX < DisplayManager.Current.FieldWidth && field[dY, dX].Value == -1)
-                                    {
-                                        temp.Add(new PathfindNode() { Position = new Point() { X = dX, Y = dY }, Value = step + 1, Previous = field[point.Position.Y, point.Position.X] });
-                                    }
-
-                                }
-                                for (int dY = point.Position.Y - 1; dY <= point.Position.Y + 1; dY++)
-                                {
-                                    var dX = point.Position.X;
-                                    if (dY > 0 && dY < DisplayManager.Current.FieldHeight && dX > 0 && dX < DisplayManager.Current.FieldWidth && field[dY, dX].Value == -1)
-                                    {
-                                        temp.Add(new PathfindNode() { Position = new Point() { X = dX, Y = dY }, Value = step + 1, Previous = field[point.Position.Y, point.Position.X] });
-                                    }
-                                }
+                                temp.Add(new PathfindNode() { Position = new Point() { X = dX, Y = dY }, Value = step + 1, Previous = PathMap[point.Position.Y, point.Position.X] });
                             }
 
+                        }
+                        for (int dY = point.Position.Y - 1; dY <= point.Position.Y + 1; dY++)
+                        {
+                            var dX = point.Position.X;
+                            if (dY > 0 && dY < DisplayManager.Current.FieldHeight && dX > 0 && dX < DisplayManager.Current.FieldWidth && PathMap[dY, dX].Value == -1 && !temp.Any(x => x.Equals(PathMap[dY, dX])))
+                            {
+                                temp.Add(new PathfindNode() { Position = new Point() { X = dX, Y = dY }, Value = step + 1, Previous = PathMap[point.Position.Y, point.Position.X] });
+                            }
                         }
                     }
 
@@ -214,17 +227,35 @@ namespace SRogue.Core.Modules
 
                     step++;
                 }
+            }
 
-                var currentPoint = field[GameState.Current.Player.Y, GameState.Current.Player.X];
-                var chain = new List<PathfindNode>();
+            private static void CreateOrErasePathMap()
+            {
+                var noMapCreated = PathMap == null;
 
-                while (currentPoint.Previous != null)
+                if (noMapCreated)
                 {
-                    chain.Add(currentPoint);
-                    currentPoint = currentPoint.Previous;
+                    PathMap = new PathfindNode[DisplayManager.Current.FieldHeight, DisplayManager.Current.FieldWidth];
                 }
 
-                return chain.LastOrDefault()?.Position;
+                for (int x = 0; x < DisplayManager.Current.FieldWidth; x++)
+                {
+                    for (int y = 0; y < DisplayManager.Current.FieldHeight; y++)
+                    {
+                        if (noMapCreated)
+                        {
+                            PathMap[y, x] = new PathfindNode() { Position = new Point() { X = x, Y = y }, Previous = null, Value = -1 };
+                        }
+                        else
+                        {
+                            PathMap[y, x].Value = -1;
+                            PathMap[y, x].Previous = null;
+                        }
+
+                        if (!GameManager.Current.GetTilesAt(x, y).Any(p => p.Pathable))
+                            PathMap[y, x].Value = -2;
+                    }
+                }
             }
 
             #endregion

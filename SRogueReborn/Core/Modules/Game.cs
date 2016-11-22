@@ -157,6 +157,7 @@ namespace SRogue.Core.Modules
 
         public void GameTick()
         {
+            Ai.Container.RecalculatePlayerPathmap();
             var enitities = Entities.OrderBy(x => (x is Player));
             foreach (var entity in enitities)
             {
