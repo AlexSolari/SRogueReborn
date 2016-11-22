@@ -343,11 +343,11 @@ namespace SRogue.Core.Modules
         protected void MakeBuffs(char[,] ui)
         {
             Put("BUFFS:".FormatWith(GameState.Current.Depth), 1, 8, ui, true);
-            var firstfive = GameState.Current.Player.Buffs.Take(5);
+            var buffs = GameState.Current.Player.Buffs.GroupBy(x => x.BuffName).Select(x => new { BuffName = x.FirstOrDefault().BuffName, Count = x.Count() });
             int index = 9;
-            foreach (var buff in firstfive)
+            foreach (var group in buffs)
             {
-                Put("{0}".FormatWith(buff.BuffName), 1, index, ui, true);
+                Put("{0} (x{1})".FormatWith(group.BuffName, group.Count), 1, index, ui, true);
                 index++;
             }
         }
