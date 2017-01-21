@@ -25,7 +25,9 @@ namespace SRogue.Core.Modules
 
         public void Play(Theme level)
         {
+#if !DEBUG
             if (CurrentTheme == level)
+#endif
                 return;
 
             MusicManager.Current.LoopPlayer.Stop();

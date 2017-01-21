@@ -28,6 +28,8 @@ namespace SRogue.Core.Modules
 
         public State()
         {
+            Player = EntityLoadManager.Current.Load<Player>();
+
             var sword = new Sword();
             sword.Quality = ItemQuality.Good;
             sword.Material = ItemMaterial.Wooden;

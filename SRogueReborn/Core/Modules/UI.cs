@@ -145,6 +145,35 @@ namespace SRogue.Core.Modules
             }
         }
 
+        public IList<string> RenderMenu(Display.MenuDesigion option)
+        {
+            var result = new List<string>();
+
+            result.Add(Padding(" ▄▄   ▄▄▄         ▄▄    ▄  ▄▌▄▄▄  ", DisplayManager.Current.ScreenWidth));
+            result.Add(Padding("▐█ ▀  █  █       ▐█ ▀   █  █▌▀▄ ▀ ", DisplayManager.Current.ScreenWidth));
+            result.Add(Padding("▄▀▀▀█▄▐▀▀▄  ▄█▀▄ ▄█ ▀█▄ █▌ █▌▐▀▀ ▄", DisplayManager.Current.ScreenWidth));
+            result.Add(Padding("▐█▄ ▐█▐█ █▌▐█▌ ▐▌▐█▄ ▐█ ▐█▄█▌▐█▄▄▌", DisplayManager.Current.ScreenWidth));
+            result.Add(Padding(" ▀▀▀▀  ▀  ▀ ▀█▄▀  ▀▀▀▀   ▀▀▀  ▀▀▀ ", DisplayManager.Current.ScreenWidth));
+            result.Add(string.Empty);
+            result.Add(Padding("w,s - navigate, q - select", DisplayManager.Current.ScreenWidth));
+            result.Add(string.Empty);
+            var options = Enum.GetNames(typeof(Display.MenuDesigion));
+            foreach (var item in options)
+            {
+                var str = 
+                    ((item == Enum.GetName(typeof(Display.MenuDesigion), option))
+                    ? ">> {0} <<" 
+                    : "{0}").FormatWith(item);
+
+                result.Add(Padding(str, DisplayManager.Current.ScreenWidth));
+            }
+            result.Add(string.Empty);
+            result.Add(string.Empty);
+            result.Add(Padding("Alex Solari, " + DateTime.Now.Year, DisplayManager.Current.ScreenWidth));
+
+            return result;
+        }
+
         protected void MakeInventoryHeader(char[,] ui)
         {
             Put(Padding("INVENTORY", InventoryWidth), 1, 1, ui);
@@ -237,7 +266,8 @@ namespace SRogue.Core.Modules
             Console.Clear();
             DisplayManager.Current.ShowEndScreen();
             Console.ReadKey();
-            Environment.Exit(0);
+            MusicManager.Current.Play(Music.Theme.Default);
+            DisplayManager.Current.ShowStartScreen();
         }
 
         private void Put(char c, int x, int y, char[,] ui)

@@ -10,5 +10,12 @@ namespace SRogue.Core
 {
     class GameState : Singleton<State>
     {
+        public static void Reset()
+        {
+            _instance = new State();
+            Ai.Container.ResetPathMap();
+            DisplayManager.Current.ResetOverlay();
+            GameManager.Current.GenerateWorld();
+        }
     }
 }

@@ -183,6 +183,11 @@ namespace SRogue.Core.Modules
 
             private static PathfindNode[,] PathMap;
 
+            public static void ResetPathMap()
+            {
+                PathMap = null;
+            }
+
             public static void RecalculatePlayerPathmap()
             {
                 CreateOrErasePathMap();

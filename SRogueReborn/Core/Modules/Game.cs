@@ -268,9 +268,8 @@ namespace SRogue.Core.Modules
             }
 
             GenerateExit(centers);
-#if !DEBUG
             DisplayManager.Current.ResetOverlay();
-#endif
+
             DisplayManager.Current.SaveOverlay();
 
             if (isBoss)
@@ -302,7 +301,7 @@ namespace SRogue.Core.Modules
 
         private void AddPlayer(IList<Point> centers)
         {
-            var player = GameState.Current.Player = GameState.Current.Player ?? EntityLoadManager.Current.Load<Player>();
+            var player = GameState.Current.Player = GameState.Current.Player;
             player.Health = player.HealthMax;
             player.X = centers.First().X;
             player.Y = centers.First().Y;

@@ -18,6 +18,12 @@ namespace SRogue.Core.Modules
             Screen
 	    }
 
+        public enum MenuDesigion
+        {
+            Play,
+            Exit
+        }
+
         public Point ExaminatedPoint = null;
         public readonly int ScreenWidth = 80;
         public readonly int ScreenHeight = 27;
@@ -44,6 +50,50 @@ namespace SRogue.Core.Modules
         public void SaveOverlay()
         {
             OverlaySaver = (char[,])Overlay.Clone();
+        }
+
+        public void ShowStartScreen()
+        {
+            var desigionMaked = false;
+            var desigion = MenuDesigion.Play;
+            do
+            {
+                DisplayManager.Current.DrawMenu(desigion);
+                var input = Console.ReadKey(true).Key;
+
+                switch (input)
+                {
+                    case ConsoleKey.Q:
+                        desigionMaked = true;
+                        break;
+                    case ConsoleKey.W:
+                    case ConsoleKey.S:
+                        if (desigion == MenuDesigion.Play)
+                            desigion = MenuDesigion.Exit;
+                        else
+                            desigion = MenuDesigion.Play;
+                        break;
+                    default:
+                        break;
+                }
+            } while (!desigionMaked);
+
+            if (desigion == MenuDesigion.Exit)
+                Environment.Exit(0);
+            else
+                GameState.Reset();
+        }
+
+        public void DrawMenu(MenuDesigion option)
+        {
+            Console.Clear();
+
+            var rendered = UiManager.Current.RenderMenu(option);
+
+            foreach (var item in rendered)
+            {
+                Console.Out.WriteLine(item);
+            }
         }
 
         public void LoadOverlay()

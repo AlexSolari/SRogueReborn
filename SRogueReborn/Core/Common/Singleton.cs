@@ -8,7 +8,7 @@ namespace SRogue.Core.Common
 {
     public class Singleton<T>
     {
-        private static T _instance;
+        protected static T _instance;
 
         static Singleton()
         {
