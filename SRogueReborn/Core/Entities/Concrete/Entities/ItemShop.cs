@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SRogue.Core.Common;
 
 namespace SRogue.Core.Entities.Concrete.Entities
 {
@@ -13,6 +14,11 @@ namespace SRogue.Core.Entities.Concrete.Entities
         {
             GameState.Current.ShopOpened = true;
             GameState.Current.ActivateShop();
+        }
+
+        public override void Damage(float pure, DamageType type, IEntity source = null)
+        {
+            return;
         }
     }
 }

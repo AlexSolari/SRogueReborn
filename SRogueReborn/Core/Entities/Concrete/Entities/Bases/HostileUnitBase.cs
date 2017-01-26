@@ -28,7 +28,6 @@ namespace SRogue.Core.Entities.Concrete.Entities.Bases
             var weapon = GameState.Current.Inventory.Weapon.Item as WeaponBase;
             var targetUnit = this;
             var damage = initiator.SummarizeAttack();
-            UiManager.Current.Actions.Append("Dealed {0} damage to {1}. ".FormatWith(damage, this.GetType().Name));
             targetUnit.Damage(damage, DamageType.Physical, initiator);
         }
 

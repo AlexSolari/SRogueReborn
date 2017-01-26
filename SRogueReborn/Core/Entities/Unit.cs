@@ -1,5 +1,6 @@
 ﻿using SRogue.Core.Common;
 using SRogue.Core.Common.TickEvents;
+using SRogue.Core.Entities.Concrete.Entities;
 using SRogue.Core.Entities.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -101,6 +102,9 @@ namespace SRogue.Core.Entities
 
         public virtual void Damage(float pure, DamageType type, IEntity source = null)
         {
+            if (source is Player)
+                UiManager.Current.Actions.Append("Dealed {0} damage to {1}. ".FormatWith(pure, this.GetType().Name));
+
             Health -= DecreaseDamage(pure, type);
             if (!IsAlive)
             {
