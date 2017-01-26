@@ -35,11 +35,6 @@ namespace SRogue.Core.Modules
             sword.Material = ItemMaterial.Wooden;
             Inventory.Weapon.Equip(sword);
 
-            var wand = new Wand();
-            sword.Quality = ItemQuality.Good;
-            sword.Material = ItemMaterial.Iron;
-            Inventory.Backpack.Add(wand);
-
             Inventory.Head.Equip(null);
             Inventory.Chest.Equip(null);
             Inventory.Legs.Equip(null);
