@@ -59,7 +59,19 @@ namespace SRogue.Core.Entities.Concrete.Entities
         protected IEnumerable<TType> GetNearbyTiles<TType>()
             where TType : class
         {
-            return GameManager.Current.Tiles.Where(t => t.X.IsInRange(X - 1, X + 1) && t.Y.IsInRange(Y - 1, Y + 1) && t is TType).Select(t => t as TType);
+            var x = GameState.Current.Player.X;
+            var y = GameState.Current.Player.Y;
+            return new List<TType>() {
+                GameManager.Current.Tiles[y + 1, x - 1] as TType,
+                GameManager.Current.Tiles[y + 1, x] as TType,
+                GameManager.Current.Tiles[y + 1, x + 1] as TType,
+                GameManager.Current.Tiles[y, x - 1] as TType,
+                GameManager.Current.Tiles[y, x + 1] as TType,
+                GameManager.Current.Tiles[y - 1, x - 1] as TType,
+                GameManager.Current.Tiles[y - 1, x] as TType,
+                GameManager.Current.Tiles[y - 1, x + 1] as TType,
+            }.Where(t => t != null);
         }
     }
 }
+

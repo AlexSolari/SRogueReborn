@@ -18,7 +18,7 @@ namespace SRogue.Core.Modules
     public class Game
     {
         public IList<IUnit> Entities { get; private set; } = new List<IUnit>();
-        public IList<ITile> Tiles { get; private set; } = new List<ITile>();
+        public ITile[,] Tiles { get; private set; } = new ITile[25, 59];
         public List<TickEventBase> OnTickEndEvents { get; set; } = new List<TickEventBase>();
 
         public Dictionary<ConsoleKey, Func<bool>> UsualControl { get; set; }
@@ -101,9 +101,9 @@ namespace SRogue.Core.Modules
 
         #region GameObjects
 
-        public IEnumerable<ITile> GetTilesAt(int x, int y)
+        public ITile GetTileAt(int x, int y)
         {
-            return Tiles.Where(t => t.X == x && t.Y == y);
+            return Tiles[y, x];
         }
 
         public IEnumerable<IUnit> GetEntitiesAt(int x, int y)
@@ -118,14 +118,11 @@ namespace SRogue.Core.Modules
 
         public void Add(ITile tile)
         {
-            var tiles = GetTilesAt(tile.X, tile.Y);
+            var oldtile = GetTileAt(tile.X, tile.Y);
 
-            foreach (var t in tiles)
-            {
-                OnTickEndEvents.Add(new EventTileRemove(t));
-            }
+            OnTickEndEvents.Add(new EventTileRemove(oldtile));
 
-            Tiles.Add(tile);
+            Tiles[tile.Y, tile.X] = tile;
         }
 
         #endregion
@@ -211,12 +208,9 @@ namespace SRogue.Core.Modules
                     (entity as IAiControllable).AiTick();
                 }
 
-                var tilesUnderEntity = GetTilesAt(entity.X, entity.Y);
+                var tileUnderEntity = GetTileAt(entity.X, entity.Y);
 
-                foreach (var tile in tilesUnderEntity)
-                {
-                    tile.OnStep(entity);
-                }
+                tileUnderEntity.OnStep(entity);
 
                 if (entity.Health < entity.HealthMax)
                 {
@@ -242,19 +236,46 @@ namespace SRogue.Core.Modules
         public bool PlaceFree(int x, int y, bool ignoreEntities = false, bool ignorePathable = true)
         {
             var isThereEntities = Entities.Any(e => e.X == x && e.Y == y);
-            var tileAtPoint = Tiles.Where(t => t.X == x && t.Y == y);
-            var isThereTiles = (ignorePathable) ? tileAtPoint.Any() : tileAtPoint.Any(t => !t.Pathable);
+            var tileAtPoint = Tiles[y, x];
+            var isThereTiles = (ignorePathable) ? tileAtPoint != null : !tileAtPoint.Pathable;
 
             return (ignoreEntities || !isThereEntities) && !isThereTiles;
         }
 
         public ITile GetRandomTile(bool pathable = false, bool withoutEntities = true)
         {
-            var entities = Entities.ToList();
-            var tiles = Tiles.Where(x => (pathable) ? x.Pathable : !x.Pathable).ToList();
-            entities.ForEach(t => tiles = tiles.Except(tiles.Where(e => e.X == t.X && e.Y == t.Y)).ToList());
-            var tile = tiles[Rnd.Current.Next(tiles.Count())];
-            return tile;
+            var rnd = Rnd.Current;
+            var allTiles = Tiles;
+            var pathableTiles = new List<ITile>();
+            var withoutEntitiesTiles = new List<ITile>();
+            var withoutEntitiesPathableTiles = new List<ITile>();
+
+            foreach (var tile in allTiles)
+            {
+                var entities = GetEntitiesAt(tile.X, tile.Y);
+
+                if (!entities.Any())
+                    withoutEntitiesTiles.Add(tile);
+
+                if (tile.Pathable)
+                    pathableTiles.Add(tile);
+
+                if (!entities.Any() && tile.Pathable)
+                    withoutEntitiesPathableTiles.Add(tile);
+            }
+
+            ITile result;
+
+            if (pathable && withoutEntities)
+                result = withoutEntitiesPathableTiles[rnd.Next(withoutEntitiesPathableTiles.Count)];
+            else if (pathable)
+                result = pathableTiles[rnd.Next(pathableTiles.Count)];
+            else if (withoutEntities)
+                result = withoutEntitiesTiles[rnd.Next(withoutEntitiesTiles.Count)];
+            else 
+                result = allTiles[rnd.Next(25), rnd.Next(59)];
+
+            return result;
         }
 
         #endregion
@@ -267,7 +288,7 @@ namespace SRogue.Core.Modules
             var isCity = GameState.Current.Depth % 5 == 0 && GameState.Current.Depth <= 35;
             var isBoss = !isCity && GameState.Current.Depth % 5 == 4 || GameState.Current.Depth > 35;
 
-            Tiles.Clear();
+            Tiles = new ITile[25, 59];
             Entities.Clear();
 
             var roomsCount = Rnd.Current.Next(6, 14);

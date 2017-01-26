@@ -46,7 +46,7 @@ namespace SRogue.Core.Common.Items.Concrete
         public override void Ability(Direction direction)
         {
             var currentPosition = new Point() { X = GameState.Current.Player.X, Y = GameState.Current.Player.Y };
-            IEnumerable<ITile> currentTiles;
+            ITile currentTile;
 
             do
             {
@@ -68,9 +68,9 @@ namespace SRogue.Core.Common.Items.Concrete
                         break;
                 }
 
-                currentTiles = GameManager.Current.GetTilesAt(currentPosition.X, currentPosition.Y);
+                currentTile = GameManager.Current.GetTileAt(currentPosition.X, currentPosition.Y);
 
-                if (currentTiles.Any(x => !x.Pathable))
+                if (!currentTile.Pathable)
                     break;
 
                 DisplayManager.Current.BlastedPoints.Add(new Point() { X = currentPosition.X, Y = currentPosition.Y });
@@ -82,7 +82,7 @@ namespace SRogue.Core.Common.Items.Concrete
                     entity.Damage(MagicDamage, DamageType.Magical, GameState.Current.Player);
                 }
             }
-            while (currentTiles.Any());
+            while (currentTile != null);
 
             GameManager.Current.BlastFired = true;
 

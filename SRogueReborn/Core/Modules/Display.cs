@@ -270,35 +270,35 @@ namespace SRogue.Core.Modules
             //render direct
             var dX = playerX;
             var dY = playerY;
-            while (!GameManager.Current.GetTilesAt(dX - 1, dY).Any(t => t is Wall) && dX <= playerX + 3)
+            while (!(GameManager.Current.GetTileAt(dX - 1, dY) is Wall) && dX <= playerX + 3)
             {
                 Put(PlayerVisionMarker, dX, dY, Destination.Overlay);
                 dX++;
             }
             dX = playerX;
-            while (!GameManager.Current.GetTilesAt(dX + 1, dY).Any(t => t is Wall) && dX >= playerX - 3)
+            while (!(GameManager.Current.GetTileAt(dX + 1, dY) is Wall) && dX >= playerX - 3)
             {
                 Put(PlayerVisionMarker, dX, dY, Destination.Overlay);
                 dX--;
             }
             dX = playerX;
             dY = playerY;
-            while (!GameManager.Current.GetTilesAt(dX, dY - 1).Any(t => t is Wall) && dY <= playerY + 3)
+            while (!(GameManager.Current.GetTileAt(dX, dY - 1) is Wall) && dY <= playerY + 3)
             {
                 Put(PlayerVisionMarker, dX, dY, Destination.Overlay);
                 dY++;
             }
             dY = playerY;
-            while (!GameManager.Current.GetTilesAt(dX, dY + 1).Any(t => t is Wall) && dY >= playerY - 3)
+            while (!(GameManager.Current.GetTileAt(dX, dY + 1) is Wall) && dY >= playerY - 3)
             {
                 Put(PlayerVisionMarker, dX, dY, Destination.Overlay);
                 dY--;
             }
             //render angles
-            var topleftfree = !GameManager.Current.GetTilesAt(playerX - 1, playerY - 1).Any(t => t is Wall);
-            var toprightfree = !GameManager.Current.GetTilesAt(playerX + 1, playerY - 1).Any(t => t is Wall);
-            var bottomleftfree = !GameManager.Current.GetTilesAt(playerX - 1, playerY + 1).Any(t => t is Wall);
-            var bottomrightfree = !GameManager.Current.GetTilesAt(playerX + 1, playerY + 1).Any(t => t is Wall);
+            var topleftfree = !(GameManager.Current.GetTileAt(playerX - 1, playerY - 1) is Wall);
+            var toprightfree = !(GameManager.Current.GetTileAt(playerX + 1, playerY - 1) is Wall);
+            var bottomleftfree = !(GameManager.Current.GetTileAt(playerX - 1, playerY + 1) is Wall);
+            var bottomrightfree = !(GameManager.Current.GetTileAt(playerX + 1, playerY + 1) is Wall);
             if (topleftfree)
             {
                 Put(PlayerVisionMarker, playerX - 2, playerY - 1, Destination.Overlay);

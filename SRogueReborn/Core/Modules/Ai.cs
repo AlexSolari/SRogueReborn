@@ -257,7 +257,7 @@ namespace SRogue.Core.Modules
                             PathMap[y, x].Previous = null;
                         }
 
-                        if (!GameManager.Current.GetTilesAt(x, y).Any(p => p.Pathable))
+                        if (!GameManager.Current.GetTileAt(x, y).Pathable)
                             PathMap[y, x].Value = -2;
                     }
                 }

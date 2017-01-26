@@ -10,7 +10,12 @@ namespace SRogue.Core.Common.TickEvents
 {
     public class EventTileRemove : SingleTimeEvent
     {
-        public EventTileRemove(ITile tile) : base(() => GameManager.Current.Tiles.Remove(tile))
+        public EventTileRemove(ITile tile) : base(() => 
+        {
+            if (tile != null && GameManager.Current.Tiles[tile.Y, tile.X] == tile)
+                GameManager.Current.Tiles[tile.Y, tile.X] = null;
+        }
+        )
         {
         }
     }
