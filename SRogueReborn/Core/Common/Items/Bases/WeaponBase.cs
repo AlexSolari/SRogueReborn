@@ -10,7 +10,7 @@ namespace SRogue.Core.Common.Items.Bases
     {
         protected int _Damage;
 
-        public int Damage
+        public virtual int Damage
         {
             get
             {
@@ -20,6 +20,11 @@ namespace SRogue.Core.Common.Items.Bases
             {
                 _Damage = value;
             }
+        }
+
+        public virtual void Ability(Direction direction)
+        {
+
         }
 
         public override string Name

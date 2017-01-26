@@ -38,6 +38,7 @@ namespace SRogue.Core.Common
         public const char PlayerVisionMarker = '\0';
         public const char PlayerVision = ' ';
         public const char ExaminatedMarker = '*';
+        public const char Blast = '#';
 
 
         /*** Cache ***/

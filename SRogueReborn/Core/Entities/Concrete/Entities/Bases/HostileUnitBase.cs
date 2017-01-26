@@ -29,11 +29,15 @@ namespace SRogue.Core.Entities.Concrete.Entities.Bases
             var targetUnit = this;
             var damage = initiator.SummarizeAttack();
             UiManager.Current.Actions.Append("Dealed {0} damage to {1}. ".FormatWith(damage, this.GetType().Name));
-            targetUnit.Damage(damage, DamageType.Physical);
-            if (targetUnit.Health <= 0)
-            {
-                GameState.Current.Gold += (int)(targetUnit.Reward * (Rnd.Current.NextDouble() + 0.5f));
-            }
+            targetUnit.Damage(damage, DamageType.Physical, initiator);
+        }
+
+        public override void Kill(IEntity source = null)
+        {
+            if (source == GameState.Current.Player)
+                GameState.Current.Gold += (int)(Reward * (Rnd.Current.NextDouble() + 0.5f));
+
+            base.Kill();
         }
     }
 }

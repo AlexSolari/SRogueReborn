@@ -25,16 +25,53 @@ namespace SRogue.Core.Modules
         public Dictionary<ConsoleKey, Action> InventoryControl { get; set; }
         public Dictionary<ConsoleKey, Action> ShopControl { get; set; }
 
+        public bool DirectionSelect { get; set; }
+        public bool BlastFired { get; set; }
+
         public Game()   
         {
             UsualControl = new Dictionary<ConsoleKey, Func<bool>> // if returns true, then call GameTick after action
             {
-                [ConsoleKey.W] = () => { GameState.Current.Player.Move(Direction.Top); return true; },
-                [ConsoleKey.S] = () => { GameState.Current.Player.Move(Direction.Bottom); return true; },
-                [ConsoleKey.A] = () => { GameState.Current.Player.Move(Direction.Left); return true; },
-                [ConsoleKey.D] = () => { GameState.Current.Player.Move(Direction.Right); return true; },
+                [ConsoleKey.W] = () => 
+                {
+                    if (DirectionSelect)
+                        UseTargetedAbility(Direction.Top);
+                    else
+                        GameState.Current.Player.Move(Direction.Top);
+                    return true;
+                },
+                [ConsoleKey.S] = () => 
+                {
+                    if (DirectionSelect)
+                        UseTargetedAbility(Direction.Bottom);
+                    else
+                        GameState.Current.Player.Move(Direction.Bottom);
+                    return true;
+                },
+                [ConsoleKey.A] = () => 
+                {
+                    if (DirectionSelect)
+                        UseTargetedAbility(Direction.Left);
+                    else
+                        GameState.Current.Player.Move(Direction.Left);
+                    return true;
+                },
+                [ConsoleKey.D] = () => 
+                {
+                    if (DirectionSelect)
+                        UseTargetedAbility(Direction.Right);
+                    else
+                        GameState.Current.Player.Move(Direction.Right);
+                    return true;
+                },
                 [ConsoleKey.E] = () => { GameState.Current.Player.Examine(); return true; },
                 [ConsoleKey.I] = () => { ToggleInventory(); return false; },
+                [ConsoleKey.X] = () => 
+                {
+                    UiManager.Current.Actions.Append("Select direction");
+                    DirectionSelect = true;
+                    return false;
+                },
             };
 
             InventoryControl = new Dictionary<ConsoleKey, Action>
@@ -54,10 +91,16 @@ namespace SRogue.Core.Modules
             };
         }
 
+        public void UseTargetedAbility(Direction direction)
+        {
+            GameState.Current.Inventory.Weapon.Ability(direction);
+            DirectionSelect = false;
+        }
+
 
 
         #region GameObjects
-        
+
         public IEnumerable<ITile> GetTilesAt(int x, int y)
         {
             return Tiles.Where(t => t.X == x && t.Y == y);
@@ -124,11 +167,13 @@ namespace SRogue.Core.Modules
                 if (UsualControl.ContainsKey(input))
                 {
                     needToTick = UsualControl[input]();
-                    if (input == ConsoleKey.E)
+                    if (input == ConsoleKey.E || BlastFired)
                     {
                         DisplayManager.Current.Draw();
                         Thread.Sleep(333);
                         redrawActions = false;
+                        BlastFired = false;
+                        DisplayManager.Current.BlastedPoints.Clear();
                     }
                     
                 }

@@ -13,5 +13,10 @@ namespace SRogue.Core.Common.Items.Slots
         public WeaponSlot() : base(ItemType.Weapon)
         {
         }
+
+        public void Ability(Direction direction)
+        {
+            (Item as WeaponBase).Ability(direction);
+        }
     }
 }

@@ -64,12 +64,12 @@ namespace SRogue.Core.Entities.Concrete.Entities
             Y = (Y < 0) ? 0 : Y;
         }
 
-        public override void Kill()
+        public override void Kill(IEntity source = null)
         {
             if (!DroppedLoot)
                 DropLoot();
 
-            base.Kill();
+            base.Kill(source);
         }
     }
 }

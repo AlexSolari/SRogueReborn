@@ -99,16 +99,16 @@ namespace SRogue.Core.Entities
             }
         }
 
-        public virtual void Damage(float pure, DamageType type)
+        public virtual void Damage(float pure, DamageType type, IEntity source = null)
         {
             Health -= DecreaseDamage(pure, type);
             if (!IsAlive)
             {
-                Kill();
+                Kill(source);
             }
         }
 
-        public virtual void Kill()
+        public virtual void Kill(IEntity source = null)
         {
             GameManager.Current.OnTickEndEvents.Add(new EventEntityRemove(this));
         }

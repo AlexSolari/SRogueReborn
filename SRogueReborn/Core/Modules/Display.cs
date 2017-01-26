@@ -25,6 +25,7 @@ namespace SRogue.Core.Modules
         }
 
         public Point ExaminatedPoint = null;
+        public List<Point> BlastedPoints = new List<Point>();
         public readonly int ScreenWidth = 80;
         public readonly int ScreenHeight = 27;
         public readonly int Width = 79;
@@ -40,6 +41,7 @@ namespace SRogue.Core.Modules
         private const char PlayerVisionMarker = Assets.PlayerVisionMarker;
         private const char ExaminatedMarker = Assets.ExaminatedMarker;
         private const char PlayerVision = Assets.PlayerVision;
+        private const char BlastMarker = Assets.Blast;
 
         public Display()
         {
@@ -144,9 +146,9 @@ namespace SRogue.Core.Modules
             }
 
             Put("YOU DIED", 15, 20, Destination.Overlay);
-
+            
             Console.Out.Write(Render(false));
-
+            
             MusicManager.Current.Play(Music.Theme.Death);
         }
 
@@ -176,6 +178,7 @@ namespace SRogue.Core.Modules
             FillOverlay();
             MakeVision();
             MakeExaminated();
+            MakeBlasted();
             MakePopup();
         }
 
@@ -197,6 +200,15 @@ namespace SRogue.Core.Modules
                 }
             }
             Put(PlayerVisionMarker, tragetX, targetY, Destination.Overlay);
+        }
+
+        private void MakeBlasted()
+        {
+            foreach (var point in BlastedPoints)
+            {
+                if (Overlay[point.Y, point.X] == PlayerVisionMarker)
+                    Put(BlastMarker, point.X, point.Y, Destination.Overlay);
+            }
         }
 
         private void FillOverlay()
@@ -309,6 +321,11 @@ namespace SRogue.Core.Modules
             }
         }
 
+        public void ResetBuffer()
+        {
+            Buffer = null;
+        }
+
         protected void MakeScreen()
         {
             foreach (var entity in GameManager.Current.Tiles)
@@ -346,6 +363,14 @@ namespace SRogue.Core.Modules
 
         public void Draw(bool redrawActions = true)
         {
+            for (int y = 0; y < Height; y++)
+            {
+                for (int x = 0; x < Width; x++)
+                {
+                    Overlay[y,x] = (Overlay[y, x] == BlastMarker) ? PlayerVisionMarker : Overlay[y, x];
+                }
+            }
+
             var newScreen = DisplayManager.Current.Render();
             var length = newScreen.Length;
 
@@ -429,6 +454,11 @@ namespace SRogue.Core.Modules
                 else if (newChar == Assets.ExaminatedMarker)
                 {
                     Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    customColored = true;
+                }
+                else if (newChar == Assets.Blast)
+                {
+                    Console.ForegroundColor = ConsoleColor.Cyan;
                     customColored = true;
                 }
             }

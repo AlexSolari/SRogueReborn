@@ -117,7 +117,7 @@ namespace SRogue.Core.Modules
 
                 if (canAttack)
                 {
-                    GameState.Current.Player.Damage(target.Attack, (Common.DamageType)damagetype);
+                    GameState.Current.Player.Damage(target.Attack, (Common.DamageType)damagetype, target);
                     UiManager.Current.Actions.Append("Taked {0} damage from {1}. ".FormatWith(target.Attack, target.GetType().Name));
                 }
                 else

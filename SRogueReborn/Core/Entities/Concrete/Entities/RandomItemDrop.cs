@@ -15,6 +15,7 @@ namespace SRogue.Core.Entities.Concrete.Entities
         {
             Droplist.Add(new Sword());
             Droplist.Add(new Sword());
+            Droplist.Add(new Wand());
             Droplist.Add(new Armor());
             Droplist.Add(new Helmet());
             Droplist.Add(new Leggins());

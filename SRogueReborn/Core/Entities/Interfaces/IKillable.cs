@@ -9,6 +9,6 @@ namespace SRogue.Core.Entities.Interfaces
     public interface IKillable
     {
         bool IsAlive { get; }
-        void Kill();
+        void Kill(IEntity source = null);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using SRogue.Core.Common;
 using SRogue.Core.Common.Items.Bases;
+using SRogue.Core.Common.Items.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -266,6 +267,7 @@ namespace SRogue.Core.Modules
             Console.Clear();
             DisplayManager.Current.ShowEndScreen();
             Console.ReadKey();
+            DisplayManager.Current.ResetBuffer();
             MusicManager.Current.Play(Music.Theme.Default);
             DisplayManager.Current.ShowStartScreen();
         }
@@ -384,9 +386,11 @@ namespace SRogue.Core.Modules
 
         protected void MakeHints(char[,] ui)
         {
-            Put("e - examinate".FormatWith(GameState.Current.Depth), 1, 20, ui, true);
-            Put("i - inventory".FormatWith(GameState.Current.Depth), 1, 21, ui, true);
-            Put("wasd - control".FormatWith(GameState.Current.Depth), 1, 22, ui, true);
+            Put("e - examinate".FormatWith(GameState.Current.Depth), 1, 19, ui, true);
+            Put("i - inventory".FormatWith(GameState.Current.Depth), 1, 20, ui, true);
+            Put("wasd - control".FormatWith(GameState.Current.Depth), 1, 21, ui, true);
+            if (GameState.Current.Inventory.Weapon.Item is Wand)
+                Put("x - ranged attack".FormatWith(GameState.Current.Depth), 1, 22, ui, true);
         }
         #endregion
     }

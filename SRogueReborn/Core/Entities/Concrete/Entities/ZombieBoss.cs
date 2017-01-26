@@ -25,12 +25,12 @@ namespace SRogue.Core.Entities.Concrete.Entities
             DroppedLoot = true;
         }
 
-        public override void Kill()
+        public override void Kill(IEntity source = null)
         {
             if (!DroppedLoot)
                 DropLoot();
 
-            base.Kill();
+            base.Kill(source);
         }
     }
 }

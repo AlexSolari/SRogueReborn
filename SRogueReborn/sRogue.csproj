@@ -64,6 +64,7 @@
     <Compile Include="Core\Common\Items\Concrete\Leggins.cs" />
     <Compile Include="Core\Common\Items\Concrete\Boots.cs" />
     <Compile Include="Core\Common\Items\Concrete\Armor.cs" />
+    <Compile Include="Core\Common\Items\Concrete\Wand.cs" />
     <Compile Include="Core\Common\Items\Concrete\Sword.cs" />
     <Compile Include="Core\Common\Items\Bases\ItemBase.cs" />
     <Compile Include="Core\Common\Items\Interfaces\IEquipment.cs" />

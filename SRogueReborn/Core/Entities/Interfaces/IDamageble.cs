@@ -9,6 +9,6 @@ namespace SRogue.Core.Entities.Interfaces
 {
     public interface IDamageble : IKillable
     {
-        void Damage(float pure, DamageType type);
+        void Damage(float pure, DamageType type, IEntity source = null);
     }
 }

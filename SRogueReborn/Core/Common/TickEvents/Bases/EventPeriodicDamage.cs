@@ -21,7 +21,7 @@ namespace SRogue.Core.Common.TickEvents.Bases
             get
             {
                 return () => {
-                    (Target as IUnit).Damage(Damage, DamageType);
+                    (Target as IUnit).Damage(Damage, DamageType, null);
                 };
             }
         }
