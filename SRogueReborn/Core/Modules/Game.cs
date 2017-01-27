@@ -1,4 +1,5 @@
 ﻿using SRogue.Core.Common;
+using SRogue.Core.Common.Items.Concrete;
 using SRogue.Core.Common.TickEvents;
 using SRogue.Core.Common.TickEvents.Bases;
 using SRogue.Core.Entities;
@@ -68,9 +69,15 @@ namespace SRogue.Core.Modules
                 [ConsoleKey.I] = () => { ToggleInventory(); return false; },
                 [ConsoleKey.X] = () => 
                 {
-                    UiManager.Current.Actions.Append("Select direction");
-                    DirectionSelect = true;
-                    return false;
+                    if (GameState.Current.Inventory.Weapon.Item is Wand)
+                    {
+
+                        UiManager.Current.Actions.Append("Select direction");
+                        DirectionSelect = true;
+                        return false;
+                    }
+
+                    return true;
                 },
             };
 
