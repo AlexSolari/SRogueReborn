@@ -72,6 +72,13 @@ namespace SRogue.Core.Entities.Concrete.Entities
                 GameManager.Current.Tiles[y - 1, x + 1] as TType,
             }.Where(t => t != null);
         }
+
+
+        public void UseTargetedAbility(Direction direction)
+        {
+            GameState.Current.Inventory.Weapon.Ability(direction);
+            GameState.Current.DirectionSelect = false;
+        }
     }
 }
 

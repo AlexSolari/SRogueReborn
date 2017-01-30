@@ -79,6 +79,7 @@
     <Compile Include="Core\Common\Point.cs" />
     <Compile Include="Core\Common\Rnd.cs" />
     <Compile Include="Core\Common\Singleton.cs" />
+    <Compile Include="Core\Common\SizeConstants.cs" />
     <Compile Include="Core\Common\TickEvents\Bases\SingleTimeEvent.cs" />
     <Compile Include="Core\Common\TickEvents\EventItemDrop.cs" />
     <Compile Include="Core\Common\TickEvents\Bases\EventPeriodicDamage.cs" />

@@ -84,7 +84,7 @@ namespace SRogue.Core.Common.Items.Concrete
             }
             while (currentTile != null);
 
-            GameManager.Current.BlastFired = true;
+            GameState.Current.BlastFired = true;
 
             base.Ability(direction);
         }

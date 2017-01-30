@@ -211,7 +211,7 @@ namespace SRogue.Core.Modules
                         for (int dX = point.Position.X - 1; dX <= point.Position.X + 1; dX++)
                         {
                             var dY = point.Position.Y;
-                            if (dY > 0 && dY < DisplayManager.Current.FieldHeight && dX > 0 && dX < DisplayManager.Current.FieldWidth && PathMap[dY, dX].Value == -1 && !temp.Any(x => x.Equals(PathMap[dY, dX])))
+                            if (dY > 0 && dY < SizeConstants.FieldHeight && dX > 0 && dX < SizeConstants.FieldWidth && PathMap[dY, dX].Value == -1 && !temp.Any(x => x.Equals(PathMap[dY, dX])))
                             {
                                 temp.Add(new PathfindNode() { Position = new Point() { X = dX, Y = dY }, Value = step + 1, Previous = PathMap[point.Position.Y, point.Position.X] });
                             }
@@ -220,7 +220,7 @@ namespace SRogue.Core.Modules
                         for (int dY = point.Position.Y - 1; dY <= point.Position.Y + 1; dY++)
                         {
                             var dX = point.Position.X;
-                            if (dY > 0 && dY < DisplayManager.Current.FieldHeight && dX > 0 && dX < DisplayManager.Current.FieldWidth && PathMap[dY, dX].Value == -1 && !temp.Any(x => x.Equals(PathMap[dY, dX])))
+                            if (dY > 0 && dY < SizeConstants.FieldHeight && dX > 0 && dX < SizeConstants.FieldWidth && PathMap[dY, dX].Value == -1 && !temp.Any(x => x.Equals(PathMap[dY, dX])))
                             {
                                 temp.Add(new PathfindNode() { Position = new Point() { X = dX, Y = dY }, Value = step + 1, Previous = PathMap[point.Position.Y, point.Position.X] });
                             }
@@ -240,12 +240,12 @@ namespace SRogue.Core.Modules
 
                 if (noMapCreated)
                 {
-                    PathMap = new PathfindNode[DisplayManager.Current.FieldHeight, DisplayManager.Current.FieldWidth];
+                    PathMap = new PathfindNode[SizeConstants.FieldHeight, SizeConstants.FieldWidth];
                 }
 
-                for (int x = 0; x < DisplayManager.Current.FieldWidth; x++)
+                for (int x = 0; x < SizeConstants.FieldWidth; x++)
                 {
-                    for (int y = 0; y < DisplayManager.Current.FieldHeight; y++)
+                    for (int y = 0; y < SizeConstants.FieldHeight; y++)
                     {
                         if (noMapCreated)
                         {

@@ -58,9 +58,9 @@ namespace SRogue.Core.Entities.Concrete.Entities
                 Y = targetY;
             }
             
-            X = (X >= DisplayManager.Current.FieldWidth) ? DisplayManager.Current.FieldWidth - 1 : X;
+            X = (X >= SizeConstants.FieldWidth) ? SizeConstants.FieldWidth - 1 : X;
             X = (X < 0) ? 0 : X;
-            Y = (Y >= DisplayManager.Current.FieldHeight) ? DisplayManager.Current.FieldHeight - 1 : Y;
+            Y = (Y >= SizeConstants.FieldHeight) ? SizeConstants.FieldHeight - 1 : Y;
             Y = (Y < 0) ? 0 : Y;
         }
 

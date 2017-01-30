@@ -26,54 +26,51 @@ namespace SRogue.Core.Modules
         public Dictionary<ConsoleKey, Action> InventoryControl { get; set; }
         public Dictionary<ConsoleKey, Action> ShopControl { get; set; }
 
-        public bool DirectionSelect { get; set; }
-        public bool BlastFired { get; set; }
-
         public Game()   
         {
             UsualControl = new Dictionary<ConsoleKey, Func<bool>> // if returns true, then call GameTick after action
             {
                 [ConsoleKey.W] = () => 
                 {
-                    if (DirectionSelect)
-                        UseTargetedAbility(Direction.Top);
+                    if (GameState.Current.DirectionSelect)
+                        GameState.Current.Player.UseTargetedAbility(Direction.Top);
                     else
                         GameState.Current.Player.Move(Direction.Top);
                     return true;
                 },
                 [ConsoleKey.S] = () => 
                 {
-                    if (DirectionSelect)
-                        UseTargetedAbility(Direction.Bottom);
+                    if (GameState.Current.DirectionSelect)
+                        GameState.Current.Player.UseTargetedAbility(Direction.Bottom);
                     else
                         GameState.Current.Player.Move(Direction.Bottom);
                     return true;
                 },
                 [ConsoleKey.A] = () => 
                 {
-                    if (DirectionSelect)
-                        UseTargetedAbility(Direction.Left);
+                    if (GameState.Current.DirectionSelect)
+                        GameState.Current.Player.UseTargetedAbility(Direction.Left);
                     else
                         GameState.Current.Player.Move(Direction.Left);
                     return true;
                 },
                 [ConsoleKey.D] = () => 
                 {
-                    if (DirectionSelect)
-                        UseTargetedAbility(Direction.Right);
+                    if (GameState.Current.DirectionSelect)
+                        GameState.Current.Player.UseTargetedAbility(Direction.Right);
                     else
                         GameState.Current.Player.Move(Direction.Right);
                     return true;
                 },
                 [ConsoleKey.E] = () => { GameState.Current.Player.Examine(); return true; },
-                [ConsoleKey.I] = () => { ToggleInventory(); return false; },
+                [ConsoleKey.I] = () => { ToggleInventoryPopup(); return false; },
                 [ConsoleKey.X] = () => 
                 {
                     if (GameState.Current.Inventory.Weapon.Item is Wand)
                     {
 
                         UiManager.Current.Actions.Append("Select direction");
-                        DirectionSelect = true;
+                        GameState.Current.DirectionSelect = true;
                         return false;
                     }
 
@@ -87,7 +84,7 @@ namespace SRogue.Core.Modules
                 [ConsoleKey.S] = () => GameState.Current.Inventory.SelectPrev(),
                 [ConsoleKey.Q] = () => GameState.Current.Inventory.ActivateSelected(),
                 [ConsoleKey.E] = () => GameState.Current.Inventory.SellSelected(),
-                [ConsoleKey.I] = () => ToggleInventory(),
+                [ConsoleKey.I] = () => ToggleInventoryPopup(),
             };
 
             ShopControl = new Dictionary<ConsoleKey, Action>
@@ -98,15 +95,7 @@ namespace SRogue.Core.Modules
             };
         }
 
-        public void UseTargetedAbility(Direction direction)
-        {
-            GameState.Current.Inventory.Weapon.Ability(direction);
-            DirectionSelect = false;
-        }
-
-
-
-        #region GameObjects
+        #region Tiles & Entities
 
         public ITile GetTileAt(int x, int y)
         {
@@ -130,114 +119,6 @@ namespace SRogue.Core.Modules
             OnTickEndEvents.Add(new EventTileRemove(oldtile));
 
             Tiles[tile.Y, tile.X] = tile;
-        }
-
-        #endregion
-
-        #region GameStatus
-
-        public bool ProcessInput(ConsoleKey input)
-        {
-            var redrawActions = true;
-
-            if (GameState.Current.PopupOpened)
-            {
-                if (input == ConsoleKey.Q)
-                {
-                    GameState.Current.PopupOpened = false;
-                    DisplayManager.Current.LoadOverlay();
-                }
-                else
-                    return redrawActions;
-            }
-
-            if (GameState.Current.ShopOpened)
-            {
-                if (ShopControl.ContainsKey(input))
-                {
-                    ShopControl[input]();
-                }
-            }
-            else if (GameState.Current.InventoryOpened)
-            {
-                if (InventoryControl.ContainsKey(input))
-                {
-                    InventoryControl[input]();
-                }
-            }
-            else
-            {
-                var needToTick = true;
-                if (UsualControl.ContainsKey(input))
-                {
-                    needToTick = UsualControl[input]();
-                    if (input == ConsoleKey.E || BlastFired)
-                    {
-                        DisplayManager.Current.Draw();
-                        Thread.Sleep(333);
-                        redrawActions = false;
-                        BlastFired = false;
-                        DisplayManager.Current.BlastedPoints.Clear();
-                    }
-                    
-                }
-
-                if (needToTick)
-                    GameTick();
-            }
-
-            return redrawActions;
-        }
-
-        private void ToggleInventory()
-        {
-            if (GameState.Current.InventoryOpened)
-            {
-                DisplayManager.Current.LoadOverlay();
-                GameState.Current.Inventory.Deselect();
-            }
-            else
-            {
-                DisplayManager.Current.SaveOverlay();
-                GameState.Current.Inventory.SelectNext();
-            }
-            GameState.Current.InventoryOpened = !GameState.Current.InventoryOpened;
-        }
-
-        public void GameTick()
-        {
-            Ai.Container.RecalculatePlayerPathmap();
-            var enitities = Entities.OrderBy(x => (x is Player));
-            foreach (var entity in enitities)
-            {
-                if (entity is IAiControllable)
-                {
-                    (entity as IAiControllable).AiTick();
-                }
-
-                var tileUnderEntity = GetTileAt(entity.X, entity.Y);
-
-                tileUnderEntity.OnStep(entity);
-
-                if (entity.Health < entity.HealthMax)
-                {
-                    var regen = (entity is IHostile) ? 0.33f : 1;
-                    entity.Health = Math.Min(entity.Health + regen, entity.HealthMax);
-                }
-            }
-
-            var events = OnTickEndEvents.ToList();
-            foreach (var evnt in events)
-            {
-                evnt.Event();
-                evnt.TicksRemaining--;
-                if (evnt.TicksRemaining == 0 && evnt.OnTimeout != null)
-                {
-                    evnt.OnTimeout();
-                }
-            }
-
-            OnTickEndEvents.RemoveAll(x => x.TicksRemaining <= 0);
         }
 
         public bool PlaceFree(int x, int y, bool ignoreEntities = false, bool ignorePathable = true)
@@ -279,11 +160,84 @@ namespace SRogue.Core.Modules
                 result = pathableTiles[rnd.Next(pathableTiles.Count)];
             else if (withoutEntities)
                 result = withoutEntitiesTiles[rnd.Next(withoutEntitiesTiles.Count)];
-            else 
+            else
                 result = allTiles[rnd.Next(25), rnd.Next(59)];
 
             return result;
         }
+
+        #endregion
+
+        #region Inputs
+
+        public bool ProcessInput(ConsoleKey input)
+        {
+            var redrawActions = true;
+
+            if (GameState.Current.PopupOpened)
+            {
+                if (input == ConsoleKey.Q)
+                {
+                    GameState.Current.PopupOpened = false;
+                    DisplayManager.Current.LoadOverlay();
+                }
+                else
+                    return redrawActions;
+            }
+
+            if (GameState.Current.ShopOpened)
+            {
+                if (ShopControl.ContainsKey(input))
+                {
+                    ShopControl[input]();
+                }
+            }
+            else if (GameState.Current.InventoryOpened)
+            {
+                if (InventoryControl.ContainsKey(input))
+                {
+                    InventoryControl[input]();
+                }
+            }
+            else
+            {
+                var needToTick = true;
+                if (UsualControl.ContainsKey(input))
+                {
+                    needToTick = UsualControl[input]();
+                    if (input == ConsoleKey.E || GameState.Current.BlastFired)
+                    {
+                        DisplayManager.Current.Draw();
+                        Thread.Sleep(333);
+                        redrawActions = false;
+                        GameState.Current.BlastFired = false;
+                        DisplayManager.Current.BlastedPoints.Clear();
+                    }
+                    
+                }
+
+                if (needToTick)
+                    GameTick();
+            }
+
+            return redrawActions;
+        }
+
+        private void ToggleInventoryPopup()
+        {
+            if (GameState.Current.InventoryOpened)
+            {
+                DisplayManager.Current.LoadOverlay();
+                GameState.Current.Inventory.Deselect();
+            }
+            else
+            {
+                DisplayManager.Current.SaveOverlay();
+                GameState.Current.Inventory.SelectNext();
+            }
+            GameState.Current.InventoryOpened = !GameState.Current.InventoryOpened;
+        }
+
 
         #endregion
 
@@ -442,9 +396,9 @@ namespace SRogue.Core.Modules
 
         protected void Fill()
         {
-            for (int x = 0; x < DisplayManager.Current.FieldWidth; x++)
+            for (int x = 0; x < SizeConstants.FieldWidth; x++)
             {
-                for (int y = 0; y < DisplayManager.Current.FieldHeight; y++)
+                for (int y = 0; y < SizeConstants.FieldHeight; y++)
                 {
                     if (PlaceFree(x, y, true))
                     {
@@ -524,8 +478,8 @@ namespace SRogue.Core.Modules
         {
             var roomSizeX = Rnd.Current.Next(3, 5);
             var roomSizeY = Rnd.Current.Next(2, 3);
-            var roomX = Rnd.Current.Next(roomSizeX + 1, DisplayManager.Current.FieldWidth - 1 - roomSizeX);
-            var roomY = Rnd.Current.Next(roomSizeY + 1, DisplayManager.Current.FieldHeight - 1 - roomSizeY);
+            var roomX = Rnd.Current.Next(roomSizeX + 1, SizeConstants.FieldWidth - 1 - roomSizeX);
+            var roomY = Rnd.Current.Next(roomSizeY + 1, SizeConstants.FieldHeight - 1 - roomSizeY);
 
             centers.Add(new Point() { X = roomX, Y = roomY });
 
@@ -556,7 +510,42 @@ namespace SRogue.Core.Modules
                 Add(newTile);
             }
         }
-#endregion
+        #endregion
 
+        public void GameTick()
+        {
+            Ai.Container.RecalculatePlayerPathmap();
+            var enitities = Entities.OrderBy(x => (x is Player));
+            foreach (var entity in enitities)
+            {
+                if (entity is IAiControllable)
+                {
+                    (entity as IAiControllable).AiTick();
+                }
+
+                var tileUnderEntity = GetTileAt(entity.X, entity.Y);
+
+                tileUnderEntity.OnStep(entity);
+
+                if (entity.Health < entity.HealthMax)
+                {
+                    var regen = (entity is IHostile) ? 0.33f : 1;
+                    entity.Health = Math.Min(entity.Health + regen, entity.HealthMax);
+                }
+            }
+
+            var events = OnTickEndEvents.ToList();
+            foreach (var evnt in events)
+            {
+                evnt.Event();
+                evnt.TicksRemaining--;
+                if (evnt.TicksRemaining == 0 && evnt.OnTimeout != null)
+                {
+                    evnt.OnTimeout();
+                }
+            }
+
+            OnTickEndEvents.RemoveAll(x => x.TicksRemaining <= 0);
+        }
     }
 }

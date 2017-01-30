@@ -20,15 +20,23 @@ namespace SRogue.Core.Modules
         public string PopupMessage { get; set; }
         public Player Player { get; set; }
 
-        public int Depth { get; set; } = 0;
-        public Inventory Inventory { get; set; } = new Inventory(InventorySize);
-        public int Gold { get; set; } = 0;
-        public CityShop Shop { get; set; } = new CityShop();
-        public int TrainingLevel { get; set; } = 1;
+        public int Depth { get; set; }
+        public Inventory Inventory { get; set; }
+        public int Gold { get; set; }
+        public CityShop Shop { get; set; }
+        public int TrainingLevel { get; set; }
+
+        public bool DirectionSelect { get; set; }
+        public bool BlastFired { get; set; }
 
         public State()
         {
             Player = EntityLoadManager.Current.Load<Player>();
+            TrainingLevel = 1;
+            Shop = new CityShop();
+            Inventory = new Inventory(InventorySize);
+            Gold = 0;
+            Depth = 0;
 
             var sword = new Sword();
             sword.Quality = ItemQuality.Good;
@@ -45,6 +53,8 @@ namespace SRogue.Core.Modules
                 Inventory.Backpack.Add(new HealingPotion());
             }
         }
+
+        #region Shop
 
         public void ActivateShop()
         {
@@ -159,5 +169,7 @@ namespace SRogue.Core.Modules
                 }
             }
         }
+
+        #endregion
     }
 }

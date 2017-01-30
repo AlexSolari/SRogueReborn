@@ -1,4 +1,5 @@
 ﻿using SRogue.Core;
+using SRogue.Core.Common;
 using SRogue.Core.Entities;
 using SRogue.Core.Modules;
 using System;
@@ -16,7 +17,7 @@ namespace SRogue
         {
             Console.Title = "SRogue";
 
-            Console.SetWindowSize(DisplayManager.Current.ScreenWidth, DisplayManager.Current.ScreenHeight);
+            Console.SetWindowSize(SizeConstants.TotalScreenWidth, SizeConstants.TotalScreenHeight);
 
             switch (Environment.OSVersion.Platform)
             {
