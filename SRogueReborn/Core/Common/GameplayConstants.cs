@@ -11,5 +11,8 @@ namespace SRogue.Core.Common
         public const float PhysicalDamageDecreaseComponent = 0.98f;
         public const float PureDamageDecreaseComponent = 1f;
         public const float MagicalDamageDecreaseComponent = 0.95f;
+
+        public const float UndeadHeathRegenerationRate = 0.33f;
+        public const float HeroHeathRegenerationRate = 1f;
     }
 }

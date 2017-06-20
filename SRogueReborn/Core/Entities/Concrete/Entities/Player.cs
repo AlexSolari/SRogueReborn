@@ -62,14 +62,14 @@ namespace SRogue.Core.Entities.Concrete.Entities
             var x = GameState.Current.Player.X;
             var y = GameState.Current.Player.Y;
             return new List<TType>() {
-                GameManager.Current.Tiles[y + 1, x - 1] as TType,
-                GameManager.Current.Tiles[y + 1, x] as TType,
-                GameManager.Current.Tiles[y + 1, x + 1] as TType,
-                GameManager.Current.Tiles[y, x - 1] as TType,
-                GameManager.Current.Tiles[y, x + 1] as TType,
-                GameManager.Current.Tiles[y - 1, x - 1] as TType,
-                GameManager.Current.Tiles[y - 1, x] as TType,
-                GameManager.Current.Tiles[y - 1, x + 1] as TType,
+                GameState.Current.CurrentLevel.Tiles[y + 1, x - 1] as TType,
+                GameState.Current.CurrentLevel.Tiles[y + 1, x] as TType,
+                GameState.Current.CurrentLevel.Tiles[y + 1, x + 1] as TType,
+                GameState.Current.CurrentLevel.Tiles[y, x - 1] as TType,
+                GameState.Current.CurrentLevel.Tiles[y, x + 1] as TType,
+                GameState.Current.CurrentLevel.Tiles[y - 1, x - 1] as TType,
+                GameState.Current.CurrentLevel.Tiles[y - 1, x] as TType,
+                GameState.Current.CurrentLevel.Tiles[y - 1, x + 1] as TType,
             }.Where(t => t != null);
         }
 

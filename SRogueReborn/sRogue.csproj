@@ -90,6 +90,8 @@
     <Compile Include="Core\Common\TickEvents\EventSpikeTrapDamage.cs" />
     <Compile Include="Core\Common\TickEvents\EventNextLevel.cs" />
     <Compile Include="Core\Common\TickEvents\Bases\TickEventBase.cs" />
+    <Compile Include="Core\Common\World\GameLevel.cs" />
+    <Compile Include="Core\Common\World\Generation\Generator.cs" />
     <Compile Include="Core\DisplayManager.cs" />
     <Compile Include="Core\Entities\Concrete\Entities\Bases\DropUnitBase.cs" />
     <Compile Include="Core\Entities\Concrete\Entities\Bases\HostileUnitBase.cs" />

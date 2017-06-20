@@ -12,7 +12,7 @@ namespace SRogue.Core.Common.TickEvents
     {
         public EventEntityRemove(IUnit unit) : base(
             () => {
-                GameManager.Current.Entities.Remove(unit);
+                GameState.Current.CurrentLevel.Entities.Remove(unit);
 
                 if (unit == GameState.Current.Player)
                 {

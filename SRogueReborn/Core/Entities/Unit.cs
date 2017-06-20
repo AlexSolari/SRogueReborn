@@ -68,8 +68,8 @@ namespace SRogue.Core.Entities
                     break;
             }
 
-            var entities = GameManager.Current.GetEntitiesAt(targetX, targetY).Where(x => x is IInteractable);
-            if (GameManager.Current.PlaceFree(targetX, targetY, false, false))
+            var entities = GameState.Current.CurrentLevel.GetEntitiesAt(targetX, targetY).Where(x => x is IInteractable);
+            if (GameState.Current.CurrentLevel.PlaceFree(targetX, targetY, false, false))
             {
                 X = targetX;
                 Y = targetY;
@@ -93,7 +93,7 @@ namespace SRogue.Core.Entities
 
         public void MoveInstantly(int x, int y)
         {
-            if (GameManager.Current.PlaceFree(x, y, false, false))
+            if (GameState.Current.CurrentLevel.PlaceFree(x, y, false, false))
             {
                 X = x;
                 Y = y;

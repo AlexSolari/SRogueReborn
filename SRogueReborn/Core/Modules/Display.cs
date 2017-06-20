@@ -91,12 +91,12 @@ namespace SRogue.Core.Modules
 
         protected void MakeScreen()
         {
-            foreach (var entity in GameManager.Current.Tiles)
+            foreach (var entity in GameState.Current.CurrentLevel.Tiles)
             {
                 Put(entity.Texture, entity.X, entity.Y, Destination.Screen);
             }
 
-            foreach (var entity in GameManager.Current.Entities)
+            foreach (var entity in GameState.Current.CurrentLevel.Entities)
             {
                 Put(entity.Texture, entity.X, entity.Y, Destination.Screen);
             }
@@ -215,35 +215,35 @@ namespace SRogue.Core.Modules
             //render direct
             var dX = playerX;
             var dY = playerY;
-            while (!(GameManager.Current.GetTileAt(dX - 1, dY) is Wall) && dX <= playerX + 3)
+            while (!(GameState.Current.CurrentLevel.GetTileAt(dX - 1, dY) is Wall) && dX <= playerX + 3)
             {
                 Put(PlayerVisionMarker, dX, dY, Destination.Overlay);
                 dX++;
             }
             dX = playerX;
-            while (!(GameManager.Current.GetTileAt(dX + 1, dY) is Wall) && dX >= playerX - 3)
+            while (!(GameState.Current.CurrentLevel.GetTileAt(dX + 1, dY) is Wall) && dX >= playerX - 3)
             {
                 Put(PlayerVisionMarker, dX, dY, Destination.Overlay);
                 dX--;
             }
             dX = playerX;
             dY = playerY;
-            while (!(GameManager.Current.GetTileAt(dX, dY - 1) is Wall) && dY <= playerY + 3)
+            while (!(GameState.Current.CurrentLevel.GetTileAt(dX, dY - 1) is Wall) && dY <= playerY + 3)
             {
                 Put(PlayerVisionMarker, dX, dY, Destination.Overlay);
                 dY++;
             }
             dY = playerY;
-            while (!(GameManager.Current.GetTileAt(dX, dY + 1) is Wall) && dY >= playerY - 3)
+            while (!(GameState.Current.CurrentLevel.GetTileAt(dX, dY + 1) is Wall) && dY >= playerY - 3)
             {
                 Put(PlayerVisionMarker, dX, dY, Destination.Overlay);
                 dY--;
             }
             //render angles
-            var topleftfree = !(GameManager.Current.GetTileAt(playerX - 1, playerY - 1) is Wall);
-            var toprightfree = !(GameManager.Current.GetTileAt(playerX + 1, playerY - 1) is Wall);
-            var bottomleftfree = !(GameManager.Current.GetTileAt(playerX - 1, playerY + 1) is Wall);
-            var bottomrightfree = !(GameManager.Current.GetTileAt(playerX + 1, playerY + 1) is Wall);
+            var topleftfree = !(GameState.Current.CurrentLevel.GetTileAt(playerX - 1, playerY - 1) is Wall);
+            var toprightfree = !(GameState.Current.CurrentLevel.GetTileAt(playerX + 1, playerY - 1) is Wall);
+            var bottomleftfree = !(GameState.Current.CurrentLevel.GetTileAt(playerX - 1, playerY + 1) is Wall);
+            var bottomrightfree = !(GameState.Current.CurrentLevel.GetTileAt(playerX + 1, playerY + 1) is Wall);
             if (topleftfree)
             {
                 Put(PlayerVisionMarker, playerX - 2, playerY - 1, Destination.Overlay);

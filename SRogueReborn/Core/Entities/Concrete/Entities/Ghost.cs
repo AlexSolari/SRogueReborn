@@ -50,7 +50,7 @@ namespace SRogue.Core.Entities.Concrete.Entities
                     break;
             }
 
-            var entities = GameManager.Current.GetEntitiesAt(targetX, targetY).Where(x => x is IInteractable);
+            var entities = GameState.Current.CurrentLevel.GetEntitiesAt(targetX, targetY).Where(x => x is IInteractable);
 
             if (entities.Count() == 0)
             {

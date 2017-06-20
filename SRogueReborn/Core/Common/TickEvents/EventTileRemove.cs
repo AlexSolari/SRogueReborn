@@ -12,8 +12,8 @@ namespace SRogue.Core.Common.TickEvents
     {
         public EventTileRemove(ITile tile) : base(() => 
         {
-            if (tile != null && GameManager.Current.Tiles[tile.Y, tile.X] == tile)
-                GameManager.Current.Tiles[tile.Y, tile.X] = null;
+            if (tile != null && GameState.Current.CurrentLevel.Tiles[tile.Y, tile.X] == tile)
+                GameState.Current.CurrentLevel.Tiles[tile.Y, tile.X] = null;
         }
         )
         {

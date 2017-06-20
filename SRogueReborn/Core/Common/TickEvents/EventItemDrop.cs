@@ -11,7 +11,7 @@ namespace SRogue.Core.Common.TickEvents
     public class EventItemDrop<IDropUnitContainer> : SingleTimeEvent 
         where IDropUnitContainer: IUnit, IDropContainer
     {
-        public EventItemDrop(IDropUnitContainer unit) : base(() => GameManager.Current.Entities.Add(unit))
+        public EventItemDrop(IDropUnitContainer unit) : base(() => GameState.Current.CurrentLevel.Entities.Add(unit))
             
         {
         }

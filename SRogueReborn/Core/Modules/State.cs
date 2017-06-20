@@ -1,5 +1,6 @@
 ﻿using SRogue.Core.Common.Items;
 using SRogue.Core.Common.Items.Concrete;
+using SRogue.Core.Common.World;
 using SRogue.Core.Entities.Concrete.Entities;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,7 @@ namespace SRogue.Core.Modules
         public bool PopupOpened { get; set; } = false;
         public string PopupMessage { get; set; }
         public Player Player { get; set; }
-
+        public GameLevel CurrentLevel { get; set; }
         public int Depth { get; set; }
         public Inventory Inventory { get; set; }
         public int Gold { get; set; }
@@ -38,9 +39,11 @@ namespace SRogue.Core.Modules
             Gold = 0;
             Depth = 0;
 
-            var sword = new Sword();
-            sword.Quality = ItemQuality.Good;
-            sword.Material = ItemMaterial.Wooden;
+            var sword = new Sword()
+            {
+                Quality = ItemQuality.Good,
+                Material = ItemMaterial.Wooden
+            };
             Inventory.Weapon.Equip(sword);
 
             Inventory.Head.Equip(null);

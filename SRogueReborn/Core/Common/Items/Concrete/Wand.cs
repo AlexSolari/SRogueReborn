@@ -68,14 +68,14 @@ namespace SRogue.Core.Common.Items.Concrete
                         break;
                 }
 
-                currentTile = GameManager.Current.GetTileAt(currentPosition.X, currentPosition.Y);
+                currentTile = GameState.Current.CurrentLevel.GetTileAt(currentPosition.X, currentPosition.Y);
 
                 if (!currentTile.Pathable)
                     break;
 
                 DisplayManager.Current.BlastedPoints.Add(new Point() { X = currentPosition.X, Y = currentPosition.Y });
 
-                var entities = GameManager.Current.GetEntitiesAt(currentPosition.X, currentPosition.Y);
+                var entities = GameState.Current.CurrentLevel.GetEntitiesAt(currentPosition.X, currentPosition.Y);
 
                 foreach (var entity in entities)
                 {
