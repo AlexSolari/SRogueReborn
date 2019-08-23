@@ -27,7 +27,7 @@ namespace SRogue.Core.Modules
         {
             if (typeof(IUnit).IsAssignableFrom(type) && typeof(IAiControllable).IsAssignableFrom(type) && !AiTicks.Any(x => x.Key == type))
             {
-                AiTicks.Add(type, tick as Action<IUnit>);
+                AiTicks.Add(type, tick);
             }
         }
 
@@ -100,14 +100,14 @@ namespace SRogue.Core.Modules
 
             private static void Prefab(IUnit target, int vision, int radius, int damagetype)
             {
-                Point targetPoint = null;
+                Point targetPoint = default(Point);
 
                 if (GetDistanceToPlayer(target) <= vision)
                 {
                     targetPoint = GetNextPoint(target, vision);
                 }
 
-                if (((object)targetPoint) == null)
+                if (targetPoint == default(Point))
                 {
                     target.Move((Direction)Rnd.Current.Next(4));
                     return;
@@ -178,7 +178,7 @@ namespace SRogue.Core.Modules
                     
                 }
 
-                return chain.FirstOrDefault()?.Position;
+                return chain.FirstOrDefault() == null ? default(Point) : chain.FirstOrDefault().Position;
             }
 
             private static PathfindNode[,] PathMap;

@@ -25,7 +25,7 @@ namespace SRogue.Core.Entities.Concrete.Entities.Bases
                 UiManager.Current.Actions.Append("{0} dodged. ".FormatWith(this.GetType().Name));
                 return;
             }
-            var weapon = GameState.Current.Inventory.Weapon.Item as WeaponBase;
+            var weapon = GameState.Current.Inventory.Weapon.Item;
             var targetUnit = this;
             var damage = initiator.SummarizeAttack();
             targetUnit.Damage(damage, DamageType.Physical, initiator);

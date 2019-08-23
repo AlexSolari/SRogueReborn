@@ -100,7 +100,7 @@ namespace SRogue.Core.Common.World
 
         public void AddPlayer(IList<Point> centers)
         {
-            var player = GameState.Current.Player = GameState.Current.Player;
+            var player = GameState.Current.Player;
             player.Health = player.HealthMax;
             player.X = centers.First().X;
             player.Y = centers.First().Y;

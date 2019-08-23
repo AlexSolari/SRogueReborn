@@ -8,7 +8,7 @@ namespace SRogue.Core.Common.Items
 {
     public enum ItemMaterial
     {
-        Wooden,
+        Wooden = 0,
         Iron,
         Steel, 
         Glass,

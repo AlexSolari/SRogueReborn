@@ -25,7 +25,7 @@ namespace SRogue.Core.Entities.Concrete.Entities
 
         public override int SummarizeAttack()
         {
-            return Attack + (GameState.Current.Inventory.Weapon.Item as WeaponBase).Damage;
+            return Attack + GameState.Current.Inventory.Weapon.Item.Damage;
         }
 
         public override int SummarizeArmor()

@@ -24,7 +24,7 @@ namespace SRogue.Core.Modules
             Exit
         }
 
-        public Point ExaminatedPoint = null;
+        public Point ExaminatedPoint = default(Point);
         public List<Point> BlastedPoints = new List<Point>();
         private char[,] OverlaySaver;
         private char[,] Overlay;
@@ -142,7 +142,7 @@ namespace SRogue.Core.Modules
 
         private void MakeExaminated()
         {
-            if (((object)ExaminatedPoint) == null)
+            if (ExaminatedPoint == default(Point))
                 return;
 
             var tragetX = ExaminatedPoint.X;
@@ -402,7 +402,7 @@ namespace SRogue.Core.Modules
 
             Console.SetCursorPosition(0, SizeConstants.GameScreenHeight + 1);
             Buffer = newScreen;
-            ExaminatedPoint = null;
+            ExaminatedPoint = default(Point);
         }
 
         private void DrawActionsLine()

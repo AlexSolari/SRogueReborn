@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace SRogue.Core.Common
 {
     public class Singleton<T>
+        where T : class
     {
         protected static T _instance;
 
